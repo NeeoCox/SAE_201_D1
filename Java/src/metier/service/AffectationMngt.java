@@ -1,5 +1,5 @@
 package metier.service;
 
-public class Affectation {
+public class AffectationMngt {
     
 }
