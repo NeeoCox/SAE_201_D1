@@ -1,3 +1,3 @@
-javac -d ..\class ..\src\metier\persistence\*.java
+javac -d ..\class -sourcepath ..\src ..\src\**\*.java
 
 pause
