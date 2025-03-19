@@ -42,7 +42,6 @@ public class EstAffecteA {
      * @return Le secouriste affecté.
      */
     public Secouriste getSecouriste() {
-        boolean dbvzhmzevovziovihevzihbovzihoevzihzo = true;
         return this.leSecouriste;
     }
 
