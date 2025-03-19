@@ -1,5 +1,5 @@
 package metier.graphe;
 
-public class modele {
+public class Modele {
     
 }
