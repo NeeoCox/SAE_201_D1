@@ -6,12 +6,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <Label alignment="CENTER" prefHeight="54.0" prefWidth="620.0" text="Se connecter en tant que" textAlignment="CENTER" BorderPane.alignment="CENTER">
+      <Label alignment="CENTER" prefHeight="54.0" prefWidth="620.0" style="-fx-background-color: #125f7d;" styleClass="header-text-test" stylesheets="@../css/style.css" text="Se connecter en tant que" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="22.0" />
          </font>
       </Label>
    </top>
@@ -25,7 +24,7 @@
    <right>
       <AnchorPane prefHeight="346.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="90.0" layoutY="100.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="125.0" text="Secouriste" />
+            <Button layoutX="90.0" layoutY="100.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="125.0" style="-fx-background-color: #125f7d;" styleClass="role-button" stylesheets="@../css/style.css" text="Secouriste" />
          </children>
       </AnchorPane>
    </right>
