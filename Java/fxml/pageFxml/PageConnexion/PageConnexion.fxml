@@ -17,7 +17,7 @@
    <left>
       <AnchorPane prefHeight="346.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonAdmin" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="125.0" text="Administrateur" />
+            <Button fx:id="buttonAdmin" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" onAction="#goToPageAdminAcceuil" prefHeight="90.0" prefWidth="125.0" text="Administrateur" />
          </children>
       </AnchorPane>
    </left>
