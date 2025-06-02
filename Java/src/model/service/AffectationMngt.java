@@ -1,7 +1,4 @@
-package metier.service;
-import metier.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+package model.service;
 
 /**
  * Classe de gestion des affectations.
