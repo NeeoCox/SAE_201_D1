@@ -1,4 +1,4 @@
-package metier.persistence;
+package model.persistence;
 
 /**
  * Représente un Dispositif Prévisionnel de Secours (DPS).
