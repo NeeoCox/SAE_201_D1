@@ -1,4 +1,4 @@
-package metier.service;
+package model.service;
 
 public class SecouristeMngt {
     
