@@ -19,7 +19,7 @@ public class App extends Application {
             Controler c = new Controler();
             System.out.println("lancement de l'application");
             c.setStage(stage);
-            URL fxmlLocation = new URL("file:../fxml/pageFxml/PageConnexion.fxml");
+            URL fxmlLocation = new URL("file:../fxml/pageFxml/PageConnexion/PageConnexion.fxml");
             Parent root = FXMLLoader.load(fxmlLocation);
             stage.setTitle("Application gestion planning");
             stage.setScene(new Scene(root));
