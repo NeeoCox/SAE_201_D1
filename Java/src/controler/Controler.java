@@ -42,11 +42,11 @@ public class Controler {
 
 	private void goTo(String fichier){
 		try {
-			FXMLLoader loader = new FXMLLoader(new URL(url));
+			FXMLLoader loader = new FXMLLoader(new URL(fichier));
 			Parent root = loader.load();
 			Scene scene = new Scene(root);
-			Controller.stage.setScene(scene);
-			Controller.stage.centerOnScreen();
+			this.stage.setScene(scene);
+			this.stage.centerOnScreen();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
