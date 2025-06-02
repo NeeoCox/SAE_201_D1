@@ -1,4 +1,4 @@
-package metier.persistence;
+package model.persistence;
 
 /**
  * Représente une journée avec une date précise.

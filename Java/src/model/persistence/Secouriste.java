@@ -1,4 +1,4 @@
-package metier.persistence;
+package model.persistence;
 
 /**
  * Représente un secouriste avec ses informations personnelles.

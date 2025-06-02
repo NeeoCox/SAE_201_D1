@@ -1,4 +1,4 @@
-package metier.persistence;
+package model.persistence;
 
 /**
  * Représente l'affectation d'un secouriste à une compétence pour un DPS.

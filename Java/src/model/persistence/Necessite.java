@@ -1,4 +1,4 @@
-package metier.persistence;
+package model.persistence;
 
 /**
  * Représente une relation de nécessité entre deux compétences.
