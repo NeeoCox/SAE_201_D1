@@ -17,10 +17,10 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="61.0" layoutY="219.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Gestion des secouristes" />
-            <Button layoutX="383.0" layoutY="219.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Gestion des compétences des secouristes" />
-            <Button layoutX="61.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Affectation des secouristes" />
-            <Button layoutX="383.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Dispositif de secours" />
+            <Button fx:id="buttonGestSec" layoutX="61.0" layoutY="219.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Gestion des secouristes" />
+            <Button fx:id="buttonGestComp" layoutX="383.0" layoutY="219.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Gestion des compétences des secouristes" />
+            <Button fx:id="buttonAffectSec" layoutX="61.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Affectation des secouristes" />
+            <Button fx:id="buttonDPS" layoutX="383.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Dispositif de secours" />
          </children>
       </AnchorPane>
    </center>

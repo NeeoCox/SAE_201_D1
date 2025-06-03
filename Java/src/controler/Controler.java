@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.swing.Action;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,78 +22,82 @@ import javafx.scene.control.MenuButton;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 /**
- * Controller
+ * La classe Controler de l'app
  */
 public class Controler {
 
 	private Stage stage;
 
+	/**
+	 ***********************************
+	 * Bouton pour la page de connexion
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonAdmin;
+	@FXML
+	private Button buttonScouriste;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page Admin
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonAffectSec;
+	@FXML
+	private Button buttonGestSec;
+	@FXML
+	private Button buttonDPS;
+	@FXML 
+	private Button buttonGestComp;
 
 
 	public Controler(){
 		System.out.println("controler");
 	}
 
-	public void setStage(Stage stage) {
-		this.stage = stage;
-	}
-	
-	public void goToPageAdminAcceuil(){
+    /**
+	 * Methode pour aller a la page acceuil admin
+	 * @param event
+	 */
+	public void goToPageAdminAcceuil(ActionEvent event) {
 		System.out.println("goToPageAdminAcceuil");
-		this.goTo("file:../fxml/pageFxml/Administateur/PageAdminAcceuil.fxml");
-		stage.setResizable(true);
+		goTo("/pageFxml/Administrateur/PageAdminAcceuil.fxml", event);
 	}
 
-	private void goTo(String fichier){
-		try {
-			FXMLLoader loader = new FXMLLoader(new URL(fichier));
-			Parent root = loader.load();
-			Scene scene = new Scene(root);
-			this.stage.setScene(scene);
-			this.stage.centerOnScreen();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-	}
 	/**
-	public void versPageLogin(ActionEvent e){
-		
-		System.out.println("login");
-		this.changerDePage("file:../ressources/Login.fxml");
-		stage.setResizable(false);
+	 * Methode pour aller a la page acceuil secouriste 
+	 * @param event
+	 */
+	public void goToPageSecouristeAcceuil(ActionEvent event){
+		System.out.println("goToPageSecouristeAcceuil");
+		goTo("/pageFxml/Secouriste/PageSecouristeAcceuil.fxml", event);
+	}
+
+	/**
+	 * Methode pour charger la page a afficher 
+	 * @param fichier acces au fichier fxml
+	 * @param event event de l'action
+	 */
+	private void goTo(String fichier, ActionEvent event) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource(fichier));
+			Scene scene = new Scene(root);
+			Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+			stage.setScene(scene);
+			stage.centerOnScreen();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			System.err.println("Resource not found: " + fichier);
+		}
+	}
+
+	public void initializer(){
+		System.out.println("Initializer");
 
 	}
 	
-	
-	public void versPageAccueil(ActionEvent ev){
-		System.out.println("accueil");
-		this.changerDePage("file:../ressources/Accueil.fxml");
-		stage.setResizable(true);
-	}
-	
-	public void versPageCreation(ActionEvent ev){
-		System.out.println("creation");
-		this.changerDePage("file:../ressources/Creation.fxml");
-		stage.setResizable(false);
-	}
-	
-	public void versPageAdmin(ActionEvent ev){
-		System.out.println("admin");
-		this.changerDePage("file:../ressources/Admin.fxml");
-		stage.setResizable(true);
-	}
-	
-	
-	private void changerDePage(String url) {
-		try {
-			FXMLLoader loader = new FXMLLoader(new URL(url));
-			Parent root = loader.load();
-			Scene scene = new Scene(root);
-			Controller.stage.setScene(scene);
-			Controller.stage.centerOnScreen();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-	}**/
 }
