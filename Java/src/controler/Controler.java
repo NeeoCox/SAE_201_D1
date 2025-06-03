@@ -94,7 +94,26 @@ public class Controler {
 		goTo("/pageFxml/Administrateur/CreationSecouriste.fxml", event);
 	}
 
-	public void 
+	public void goToGestionDesSecouristes(ActionEvent event){
+		System.out.println("goToGestionDesSecouristes");
+		goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
+	}
+
+	public void goToGestionDesCompetences(ActionEvent event){
+		System.out.println("goToGestionDesCompetences");
+		goTo("/pageFxml/Administrateur/GestionDesCompetences.fxml", event);
+	}
+	
+	public void goToPageAffectationSecouristes(ActionEvent event){
+		System.out.println("goToPageAffectationSecouristes");
+		goTo("/pageFxml/Administrateur/AffectationSecouristes.fxml", event);
+	}
+
+	public void goToDispositifsDeSecours(ActionEvent event){
+		System.out.println("goToDispositifsDeSecours");
+		goTo("/pageFxml/Administrateur/DispositifsDeSecours.fxml", event);
+	}
+	
 
 	/**
 	 * Methode pour charger la page a afficher 
