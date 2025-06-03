@@ -21,7 +21,7 @@ public class App extends Application {
             stage.setTitle("Application gestion planning");
             stage.setScene(new Scene(root));
             
-            //stage.getIcons().add(new Image("file:chemin pour l'image"));
+            stage.getIcons().add(new Image("file:../fxml/img/chara.jpg"));
             
 		    stage.centerOnScreen();
             
