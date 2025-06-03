@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.swing.Action;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +21,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 /**
- * La classe Controler de l'app
+ * La classe Controler de l'application
+ * @author M.COIGNARD, L.VIMART, A.COUDIERE
  */
 public class Controler {
 
@@ -42,7 +40,7 @@ public class Controler {
 
 	/**
 	 ***********************************
-	 * Bouton pour la page Admin
+	 * Bouton pour la page acceuil Admin
 	 ***********************************
 	 */
 	@FXML
@@ -53,11 +51,19 @@ public class Controler {
 	private Button buttonDPS;
 	@FXML 
 	private Button buttonGestComp;
+	@FXML 
+	private Button buttonCreationSec;
 
 
 	public Controler(){
 		System.out.println("controler");
 	}
+
+	/**
+	 ***********************************
+	 * Methode pour changer de page de la page connexion
+	 ***********************************
+	 */
 
     /**
 	 * Methode pour aller a la page acceuil admin
@@ -76,6 +82,19 @@ public class Controler {
 		System.out.println("goToPageSecouristeAcceuil");
 		goTo("/pageFxml/Secouriste/PageSecouristeAcceuil.fxml", event);
 	}
+
+	/**
+	 ***********************************
+	 * Methode pour changer de page de la page acceuil admin
+	 ***********************************
+	 */
+
+	public void goToCreationDeSouriste(ActionEvent event){
+		System.out.println("goToCreationDeSouriste");
+		goTo("/pageFxml/Administrateur/CreationSecouriste.fxml", event);
+	}
+
+	public void 
 
 	/**
 	 * Methode pour charger la page a afficher 
