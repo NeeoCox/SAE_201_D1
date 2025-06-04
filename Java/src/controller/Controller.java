@@ -1,5 +1,10 @@
 package controller;
+<<<<<<<< HEAD:Java/src/controller/Controller.java
 
+========
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+>>>>>>>> b547f5c (	deleted:    Java/class/controler/Controler.class):Java/src/controller/Controler.java
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
