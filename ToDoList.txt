@@ -1,6 +1,7 @@
 S2.01 partie POO (13/06/2025 23h59) :
 
-- Le diagramme de classes correspondant au diagramme de conception de la base de données, accompagné d’une explication textuelle des différents choix effectués (explication des méthodes ajoutées, des associations, des types des attributs lorsque ceux-ci ne sont pas évidents, etc.);
+- Le diagramme de classes correspondant au diagramme de conception de la base de données, 
+    accompagné d’une explication textuelle des différents choix effectués (explication des méthodes ajoutées, des associations, des types des attributs lorsque ceux-ci ne sont pas évidents, etc.);
 
 - Le diagramme de séquence du scénario choisi;
 
@@ -36,9 +37,12 @@ S2.02 (13/06/2025 23h59) :
 
 S2.03 (09/06/2025 23h59) :
 
-- Un manuel technique en anglais, détaillant les étapes d’installation et de configuration des machines virtuelles, du serveur de base de données, du serveur DNS, du serveur DHCP et des tests effectués pour simuler la connexion réseau. Ce document doit permettre à un autre technicien de reproduire toutes les installations étape par étape et d’obtenir un système fonctionnel.
+- Un manuel technique en anglais, détaillant les étapes d’installation et de configuration des machines virtuelles, du serveur de base de données, du serveur DNS, du serveur DHCP et des tests effectués pour simuler la connexion réseau. 
+  Ce document doit permettre à un autre technicien de reproduire toutes les installations étape par étape et d’obtenir un système fonctionnel.
 
-- Un compte rendu de déploiement et de tests en anglais, décrivant les étapes du déploiement et des tests effectués, ainsi que les résultats obtenus lors de la simulation de la connexion réseau. Ce compte rendu est un retour d’expérience. Il doit contenir une explication de l’ordre dans lequel les installations ont été effectuées, les erreurs ou problèmes rencontrés, les tests réalisés pour détecter ces problèmes, les raisons de ces tests, ainsi que la manière dont les difficultés ont été résolues.
+- Un compte rendu de déploiement et de tests en anglais, décrivant les étapes du déploiement et des tests effectués, ainsi que les résultats obtenus lors de la simulation de la connexion réseau.
+  Ce compte rendu est un retour d’expérience. Il doit contenir une explication de l’ordre dans lequel les installations ont été effectuées, les erreurs ou problèmes rencontrés, les tests réalisés pour détecter ces problèmes, les raisons de ces tests, ainsi que la manière dont les difficultés ont été résolues.
 
-- Une vidéo de démonstration en anglais, illustrant le fonctionnement de l’infrastructure virtuelle, incluant la mise en place de la base de données, du DNS local et du serveur DHCP, ainsi que les tests de connectivité entre les machines virtuelles. Tous les étudiants d’un même groupe doivent prendre la parole de manière équitable dans la vidéo, qui ne doit pas dépasser 10 minutes (c’est une limite maximale, vous pouvez faire moins).
+- Une vidéo de démonstration en anglais, illustrant le fonctionnement de l’infrastructure virtuelle, incluant la mise en place de la base de données, du DNS local et du serveur DHCP, ainsi que les tests de connectivité entre les machines virtuelles. 
+  Tous les étudiants d’un même groupe doivent prendre la parole de manière équitable dans la vidéo, qui ne doit pas dépasser 10 minutes (c’est une limite maximale, vous pouvez faire moins).
 
