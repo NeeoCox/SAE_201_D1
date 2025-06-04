@@ -1,8 +1,6 @@
 S2.01 partie POO (13/06/2025 23h59) :
 
-- Le diagramme de classes correspondant au diagramme de conception de la base de données, accompagn
-é d’une explication textuelle des différents choix effectués (explication des méthodes ajoutées, de
-s associations, des types des attributs lorsque ceux-ci ne sont pas évidents, etc.);
+- Le diagramme de classes correspondant au diagramme de conception de la base de données, accompagné d’une explication textuelle des différents choix effectués (explication des méthodes ajoutées, des associations, des types des attributs lorsque ceux-ci ne sont pas évidents, etc.);
 
 - Le diagramme de séquence du scénario choisi;
 
