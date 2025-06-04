@@ -22,7 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.Node;
 
 /**
- * La classe Controler de l'application
+ * La classe Controller de l'application
  * @author M.COIGNARD, L.VIMART, A.COUDIERE
  */
 public class Controller {
