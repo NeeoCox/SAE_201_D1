@@ -1,4 +1,4 @@
-package vue;
+package view;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-import controler.Controler;
+import controller.Controler;
 
 public class App extends Application {
     @Override
