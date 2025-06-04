@@ -61,13 +61,58 @@ public class Controler {
 
 	/**
 	 ***********************************
-	 * Methode pour changer de page de la page connexion
+	 * TOUTES LES METHODE DES BOUTON DES PAGES DE CONNEXION 
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page de connexion
+	  * @param event l'evenement de l'action
+	  */
+	public void goToPageConnection(ActionEvent event){
+		System.out.println("goToPageConnection");
+		goTo("/pageFxml/PageConnexion/PageConnection.fxml", event);
+	}
+
+	/**
+	 * Methode pour aller a la page de connection Admin
+	 * @param event l'evenement de l'action
+	 */
+	public void goToConnectionAdmin(ActionEvent event){
+		System.out.println("goToConnectionAdmin");
+		goTo("/pageFxml/PageConnexion/PageConnectionAdmin.fxml", event);
+	}
+
+	/**
+	 * Methode pour aller a la page de connection Secouriste
+	 * @param event l'evenement de l'action
+	 */
+	public void goToConnectionSecouriste(ActionEvent event){
+		System.out.println("goToConnectionSecouriste");
+		goTo("/pageFxml/PageConnexion/PageConnectionSecouriste.fxml", event);
+	}
+
+	/**
+	 * Methode pour aller a la page ResetPassWord
+	 * @param event l'evenement de l'action
+	 */
+	public void goToResetPassWord(ActionEvent event){
+		System.out.println("goToResetPassWord");
+		goTo("/pageFxml/PageConnexion/ResetPassWord.fxml", event);
+	}
+
+	/**
+	 * Methode pour aller a la page ChangePassWord
+	 * @param event l'evenement de l'action
+	 */
+	public void goToChangePassWord(ActionEvent event){
+		System.out.println("goToChangePassWord");
+		goTo("/pageFxml/PageConnexion/ChangePassWord.fxml", event);
+	}
+
     /**
 	 * Methode pour aller a la page acceuil admin
-	 * @param event
+	 * @param event l'evenement de l'action
 	 */
 	public void goToPageAdminAcceuil(ActionEvent event) {
 		System.out.println("goToPageAdminAcceuil");
@@ -76,7 +121,7 @@ public class Controler {
 
 	/**
 	 * Methode pour aller a la page acceuil secouriste 
-	 * @param event
+	 * @param event l'evenement de l'action
 	 */
 	public void goToPageSecouristeAcceuil(ActionEvent event){
 		System.out.println("goToPageSecouristeAcceuil");
@@ -85,14 +130,19 @@ public class Controler {
 
 	/**
 	 ***********************************
-	 * Methode pour changer de page de la page acceuil admin
+	 * METHODE POUR LES BOUTON DE LA PAGE ADMIN
 	 ***********************************
 	 */
 
+	/**
+	 * 
+	 * @param event
+	 */
 	public void goToCreationDeSouriste(ActionEvent event){
 		System.out.println("goToCreationDeSouriste");
 		goTo("/pageFxml/Administrateur/CreationSecouriste.fxml", event);
 	}
+
 
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
@@ -116,7 +166,7 @@ public class Controler {
 	
 
 	/**
-	 * Methode pour charger la page a afficher 
+	 * Methode pour charger la page a afficher
 	 * @param fichier acces au fichier fxml
 	 * @param event event de l'action
 	 */
