@@ -1,0 +1,5 @@
+Compiler :
+javac --module-path ..\lib\javafx\ --add-modules javafx.controls,javafx.graphics,javafx.fxml -d ..\class -sourcepath ..\src\ ..\src\package\Classe.java
+
+Exécuter :
+java --module-path ..\lib\javafx\ --add-modules javafx.controls,javafx.graphics,javafx.fxml -d ..\class -cp "..\class;..\lib\mysql\mysql-connector-j-9.3.0.jar" package.Classe
