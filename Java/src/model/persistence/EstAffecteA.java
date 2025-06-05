@@ -132,4 +132,17 @@ public class EstAffecteA {
     public void setIdDPS(long unIdDPS) {
         this.idDPS = unIdDPS;
     }
+
+
+    @Override
+    public String toString() {
+        return "EstAffecteA{" +
+                "leSecouriste=" + leSecouriste +
+                ", idSecouriste=" + idSecouriste +
+                ", laCompetence=" + laCompetence +
+                ", intituleCompetence='" + intituleCompetence + '\'' +
+                ", leDPS=" + leDPS +
+                ", idDPS=" + idDPS +
+                '}';
+    }
 }

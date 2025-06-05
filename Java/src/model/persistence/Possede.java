@@ -90,4 +90,15 @@ public class Possede {
     public void setIntituleCompetence(String unIntituleCompetence) {
         this.intituleCompetence = unIntituleCompetence;
     }
+
+
+    @Override
+    public String toString() {
+        return "Possede{" +
+                "leSecouriste=" + leSecouriste +
+                ", idSecouriste=" + idSecouriste +
+                ", laCompetence=" + laCompetence +
+                ", intituleCompetence='" + intituleCompetence + '\'' +
+                '}';
+    }
 }

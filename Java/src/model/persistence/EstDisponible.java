@@ -167,4 +167,17 @@ public class EstDisponible {
     public void setAnneeJournee(int uneAnneeJournee) {
         this.anneeJournee = uneAnneeJournee;
     }
+
+
+    @Override
+    public String toString() {
+        return "EstDisponible{" +
+                "leSecouriste=" + leSecouriste +
+                ", idSecouriste=" + idSecouriste +
+                ", laJournee=" + laJournee +
+                ", jourJournee=" + jourJournee +
+                ", moisJournee=" + moisJournee +
+                ", anneeJournee=" + anneeJournee +
+                '}';
+    }
 }
