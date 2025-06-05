@@ -48,6 +48,11 @@ public class DAG {
         addDependence("PBF", "PBC");
     }
 
+    /**
+     * renvoie vrai si la compétences est possédée
+     * @param competences la compétences à vérifier
+     * @return true si la compétence est possédée, false sinon
+     */
     public boolean estPossedee(String competences){
         boolean possede = false;
         if(competences == null || competences.isEmpty()) {
