@@ -162,7 +162,7 @@ public class Controller {
 	 */
 	public void goToCreationDeSouriste(ActionEvent event){
 		System.out.println("goToCreationDeSouriste");
-		goTo("/pageFxml/Administrateur/CreationSecouriste.fxml", event);
+		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
 	}
 
 
