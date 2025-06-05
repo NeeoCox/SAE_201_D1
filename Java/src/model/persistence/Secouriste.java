@@ -153,4 +153,18 @@ public class Secouriste {
     public void setAdresse(String uneAdresse) {
         this.adresse = uneAdresse;
     }
+
+
+    @Override
+    public String toString() {
+        return "Secouriste{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", dateNaissance='" + dateNaissance + '\'' +
+                ", email='" + email + '\'' +
+                ", tel='" + tel + '\'' +
+                ", adresse='" + adresse + '\'' +
+                '}';
+    }
 }

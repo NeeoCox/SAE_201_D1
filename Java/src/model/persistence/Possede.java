@@ -53,7 +53,7 @@ public class Possede {
      * Mutateur de l'attribut idSecouriste.
      * @param unIdSecouriste Le nouvel identifiant du secouriste possédant la compétence.
      */
-    public void setIdSecouriste(int unIdSecouriste) {
+    public void setIdSecouriste(long unIdSecouriste) {
         this.idSecouriste = unIdSecouriste;
     }
 
@@ -89,5 +89,16 @@ public class Possede {
      */
     public void setIntituleCompetence(String unIntituleCompetence) {
         this.intituleCompetence = unIntituleCompetence;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Possede{" +
+                "leSecouriste=" + leSecouriste +
+                ", idSecouriste=" + idSecouriste +
+                ", laCompetence=" + laCompetence +
+                ", intituleCompetence='" + intituleCompetence + '\'' +
+                '}';
     }
 }

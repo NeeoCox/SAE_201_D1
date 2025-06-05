@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-import controller.Controller;
-
 public class App extends Application {
     @Override
     public void start(Stage stage) {

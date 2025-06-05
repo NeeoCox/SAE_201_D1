@@ -142,4 +142,15 @@ public class Besoin {
     public void setIdDPS(long unIdDPS) {
         this.idDPS = unIdDPS;
     }
+
+    @Override
+    public String toString() {
+        return "Besoin{" +
+                "nombre=" + nombre +
+                ", laCompetence=" + laCompetence +
+                ", intituleCompetence='" + intituleCompetence + '\'' +
+                ", leDPS=" + leDPS +
+                ", idDPS=" + idDPS +
+                '}';
+    }
 }

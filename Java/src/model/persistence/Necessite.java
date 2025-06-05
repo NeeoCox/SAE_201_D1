@@ -90,4 +90,15 @@ public class Necessite {
     public void setIntituleCompetenceNecessaire(String unIntituleCompetence) {
         this.intituleCompetenceNecessaire = unIntituleCompetence;
     }
+
+
+    @Override
+    public String toString() {
+        return "Nécessite{" +
+                "laCompetence=" + laCompetence +
+                ", intituleCompetence='" + intituleCompetence + '\'' +
+                ", competenceNecessaire=" + competenceNecessaire +
+                ", intituleCompetenceNecessaire='" + intituleCompetenceNecessaire + '\'' +
+                '}';
+    }
 }

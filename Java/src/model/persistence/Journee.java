@@ -91,4 +91,14 @@ public class Journee {
     public void setAnnee(int uneAnnee) {
         this.annee = uneAnnee;
     }
+
+
+    @Override
+    public String toString() {
+        return "Journee{" +
+                "jour=" + jour +
+                ", mois=" + mois +
+                ", annee=" + annee +
+                '}';
+    }
 }

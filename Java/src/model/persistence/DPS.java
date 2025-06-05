@@ -151,4 +151,17 @@ public class DPS {
     public void setConcerne(Sport unSport) {
         this.concerne = unSport;
     }
+
+
+    @Override
+    public String toString() {
+        return "DPS{" +
+                "id=" + id +
+                ", horaireDepart=" + horaireDepart +
+                ", horaireFin=" + horaireFin +
+                ", estProgramme=" + estProgramme +
+                ", aLieuDans=" + aLieuDans +
+                ", concerne=" + concerne +
+                '}';
+    }
 }
