@@ -185,6 +185,27 @@ public class Controller {
 		System.out.println("goToDispositifsDeSecours");
 		goTo("/pageFxml/Administrateur/DispositifsDeSecours.fxml", event);
 	}
+
+	/**
+	 ***********************************
+	 * METHODE POUR LES BOUTON DE LA PAGE SECOURISTE
+	 ***********************************
+	 */
+
+	public void goToMesCompetences(ActionEvent event){
+		System.out.println("goToMesCompetences");
+		goTo("/pageFxml/Secouriste/MesCompetences.fxml", event);
+	}
+
+	public void goToMesDisponibilite(ActionEvent event){
+		System.out.println("goToMesDisponibilite");
+		goTo("/pageFxml/Secouriste/MesDisponibilite.fxml", event);
+	}
+
+	public void goToMonPlanningEtAffectations(ActionEvent event){
+		System.out.println("goToMonPlanningEtAffectations");
+		goTo("/pageFxml/Secouriste/goToMonPlanningEtAffectations.fxml", event);
+	}
 	
 
 	/**
