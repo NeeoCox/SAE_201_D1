@@ -1,10 +1,4 @@
 package controller;
-<<<<<<<< HEAD:Java/src/controller/Controller.java
-
-========
-import java.io.BufferedWriter;
-import java.io.FileWriter;
->>>>>>>> b547f5c (	deleted:    Java/class/controler/Controler.class):Java/src/controller/Controler.java
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,6 +24,14 @@ public class Controller {
 	private Button buttonAdmin;
 	@FXML
 	private Button buttonScouriste;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page de connexion Admin
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonConncetionAdmin;
 
 	/**
 	 ***********************************
@@ -64,7 +66,7 @@ public class Controller {
 	  */
 	public void goToPageConnection(ActionEvent event){
 		System.out.println("goToPageConnection");
-		goTo("/pageFxml/PageConnexion/PageConnection.fxml", event);
+		goTo("/pageFxml/PageConnection/PageConnection.fxml", event);
 	}
 
 	/**
@@ -73,7 +75,7 @@ public class Controller {
 	 */
 	public void goToConnectionAdmin(ActionEvent event){
 		System.out.println("goToConnectionAdmin");
-		goTo("/pageFxml/PageConnexion/PageConnectionAdmin.fxml", event);
+		goTo("/pageFxml/PageConnection/ConnectionAdmin.fxml", event);
 	}
 
 	/**
@@ -82,7 +84,7 @@ public class Controller {
 	 */
 	public void goToConnectionSecouriste(ActionEvent event){
 		System.out.println("goToConnectionSecouriste");
-		goTo("/pageFxml/PageConnexion/PageConnectionSecouriste.fxml", event);
+		goTo("/pageFxml/PageConnection/ConnectionSecouriste.fxml", event);
 	}
 
 	/**
@@ -91,7 +93,7 @@ public class Controller {
 	 */
 	public void goToResetPassWord(ActionEvent event){
 		System.out.println("goToResetPassWord");
-		goTo("/pageFxml/PageConnexion/ResetPassWord.fxml", event);
+		goTo("/pageFxml/PageConnection/ResetPassWord.fxml", event);
 	}
 
 	/**
@@ -100,7 +102,7 @@ public class Controller {
 	 */
 	public void goToChangePassWord(ActionEvent event){
 		System.out.println("goToChangePassWord");
-		goTo("/pageFxml/PageConnexion/ChangePassWord.fxml", event);
+		goTo("/pageFxml/PageConnection/ChangePassWord.fxml", event);
 	}
 
     /**
@@ -149,7 +151,7 @@ public class Controller {
 	
 	public void goToPageAffectationSecouristes(ActionEvent event){
 		System.out.println("goToPageAffectationSecouristes");
-		goTo("/pageFxml/Administrateur/AffectationSecouristes.fxml", event);
+		goTo("/pageFxml/Administrateur/PageAffectationSecouristes.fxml", event);
 	}
 
 	public void goToDispositifsDeSecours(ActionEvent event){
