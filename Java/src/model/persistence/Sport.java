@@ -59,4 +59,13 @@ public class Sport {
     public void setNom(String unNom) {
         this.nom = unNom;
     }
+
+
+    @Override
+    public String toString() {
+        return "Sport{" +
+                "code='" + code + '\'' +
+                ", nom='" + nom + '\'' +
+                '}';
+    }
 }

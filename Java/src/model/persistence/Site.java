@@ -104,4 +104,15 @@ public class Site {
     public void setLatitude(float uneLatitude) {
         this.latitude = uneLatitude;
     }
+
+
+    @Override
+    public String toString() {
+        return "Site{" +
+                "code='" + code + '\'' +
+                ", nom='" + nom + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                '}';
+    }
 }

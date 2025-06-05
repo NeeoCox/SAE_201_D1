@@ -27,4 +27,12 @@ public class Competence {
     public void setIntitule(String unIntitule) {
         this.intitule = unIntitule;
     }
+
+    
+    @Override
+    public String toString() {
+        return "Compétence{" +
+                "intitule='" + intitule + '\'' +
+                '}';
+    }
 }
