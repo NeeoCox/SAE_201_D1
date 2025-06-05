@@ -1,0 +1,5 @@
+A faire: 
+- fonction pour vérif graphe compétence DAG, quand ajout compétence.
+- méthode exhaustive qui évalue toutes les combinaisons possibles pour affecter les secouristes aux dispositifs (DPS).
+- méthode gloutonne où les secouristes sont affectés progressivement. 
+- comparer les deux: performances, test cas, permettre à l'utilisateur de choisir méthode et d'afficher les résultats.
