@@ -1,11 +1,9 @@
-<<<<<<< HEAD:Java/src/model/service/DPSMngt.java
 package model.service;
-=======
-package metier.service;
-import metier.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
->>>>>>> 2ed2943cdf851ffc3cfbaad7f0687a5319cf2818:Java/src/metier/service/DPSMngt.java
+import model.persistence.*;
+
 
 /**
  * Classe de gestion des dispositifs de secours.
@@ -16,7 +14,7 @@ import java.util.List;
 public class DPSMngt {
 
     // Pour stocker les DPS
-    private List<DPS> listeDPS = new ArrayList<>();
+    private final List<DPS> listeDPS = new ArrayList<>();
 
 
     /**

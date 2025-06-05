@@ -1,11 +1,8 @@
-<<<<<<< HEAD:Java/src/model/service/SecouristeMngt.java
 package model.service;
-=======
-package metier.service;
-import metier.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
->>>>>>> 2ed2943cdf851ffc3cfbaad7f0687a5319cf2818:Java/src/metier/service/SecouristeMngt.java
+import model.persistence.*;
 
 /**
  * Classe de gestion des secouristes.
@@ -16,7 +13,7 @@ import java.util.List;
 public class SecouristeMngt {
 
     // Pour stocker les secouristes
-    private List<Secouriste> listeSecouristes = new ArrayList<>();
+    private final List<Secouriste> listeSecouristes = new ArrayList<>();
 
 
     /**

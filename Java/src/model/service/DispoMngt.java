@@ -1,11 +1,8 @@
-<<<<<<< HEAD:Java/src/model/service/DispoMngt.java
 package model.service;
-=======
-package metier.service;
-import metier.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
->>>>>>> 2ed2943cdf851ffc3cfbaad7f0687a5319cf2818:Java/src/metier/service/DispoMngt.java
+import model.persistence.*;
 
 /**
  * Classe de gestion des disponibilités.
@@ -16,7 +13,7 @@ import java.util.List;
 public class DispoMngt {
 
     // Pour stocker les disponibilités
-    private List<EstDisponible> listeDispos = new ArrayList<>();
+    private final List<EstDisponible> listeDispos = new ArrayList<>();
 
     /**
      * Créer une disponibilité
