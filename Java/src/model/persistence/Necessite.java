@@ -10,17 +10,14 @@ public class Necessite {
      * La compétence principale.
      */
     private Competence laCompetence;
-
     /**
      * L'intitulé de la compétence principale.
      */
     private String intituleCompetence;
-
     /**
      * La compétence nécessaire pour exercer la compétence principale.
      */
     private Competence competenceNecessaire;
-
     /**
      * L'intitulé de la compétence nécessaire.
      */

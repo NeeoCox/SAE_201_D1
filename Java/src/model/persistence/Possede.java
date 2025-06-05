@@ -10,17 +10,14 @@ public class Possede {
      * Le secouriste possédant la compétence.
      */
     private Secouriste leSecouriste;
-
     /**
      * L'identifiant du secouriste possédant la compétence.
      */
     private long idSecouriste;
-
     /**
      * La compétence possédée par le secouriste.
      */
     private Competence laCompetence;
-
     /**
      * L'intitulé de la compétence possédée par le secouriste.
      */

@@ -10,7 +10,6 @@ public class Sport {
      * Le code unique du sport.
      */
     private String code;
-
     /**
      * Le nom du sport.
      */

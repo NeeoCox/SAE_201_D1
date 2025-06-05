@@ -10,32 +10,26 @@ public class Secouriste {
      * L'identifiant unique du secouriste.
      */
     private long id;
-
     /**
      * Le nom du secouriste.
      */
     private String nom;
-
     /**
      * Le prénom du secouriste.
      */
     private String prenom;
-
     /**
      * La date de naissance du secouriste.
      */
     private String dateNaissance;
-
     /**
      * L'adresse email du secouriste.
      */
     private String email;
-
     /**
      * Le numéro de téléphone du secouriste.
      */
     private String tel;
-
     /**
      * L'adresse postale du secouriste.
      */
