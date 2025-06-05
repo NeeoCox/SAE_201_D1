@@ -10,7 +10,7 @@
    <top>
       <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonRetourMesComp" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#buttonRetourMesComp" text="Retour" />
+            <Button fx:id="buttonRetourMesComp" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageSecouristeAcceuil" text="Retour" />
             <Label alignment="CENTER" layoutX="113.0" layoutY="14.0" prefHeight="35.0" prefWidth="375.0" text="Mes compétences">
                <font>
                   <Font size="24.0" />
