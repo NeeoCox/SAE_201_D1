@@ -27,7 +27,7 @@
             <TextField layoutX="227.0" layoutY="173.0" />
             <Label layoutX="226.0" layoutY="85.0" text="Identifiant" />
             <Label layoutX="226.0" layoutY="148.0" text="Mot de passe" />
-            <Button fx:id="buttonConnetSec" layoutX="259.0" layoutY="243.0" mnemonicParsing="false" onAction="#goToPageSecouristeAcceuil" text="Se connecter" />
+            <Button fx:id="buttonConnectSec" layoutX="259.0" layoutY="243.0" mnemonicParsing="false" onAction="#goToPageSecouristeAcceuil" text="Se connecter" />
          </children>
       </AnchorPane>
    </center>
