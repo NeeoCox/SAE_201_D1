@@ -1,4 +1,8 @@
 package model.service;
+import java.util.ArrayList;
+import java.util.List;
+import model.persistence.*;
+
 
 /**
  * Classe de gestion des affectations.
@@ -9,7 +13,7 @@ package model.service;
 public class AffectationMngt {
 
     // Pour stocker les affectations
-    private List<EstAffecteA> listeAffectations = new ArrayList<>();
+    private final List<EstAffecteA> listeAffectations = new ArrayList<>();
 
 
     /**

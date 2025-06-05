@@ -1,5 +1,9 @@
 package model.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import model.persistence.*;
+
 /**
  * Classe de gestion des secouristes.
  * Cette classe permet de créer, modifier, supprimer et lister les secouristes.
@@ -9,7 +13,7 @@ package model.service;
 public class SecouristeMngt {
 
     // Pour stocker les secouristes
-    private List<Secouriste> listeSecouristes = new ArrayList<>();
+    private final List<Secouriste> listeSecouristes = new ArrayList<>();
 
 
     /**

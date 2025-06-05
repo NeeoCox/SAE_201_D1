@@ -1,5 +1,10 @@
 package model.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import model.persistence.*;
+
+
 /**
  * Classe de gestion des dispositifs de secours.
  * Cette classe permet de créer, modifier, supprimer et lister les DPS.
@@ -9,7 +14,7 @@ package model.service;
 public class DPSMngt {
 
     // Pour stocker les DPS
-    private List<DPS> listeDPS = new ArrayList<>();
+    private final List<DPS> listeDPS = new ArrayList<>();
 
 
     /**

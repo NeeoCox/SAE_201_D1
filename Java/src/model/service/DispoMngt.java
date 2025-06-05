@@ -1,5 +1,9 @@
 package model.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import model.persistence.*;
+
 /**
  * Classe de gestion des disponibilités.
  * Cette classe permet de créer, modifier, supprimer et lister les disponibilités.
@@ -9,7 +13,7 @@ package model.service;
 public class DispoMngt {
 
     // Pour stocker les disponibilités
-    private List<EstDisponible> listeDispos = new ArrayList<>();
+    private final List<EstDisponible> listeDispos = new ArrayList<>();
 
     /**
      * Créer une disponibilité
