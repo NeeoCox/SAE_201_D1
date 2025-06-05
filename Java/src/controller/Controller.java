@@ -40,17 +40,21 @@ public class Controller {
 
 	/**
 	 ***********************************
-	 * Bouton pour la page de connexion Admin
+	 * Bouton pour la page de connection Admin
 	 ***********************************
 	 */
 	@FXML
 	private Button buttonConncetionAdmin;
+	@FXML 
+	private Button buttonRetourConnectAdmin;
 
 	/**
 	 ***********************************
 	 * Bouton pour la page acceuil Admin
 	 ***********************************
 	 */
+	@FXML
+	private Button buttonRetourAcceuilAdmin;
 	@FXML
 	private Button buttonAffectSec;
 	@FXML
@@ -61,6 +65,16 @@ public class Controller {
 	private Button buttonGestComp;
 	@FXML 
 	private Button buttonCreationSec;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page connction Secouriste
+	 ***********************************
+	 */
+	@FXML 
+	private Button buttonRetourAcceuilSec;
+	@FXML 
+	private Button buttonConnetSec;
 
 
 	public Controller(){
