@@ -6,11 +6,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <top>
       <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonRetourAcceuilSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" text="Retour" onAction="#goToPageSecouristeAcceuil" />
+            <Button fx:id="buttonRetourAcceuilSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" text="Retour" onAction="#goToPageConnection" />
             <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" text="Acceuil Secouriste">
                <font>
                   <Font size="24.0" />
@@ -23,8 +23,8 @@
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="buttonMesComp" layoutX="218.0" layoutY="195.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Mes compétences" onAction="#goToMesCompetences" />
-            <Button fx:id="buttonMonPlanning" layoutX="61.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Mon planning et mes affectations" onAction="#goToPageSecouristeAcceuil" />
-            <Button fx:id="buttonMesDisp" layoutX="383.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Mes disponibilités" onAction="#goToMonPlanningEtAffectations"/>
+            <Button fx:id="buttonMonPlanning" layoutX="61.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Mon planning et mes affectations" onAction="#goToMonPlanningEtAffectations" />
+            <Button fx:id="buttonMesDisp" layoutX="383.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Mes disponibilités" onAction="#goToMesDisponibilite"/>
          </children>
       </AnchorPane>
    </center>

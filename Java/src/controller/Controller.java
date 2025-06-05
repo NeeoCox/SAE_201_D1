@@ -61,7 +61,20 @@ public class Controller {
 	@FXML 
 	private Button buttonRetourAcceuilSec;
 	@FXML 
-	private Button buttonConnetSec;
+	private Button buttonConnectSec;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page acceuil Secouriste
+	 ***********************************
+	 */
+
+	 @FXML
+	 private Button buttonMesComp;
+	 @FXML
+	 private Button buttonMonPlanning;
+	 @FXML
+	 private Button buttonMesDisp;
 
 
 	public Controller(){
@@ -191,7 +204,7 @@ public class Controller {
 
 	public void goToMonPlanningEtAffectations(ActionEvent event){
 		System.out.println("goToMonPlanningEtAffectations");
-		goTo("/pageFxml/Secouriste/goToMonPlanningEtAffectations.fxml", event);
+		goTo("/pageFxml/Secouriste/MonPlanningEtAffectations.fxml", event);
 	}
 	
 
