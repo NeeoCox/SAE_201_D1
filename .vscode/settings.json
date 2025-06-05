@@ -1,7 +1,6 @@
 {
     "java.project.sourcePaths": [
-        "java\\javafx-sdk-21.0.7",
-        "java\\mysql-connector-j-9.3.0"
+        "java\\javafx-sdk-21.0.7"
     ],
     "java.project.referencedLibraries": []
 }
