@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
- minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controler">
+ minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <top>
       <Label alignment="CENTER" prefHeight="54.0" prefWidth="620.0" style="-fx-background-color: #125f7d;" text="Gestion de secouristes" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
