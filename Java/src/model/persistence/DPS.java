@@ -10,31 +10,45 @@ public class DPS {
      * L'identifiant unique du DPS.
      */
     private long id;
-
     /**
      * L'horaire de départ du DPS.
      */
     private int horaireDepart;
-
     /**
      * L'horaire de fin du DPS.
      */
     private int horaireFin;
-
     /**
      * La journée pendant laquelle le DPS est programmé.
      */
     private Journee estProgramme;
-
     /**
      * Le site où le DPS a lieu.
      */
     private Site aLieuDans;
-
     /**
      * Le sport concerné par le DPS.
      */
     private Sport concerne;
+
+    
+    /**
+     * Constructeur de la classe DPS.
+     * @param unId L'identifiant unique du DPS.
+     * @param unHoraireDepart L'horaire de départ du DPS.
+     * @param unHoraireFin L'horaire de fin du DPS.
+     * @param uneJournee La journée pendant laquelle le DPS est programmé.
+     * @param unSite Le site où le DPS a lieu.
+     * @param unSport Le sport concerné par le DPS.
+     */
+    public DPS(long unId, int unHoraireDepart, int unHoraireFin, Journee uneJournee, Site unSite, Sport unSport) {
+        this.id = unId;
+        this.horaireDepart = unHoraireDepart;
+        this.horaireFin = unHoraireFin;
+        this.estProgramme = uneJournee;
+        this.aLieuDans = unSite;
+        this.concerne = unSport;
+    }
 
 
     /**

@@ -10,27 +10,22 @@ public class EstAffecteA {
      * Le secouriste affecté.
      */
     private Secouriste leSecouriste;
-
     /**
      * L'identifiant du secouriste affecté.
      */
     private long idSecouriste;
-
     /**
      * La compétence à laquelle le secouriste est affecté.
      */
     private Competence laCompetence;
-
     /**
      * L'intitulé de la compétence à laquelle le secouriste est affecté.
      */
     private String intituleCompetence;
-
     /**
      * Le DPS auquel le secouriste est affecté.
      */
     private DPS leDPS;
-
     /**
      * L'identifiant du DPS auquel le secouriste est affecté.
      */

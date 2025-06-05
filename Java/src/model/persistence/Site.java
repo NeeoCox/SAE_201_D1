@@ -10,22 +10,33 @@ public class Site {
      * Le code unique du site.
      */
     private String code;
-
     /**
      * Le nom du site.
      */
     private String nom;
-
     /**
      * La longitude géographique du site.
      */
     private float longitude;
-
     /**
      * La latitude géographique du site.
      */
     private float latitude;
 
+    /**
+     * Constructeur de la classe Site.
+     * @param unCode Le code unique du site.
+     * @param unNom Le nom du site.
+     * @param uneLongitude La longitude géographique du site.
+     * @param uneLatitude La latitude géographique du site.
+     */
+    public Site(String unCode, String unNom, float uneLongitude, float uneLatitude) {
+        this.code = unCode;
+        this.nom = unNom;
+        this.longitude = uneLongitude;
+        this.latitude = uneLatitude;
+    }
+    
 
     /**
      * Accesseur de l'attribut code.

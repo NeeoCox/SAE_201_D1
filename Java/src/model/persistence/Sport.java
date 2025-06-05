@@ -10,11 +10,21 @@ public class Sport {
      * Le code unique du sport.
      */
     private String code;
-
     /**
      * Le nom du sport.
      */
     private String nom;
+
+
+    /**
+     * Constructeur de la classe Sport.
+     * @param unCode Le code unique du sport.
+     * @param unNom Le nom du sport.
+     */
+    public Sport(String unCode, String unNom) {
+        this.code = unCode;
+        this.nom = unNom;
+    }
 
 
     /**

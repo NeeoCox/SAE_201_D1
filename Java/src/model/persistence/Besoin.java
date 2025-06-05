@@ -12,7 +12,6 @@ public class Besoin {
      * Le nombre de compétences dont a besoin le DPS.
      */
     private int nombre;
-
     /**
      * La compétence dont a besoin le DPS.
      */
@@ -21,7 +20,6 @@ public class Besoin {
      * L'intitulé de la compétence dont a besoin le DPS.
      */
     private String intituleCompetence;
-    
     /**
      * Le DPS qui a besoin de la compétence.
      */
@@ -30,6 +28,35 @@ public class Besoin {
      * L'identifiant du DPS qui a besoin de la compétence.
      */
     private long idDPS;
+
+
+    /**
+     * Constructeur de la classe Besoin.
+     * @param unDPS Le DPS qui a besoin de la compétence.
+     * @param uneCompetence La compétence dont a besoin le DPS.
+     * @param unNombre Le nombre de compétences dont a besoin le DPS.
+     */
+    public Besoin(int unNombre, Competence uneCompetence, DPS unDPS) {
+        this.nombre = unNombre;
+        this.laCompetence = uneCompetence;
+        this.intituleCompetence = uneCompetence.getIntitule();
+        this.leDPS = unDPS;
+        this.idDPS = unDPS.getId();
+    }
+
+    /**
+     * Constructeur de la classe Besoin.
+     * @param unIdDPS L'identifiant du DPS qui a besoin de la compétence.
+     * @param unIntituleCompetence L'intitulé de la compétence dont a besoin le DPS.
+     * @param unNombre Le nombre de compétences dont a besoin le DPS.
+     */
+    public Besoin(int unNombre, String unIntituleCompetence, long unIdDPS) {
+        this.nombre = unNombre;
+        this.laCompetence = null;
+        this.intituleCompetence = unIntituleCompetence;
+        this.leDPS = null;
+        this.idDPS = unIdDPS;
+    }
 
 
     /**

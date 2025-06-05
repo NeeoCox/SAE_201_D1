@@ -10,17 +10,37 @@ public class Journee {
      * Le jour de la date.
      */
     private int jour;
-
     /**
      * Le mois de la date.
      */
     private int mois;
-
     /**
      * L'année de la date.
      */
     private int annee;
 
+    
+    /**
+     * Constructeur de la classe Journee.
+     * @param unJour Le jour de la date.
+     * @param unMois Le mois de la date.
+     * @param uneAnnee L'année de la date.
+     */
+    public Journee(int unJour, int unMois, int uneAnnee) {
+        this.jour = unJour;
+        this.mois = unMois;
+        this.annee = uneAnnee;
+    }
+
+    /**
+     * Constructeur par défaut de la classe Journee.
+     * Initialise la date au 1er janvier 1970.
+     */
+    public Journee() {
+        this.jour = 1;
+        this.mois = 1;
+        this.annee = 1970;
+    }
 
     /**
      * Accesseur de l'attribut jour.
