@@ -15,6 +15,8 @@ import javafx.scene.Node;
  */
 public class Controller {
 
+	private Stage stage;
+
 	/**
 	 ***********************************
 	 * Bouton pour la page de connexion
