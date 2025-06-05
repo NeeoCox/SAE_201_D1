@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
@@ -10,8 +11,8 @@
    <top>
       <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonRetourAcceuilSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" text="Retour" onAction="#goToPageConnection" />
-            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" text="Acceuil Secouriste">
+            <Button fx:id="buttonRetourAcceuilSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageConnection" text="Retour" />
+            <Label alignment="CENTER" layoutX="98.0" layoutY="14.0" prefHeight="35.0" prefWidth="404.0" text="Se connecter en tant que Secouriste">
                <font>
                   <Font size="24.0" />
                </font>
@@ -22,9 +23,11 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonMesComp" layoutX="218.0" layoutY="195.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Mes compétences" onAction="#goToMesCompetences" />
-            <Button fx:id="buttonMonPlanning" layoutX="61.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Mon planning et mes affectations" onAction="#goToMonPlanningEtAffectations" />
-            <Button fx:id="buttonMesDisp" layoutX="383.0" layoutY="62.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Mes disponibilités" onAction="#goToMesDisponibilite"/>
+            <TextField layoutX="227.0" layoutY="108.0" />
+            <TextField layoutX="227.0" layoutY="173.0" />
+            <Label layoutX="226.0" layoutY="85.0" text="Identifiant" />
+            <Label layoutX="226.0" layoutY="148.0" text="Mot de passe" />
+            <Button fx:id="buttonConnectSec" layoutX="259.0" layoutY="243.0" mnemonicParsing="false" onAction="#goToPageSecouristeAcceuil" text="Se connecter" />
          </children>
       </AnchorPane>
    </center>

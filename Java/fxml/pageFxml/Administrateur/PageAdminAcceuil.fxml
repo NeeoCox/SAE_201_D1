@@ -6,23 +6,28 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <Label alignment="CENTER" prefHeight="54.0" prefWidth="620.0" style="-fx-background-color: #125f7d;" text="Administrateur" textAlignment="CENTER" BorderPane.alignment="CENTER">
-         <font>
-            <Font name="System Bold" size="22.0" />
-         </font>
-      </Label>
-   </top>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonGestSec" layoutX="47.0" layoutY="228.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Gestion des secouristes" />
-            <Button fx:id="buttonGestComp" layoutX="395.0" layoutY="228.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Gestion des compétences des secouristes" />
-            <Button fx:id="buttonAffectSec" layoutX="47.0" layoutY="32.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Affectation des secouristes" />
-            <Button fx:id="buttonDPS" layoutX="395.0" layoutY="38.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Dispositif de secours" />
-            <Button fx:id="buttonCreationSec" layoutX="218.0" layoutY="128.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="165.0" text="Création de secouriste" />
+            <Button fx:id="buttonGestSec" layoutX="47.0" layoutY="228.0" mnemonicParsing="false" onAction="#goToGestionDesSecouristes" prefHeight="90.0" prefWidth="165.0" text="Gestion des secouristes" />
+            <Button fx:id="buttonGestComp" layoutX="395.0" layoutY="228.0" mnemonicParsing="false" onAction="#goToGestionDesCompetences" prefHeight="90.0" prefWidth="165.0" text="Gestion des compétences des secouristes" />
+            <Button fx:id="buttonAffectSec" layoutX="47.0" layoutY="32.0" mnemonicParsing="false" onAction="#goToPageAffectationSecouristes" prefHeight="90.0" prefWidth="165.0" text="Affectation des secouristes" />
+            <Button fx:id="buttonDPS" layoutX="395.0" layoutY="34.0" mnemonicParsing="false" onAction="#goToDispositifsDeSecours" prefHeight="90.0" prefWidth="165.0" text="Dispositif de secours" />
+            <Button fx:id="buttonCreationSec" layoutX="218.0" layoutY="124.0" mnemonicParsing="false" onAction="#goToCreationDeSouriste" prefHeight="90.0" prefWidth="165.0" text="Création de secouriste" />
          </children>
       </AnchorPane>
    </center>
+   <top>
+      <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="buttonRetourAcceuilAdmin" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageConnection" text="Retour" />
+            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" text="Acceuil Administrateur">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </top>
 </BorderPane>

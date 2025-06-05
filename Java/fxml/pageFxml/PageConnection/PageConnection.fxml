@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controler.Controler">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <top>
       <Label alignment="CENTER" prefHeight="54.0" prefWidth="620.0" style="-fx-background-color: #125f7d;" text="Se connecter en tant que" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
@@ -17,14 +17,14 @@
    <left>
       <AnchorPane prefHeight="346.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonAdmin" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" onAction="#goToPageAdminAcceuil" prefHeight="90.0" prefWidth="125.0" text="Administrateur" />
+            <Button fx:id="buttonAdmin" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" onAction="#goToConnectionAdmin" prefHeight="90.0" prefWidth="125.0" text="Administrateur" />
          </children>
       </AnchorPane>
    </left>
    <right>
       <AnchorPane prefHeight="346.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonSecouriste" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" onAction="#goToPageSecouristeAcceuil" prefHeight="90.0" prefWidth="125.0" style="-fx-background-color: #125f7d;" text="Secouriste" />
+            <Button fx:id="buttonSecouriste" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" onAction="#goToConnectionSecouriste" prefHeight="90.0" prefWidth="125.0" style="-fx-background-color: #125f7d;" text="Secouriste" />
          </children>
       </AnchorPane>
    </right>

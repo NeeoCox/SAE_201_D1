@@ -1,5 +1,4 @@
 package controller;
-
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +15,8 @@ import javafx.scene.Node;
  */
 public class Controller {
 
+	private Stage stage;
+
 	/**
 	 ***********************************
 	 * Bouton pour la page de connexion
@@ -28,9 +29,21 @@ public class Controller {
 
 	/**
 	 ***********************************
+	 * Bouton pour la page de connection Admin
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonConncetionAdmin;
+	@FXML 
+	private Button buttonRetourConnectAdmin;
+
+	/**
+	 ***********************************
 	 * Bouton pour la page acceuil Admin
 	 ***********************************
 	 */
+	@FXML
+	private Button buttonRetourAcceuilAdmin;
 	@FXML
 	private Button buttonAffectSec;
 	@FXML
@@ -41,6 +54,29 @@ public class Controller {
 	private Button buttonGestComp;
 	@FXML 
 	private Button buttonCreationSec;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page connction Secouriste
+	 ***********************************
+	 */
+	@FXML 
+	private Button buttonRetourAcceuilSec;
+	@FXML 
+	private Button buttonConnectSec;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page acceuil Secouriste
+	 ***********************************
+	 */
+
+	 @FXML
+	 private Button buttonMesComp;
+	 @FXML
+	 private Button buttonMonPlanning;
+	 @FXML
+	 private Button buttonMesDisp;
 
 
 	public Controller(){
@@ -59,7 +95,7 @@ public class Controller {
 	  */
 	public void goToPageConnection(ActionEvent event){
 		System.out.println("goToPageConnection");
-		goTo("/pageFxml/PageConnexion/PageConnection.fxml", event);
+		goTo("/pageFxml/PageConnection/PageConnection.fxml", event);
 	}
 
 	/**
@@ -68,7 +104,7 @@ public class Controller {
 	 */
 	public void goToConnectionAdmin(ActionEvent event){
 		System.out.println("goToConnectionAdmin");
-		goTo("/pageFxml/PageConnexion/PageConnectionAdmin.fxml", event);
+		goTo("/pageFxml/PageConnection/ConnectionAdmin.fxml", event);
 	}
 
 	/**
@@ -77,7 +113,7 @@ public class Controller {
 	 */
 	public void goToConnectionSecouriste(ActionEvent event){
 		System.out.println("goToConnectionSecouriste");
-		goTo("/pageFxml/PageConnexion/PageConnectionSecouriste.fxml", event);
+		goTo("/pageFxml/PageConnection/ConnectionSecouriste.fxml", event);
 	}
 
 	/**
@@ -86,7 +122,7 @@ public class Controller {
 	 */
 	public void goToResetPassWord(ActionEvent event){
 		System.out.println("goToResetPassWord");
-		goTo("/pageFxml/PageConnexion/ResetPassWord.fxml", event);
+		goTo("/pageFxml/PageConnection/ResetPassWord.fxml", event);
 	}
 
 	/**
@@ -95,7 +131,7 @@ public class Controller {
 	 */
 	public void goToChangePassWord(ActionEvent event){
 		System.out.println("goToChangePassWord");
-		goTo("/pageFxml/PageConnexion/ChangePassWord.fxml", event);
+		goTo("/pageFxml/PageConnection/ChangePassWord.fxml", event);
 	}
 
     /**
@@ -128,7 +164,7 @@ public class Controller {
 	 */
 	public void goToCreationDeSouriste(ActionEvent event){
 		System.out.println("goToCreationDeSouriste");
-		goTo("/pageFxml/Administrateur/CreationSecouriste.fxml", event);
+		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
 	}
 
 
@@ -144,12 +180,33 @@ public class Controller {
 	
 	public void goToPageAffectationSecouristes(ActionEvent event){
 		System.out.println("goToPageAffectationSecouristes");
-		goTo("/pageFxml/Administrateur/AffectationSecouristes.fxml", event);
+		goTo("/pageFxml/Administrateur/PageAffectationSecouristes.fxml", event);
 	}
 
 	public void goToDispositifsDeSecours(ActionEvent event){
 		System.out.println("goToDispositifsDeSecours");
 		goTo("/pageFxml/Administrateur/DispositifsDeSecours.fxml", event);
+	}
+
+	/**
+	 ***********************************
+	 * METHODE POUR LES BOUTON DE LA PAGE SECOURISTE
+	 ***********************************
+	 */
+
+	public void goToMesCompetences(ActionEvent event){
+		System.out.println("goToMesCompetences");
+		goTo("/pageFxml/Secouriste/MesCompetences.fxml", event);
+	}
+
+	public void goToMesDisponibilite(ActionEvent event){
+		System.out.println("goToMesDisponibilite");
+		goTo("/pageFxml/Secouriste/MesDisponibilite.fxml", event);
+	}
+
+	public void goToMonPlanningEtAffectations(ActionEvent event){
+		System.out.println("goToMonPlanningEtAffectations");
+		goTo("/pageFxml/Secouriste/MonPlanningEtAffectations.fxml", event);
 	}
 	
 
