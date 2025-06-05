@@ -38,6 +38,36 @@ public class EstDisponible {
 
 
     /**
+     * Constructeur par défaut de la classe EstDisponible.
+     * Initialise les attributs à leurs valeurs par défaut.
+     */
+    public EstDisponible() {
+        this.leSecouriste = null;
+        this.idSecouriste = 0;
+        this.laJournee = new Journee();
+        this.jourJournee = 1;
+        this.moisJournee = 1;
+        this.anneeJournee = 1970;
+    }
+    /**
+     * Constructeur de la classe EstDisponible.
+     * @param unSecouriste Le secouriste disponible.
+     * @param uneJournee La journée pour laquelle le secouriste est disponible.
+     * @param unJour Le jour de la date de disponibilité.
+     * @param unMois Le mois de la date de disponibilité.
+     * @param uneAnnee L'année de la date de disponibilité.
+     */
+    public EstDisponible(Secouriste unSecouriste, Journee uneJournee, int unJour, int unMois, int uneAnnee) {
+        this.leSecouriste = unSecouriste;
+        this.idSecouriste = unSecouriste.getId();
+        this.laJournee = uneJournee;
+        this.jourJournee = unJour;
+        this.moisJournee = unMois;
+        this.anneeJournee = uneAnnee;
+    }
+
+
+    /**
      * Accesseur de l'attribut leSecouriste.
      * @return Le secouriste disponible.
      */
@@ -66,7 +96,7 @@ public class EstDisponible {
      * Mutateur de l'attribut idSecouriste.
      * @param unIdSecouriste Le nouvel identifiant du secouriste disponible.
      */
-    public void setIdSecouriste(int unIdSecouriste) {
+    public void setIdSecouriste(long unIdSecouriste) {
         this.idSecouriste = unIdSecouriste;
     }
 
