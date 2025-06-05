@@ -18,6 +18,17 @@ public class Sport {
 
 
     /**
+     * Constructeur de la classe Sport.
+     * @param unCode Le code unique du sport.
+     * @param unNom Le nom du sport.
+     */
+    public Sport(String unCode, String unNom) {
+        this.code = unCode;
+        this.nom = unNom;
+    }
+
+
+    /**
      * Accesseur de l'attribut code.
      * @return Le code unique du sport.
      */

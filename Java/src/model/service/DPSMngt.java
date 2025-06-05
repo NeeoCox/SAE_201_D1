@@ -28,7 +28,7 @@ public class DPSMngt {
      */
     public void creerDPS(long id, int horaireDepart, int horaireFin, Journee estProgramme, Site aLieuDans, Sport concerne) {
 
-        DPS nouveauDPS = new DPS();
+        DPS nouveauDPS = new DPS(id, horaireDepart, horaireFin, estProgramme, aLieuDans, concerne);
 
         nouveauDPS.setId(id);
         nouveauDPS.setHoraireDepart(horaireDepart);
