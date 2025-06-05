@@ -1,12 +1,67 @@
+package model.graphe;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
 public class DAG {
     // Structure du graphe : compétence -> liste des compétences préalables
-    private Map<String, List<String>> graph = new HashMap<>();
+    private Map<String, List<String>> competencesDep = new HashMap<>();
 
-    public void addDependency(String from, String to) {
-        graph.putIfAbsent(from, new ArrayList<>());
-        graph.putIfAbsent(to, new ArrayList<>());
-        graph.get(from).add(to); // de 'from' vers 'to' (from est requis pour to)
+    private static final String[] COMPETENCES = {"PSE1", "PSE2", "SSA", "VPSP", "CE", "CP", "CO", "PBF", "PBC"};
+
+    public DAG(){
+
     }
+
+    /**
+     * Ajoute une dépendance entre deux compétences 
+     * @param requis la compétence requise pour acquérir une autre compétence
+     * @param pourAvoir
+     */
+    public void addDependence(String requis, String pourAvoir){
+        if((requis == null || pourAvoir == null) || (requis.isEmpty() || pourAvoir.isEmpty())) {
+            throw new IllegalArgumentException("Les compétences ne peuvent pas être nulles");
+        }
+        else{
+            List<String> listeDep = competencesDep.get(requis);
+            if(listeDep != null) {    
+                competencesDep.put(requis, listeDep);
+            }
+            else{
+                listeDep = new ArrayList<>();
+                listeDep.add(pourAvoir);
+                competencesDep.put(requis, new ArrayList<>());
+            } 
+        }
+    }
+
+    public void initDep(){
+        addDependence("CO", "CP");
+        addDependence("CP", "CE");
+        addDependence("CE", "PSE2");
+        addDependence("PSE2", "PSE1");
+        addDependence("SSA", "PSE1");
+        addDependence("VPSP", "PSE2");
+        addDependence("PBF", "PBC");
+    }
+
+    public boolean estPossedee(String competences){
+        boolean possede = false;
+        if(competences == null || competences.isEmpty()) {
+            throw new IllegalArgumentException("La compétence ne peut pas être nulle ou vide");
+        }
+        for(String comp : COMPETENCES){
+            if(comp.equals(competences)){
+                possede = true;
+                break;
+            }
+        }
+        return possede;
+    }
+
 
     // Vérifie s'il y a un cycle (pas un vrai DAG sinon)
     public boolean hasCycle() {
@@ -63,7 +118,7 @@ public class DAG {
     }
 
     public static void main(String[] args) {
-        CompetenceGraph g = new CompetenceGraph();
+        DAG g = new DAG();
 
         // Ajout des dépendances du graphe (d'après l'image)
         g.addDependency("PSE1", "PSE2");
@@ -75,7 +130,7 @@ public class DAG {
         g.addDependency("PBF", "PBC");
 
         if (g.hasCycle()) {
-            System.out.println("Erreur : le graphe a une boucle (ce n’est pas un DAG)");
+            System.out.println("Erreur : le graphe a une boucle (ce n'est pas un DAG)");
         } else {
             System.out.println("Ordre possible pour acquérir les compétences :");
             System.out.println(g.topologicalSort());
