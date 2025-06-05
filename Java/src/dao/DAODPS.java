@@ -21,7 +21,6 @@ public class DAODPS {
             stmt.setLong(1, dps.getId());
             stmt.setInt(2, dps.getHoraireDepart());
             stmt.setInt(3, dps.getHoraireFin());
-            // On suppose que Journee, Site et Sport ne sont pas null
             stmt.setInt(4, dps.getEstProgramme().getJour());
             stmt.setInt(5, dps.getEstProgramme().getMois());
             stmt.setInt(6, dps.getEstProgramme().getAnnee());
