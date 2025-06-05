@@ -1,4 +1,4 @@
-package model.graphe;
+package model.graph;
 public class Glouton {
     public static void main(String[] args) {
         int n = 5;
