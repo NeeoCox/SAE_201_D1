@@ -67,6 +67,32 @@ public class DAG {
         return possede;
     }
 
+    /**
+     * Renvoi la liste des compétences requisee pour aquérir une compétence donnée
+     * @param competences la compétences pour laquelle on veut connaitre les compétences requises
+     * @return la liste des compétences requises pour aquérir la compétence
+     */
+    public List<String> getCompetencesRequise(String competences){
+        List<String> listeRequise;
+        if(competences == null || competences.isEmpty()) {
+            throw new IllegalArgumentException("La compétence ne peut pas être nulle ou vide");
+        }
+        listeRequise = competencesDep.get(competences);
+        return listeRequise;
+    }
+
+    
+
+    public boolean respectDepCompetences(String competences){
+        boolean respect = false;
+        if(competences == null || competences.isEmpty()) {
+            throw new IllegalArgumentException("La compétence ne peut pas être nulle ou vide");
+        }
+        
+
+        return respect;
+    }
+
 
     // Vérifie s'il y a un cycle (pas un vrai DAG sinon)
     public boolean hasCycle() {
