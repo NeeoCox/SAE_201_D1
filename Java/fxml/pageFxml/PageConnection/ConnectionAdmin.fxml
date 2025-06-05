@@ -11,8 +11,8 @@
    <top>
       <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="21.0" layoutY="19.0" mnemonicParsing="false" text="Retour" />
-            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" text="Connection en tant qu'Administateur">
+            <Button fx:id="buttonRetourConnectAdmin" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageConnection" text="Retour" />
+            <Label alignment="CENTER" layoutX="95.0" layoutY="14.0" prefHeight="35.0" prefWidth="410.0" text="Connection en tant qu'Administateur">
                <font>
                   <Font size="24.0" />
                </font>
@@ -27,7 +27,7 @@
             <TextField layoutX="227.0" layoutY="173.0" />
             <Label layoutX="226.0" layoutY="85.0" text="Identifiant" />
             <Label layoutX="226.0" layoutY="148.0" text="Mot de passe" />
-            <Button fx:id="buttonConncetionAdmin" onAction="#goToPageAdminAcceuil" layoutX="259.0" layoutY="243.0" mnemonicParsing="false" text="Se connecter" />
+            <Button fx:id="buttonConncetionAdmin" layoutX="259.0" layoutY="243.0" mnemonicParsing="false" onAction="#goToPageAdminAcceuil" text="Se connecter" />
          </children>
       </AnchorPane>
    </center>

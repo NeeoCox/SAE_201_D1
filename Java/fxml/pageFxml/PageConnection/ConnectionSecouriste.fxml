@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <top>
       <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="21.0" layoutY="19.0" mnemonicParsing="false" text="Retour" />
-            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" text="Se connecter en tant que secouriste">
+            <Button fx:id="buttonRetourAcceuilSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageConnection" text="Retour" />
+            <Label alignment="CENTER" layoutX="98.0" layoutY="14.0" prefHeight="35.0" prefWidth="404.0" text="Se connecter en tant que Secouriste">
                <font>
                   <Font size="24.0" />
                </font>
@@ -27,7 +27,7 @@
             <TextField layoutX="227.0" layoutY="173.0" />
             <Label layoutX="226.0" layoutY="85.0" text="Identifiant" />
             <Label layoutX="226.0" layoutY="148.0" text="Mot de passe" />
-            <Button layoutX="259.0" layoutY="243.0" mnemonicParsing="false" text="Se connecter" />
+            <Button fx:id="buttonConnetSec" layoutX="259.0" layoutY="243.0" mnemonicParsing="false" onAction="#goToPageSecouristeAcceuil" text="Se connecter" />
          </children>
       </AnchorPane>
    </center>
