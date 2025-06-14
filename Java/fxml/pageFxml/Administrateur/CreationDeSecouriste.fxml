@@ -34,7 +34,7 @@
                   <Label prefHeight="17.0" text="Prénom" />
                   <TextField fx:id="prenomSec" />
                   <Label prefHeight="17.0" text="Date de naissance" />
-                  <TextField fx:id="dateNaissSec" promptText="JJ/MM/AAAA" />
+                  <TextField fx:id="dateNaissSec" promptText="AAAA-MM-JJ" />
                   <Label layoutX="72.0" layoutY="146.0" prefHeight="17.0" text="Adresse mail" />
                   <TextField fx:id="mailSec" layoutX="10.0" layoutY="163.0" />
                   <Label layoutX="85.0" layoutY="167.0" prefHeight="17.0" text="Adresse" />

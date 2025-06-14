@@ -1,17 +1,35 @@
 package controller;
+// Import des librairies Java
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+//Import des librairies JavaFX
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.persistence.Secouriste;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Node;
+
+//Import de nos class
+import model.persistence.Secouriste;
+import model.persistence.Site;
+import model.persistence.Sport;
+import dao.DAODPS;
+import dao.DAOSite;
+import dao.DAOSport;
 import dao.DAOSecouriste;
+import model.service.MngtDPS;
 import model.service.MngtSecouriste;
+import model.service.MngtSite;
+import model.service.MngtSport;
+import model.persistence.Journee;
 
 /**
  * La classe Controller de l'application
@@ -108,14 +126,40 @@ public class Controller {
 
 	private MngtSecouriste mngtSecouriste;
 
+	/**
+	 ***********************************
+	 * Texte field et Button pour DPS
+	 ***********************************
+	 */
+	@FXML
+	private TextField idDPSCreate;
+	@FXML
+	private TextField heureDebutDPSCreate;
+	@FXML
+	private TextField heureFinDPSCreate;
+	@FXML
+	private DatePicker dateCreateDPS;
+	@FXML
+	private TextField lieuRencDPSCreate;
+	@FXML
+	private TextField sportDPSCreate;
+	@FXML
+	private Button createButtonDPS;
+
+	private MngtDPS mngtDPS;
+
+	private MngtSite mngtSite;
+
+	private MngtSport mngtSport;
+
+	
 	public Controller(){
 		System.out.println("controller");
-		initializer();
+
 	}
 
 	public void initializer(){
 		System.out.println("Initializer");
-		DAOSecouriste daoSecouriste = new DAOSecouriste(null); // changer pour la connexion a la base de données
 	}
 
 
@@ -357,10 +401,62 @@ public class Controller {
 
 	/**
 	 ***********************************
-	 * 
+	 * GESTION DISPOSITIF DE SECOURS
 	 ***********************************
 	 */
 
+	public void createDispositifDeSecours(){
+		System.out.println("crateDispositifDeSecours");
+		if (idDPSCreate.getText().isEmpty() || heureDebutDPSCreate.getText().isEmpty() || 
+			heureFinDPSCreate.getText().isEmpty() 
+			|| lieuRencDPSCreate.getText().isEmpty() || sportDPSCreate.getText().isEmpty()) {
+			System.out.println("Veuillez remplir tous les champs.");
+		}
+		else{
+			String idDPS = idDPSCreate.getText();
+			long idDPSLong = Long.parseLong(idDPS);
 
-	
+			String heureDebutStr = heureDebutDPSCreate.getText();
+			int heureDebut = Integer.parseInt(heureDebutStr);
+
+			String heureFinStr = heureFinDPSCreate.getText();
+			int heureFin = Integer.parseInt(heureFinStr);
+
+			//DATE
+			LocalDate selectedDate = dateCreateDPS.getValue();
+    
+			int jour = selectedDate.getDayOfMonth(); 
+			int mois = selectedDate.getMonthValue();   
+			int annee = selectedDate.getYear();        
+			
+			Journee journee = new Journee(jour, mois, annee);
+
+
+			// Site
+			
+
+			try{
+				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
+				mngtSite = new MngtSite(daoSite);
+				
+				String lieuRenc = lieuRencDPSCreate.getText();
+				Site site = mngtSite.lireSite(lieuRenc);
+
+				// Sport
+				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné 
+				mngtSport = new MngtSport(daoSport);
+
+				String sport = sportDPSCreate.getText();
+				Sport sportObj = mngtSport.lireSport(sport);
+
+				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné 
+				mngtDPS = new MngtDPS(daoDPS);
+				mngtDPS.creerDPS(idDPSLong, heureDebut,heureFin, journee, site, sportObj);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la création du DPS : " + e.getMessage());
+			}
+		}
+	}	
 }

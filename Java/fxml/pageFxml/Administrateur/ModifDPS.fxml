@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,7 +16,7 @@
       <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="buttonRetourAcSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageAdminAcceuil" text="Retour" />
-            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" text="Modification de Secouriste">
+            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="303.0" text="Modification de DPS">
                <font>
                   <Font size="24.0" />
                </font>
@@ -29,21 +30,19 @@
             <Pane prefHeight="200.0" prefWidth="200.0" />
             <VBox alignment="CENTER" prefHeight="338.0" prefWidth="232.0">
                <children>
-                  <Label prefHeight="17.0" text="Nom" />
-                  <TextField fx:id="nomSecModif" prefHeight="25.0" prefWidth="488.0" />
-                  <Label prefHeight="17.0" text="Prénom" />
-                  <TextField fx:id="prenomSecModif" />
-                  <Label prefHeight="17.0" text="Date de naissance" />
-                  <TextField fx:id="dateNaissSecModif" promptText="AAAA-MM-JJ" />
-                  <Label layoutX="72.0" layoutY="146.0" prefHeight="17.0" text="Adresse mail" />
-                  <TextField fx:id="mailSecModif" layoutX="10.0" layoutY="163.0" />
-                  <Label layoutX="85.0" layoutY="167.0" prefHeight="17.0" text="Adresse" />
-                  <TextField fx:id="adressSecModif" layoutX="10.0" layoutY="184.0" />
                   <Label prefHeight="17.0" text="Identifiant" />
-                  <TextField fx:id="idSecModif" />
-                  <Label prefHeight="17.0" text="Mot de passe" />
-                  <TextField fx:id="passWordSecModif" />
-                  <Button fx:id="ModifButtonSec" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Modifier" />
+                  <TextField fx:id="idDPSModif" prefHeight="25.0" prefWidth="488.0" />
+                  <Label prefHeight="17.0" text="Heure debut" />
+                  <TextField fx:id="heureDebutDPSModif" promptText="pour 10h50 -&gt; 1050" />
+                  <Label layoutX="72.0" layoutY="146.0" prefHeight="17.0" text="Heure fin" />
+                  <TextField fx:id="heureFinDPSModif" layoutX="10.0" layoutY="163.0" promptText="pour 11h50 -&gt; 1150" />
+                  <Label prefHeight="17.0" text="Date" />
+                  <DatePicker fx:id="dateModifDPS" />
+                  <Label prefHeight="17.0" text="Lieu de la rencontre" />
+                  <TextField fx:id="lieuRencDPSModif" />
+                  <Label layoutX="99.0" layoutY="37.0" prefHeight="17.0" text="Sport" />
+                  <TextField fx:id="sportDPSModif" layoutX="10.0" layoutY="54.0" prefHeight="25.0" prefWidth="488.0" />
+                  <Button fx:id="ModifButtonDPS" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Modifier" />
                </children>
             </VBox>
             <Pane prefHeight="388.0" prefWidth="200.0" />
