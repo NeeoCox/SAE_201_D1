@@ -40,6 +40,8 @@
                   <DatePicker fx:id="dateModifDPS" />
                   <Label prefHeight="17.0" text="Lieu de la rencontre" />
                   <TextField fx:id="lieuRencDPSModif" />
+                  <Label layoutX="74.0" layoutY="226.0" prefHeight="17.0" text="Compétences requises" />
+                  <TextField fx:id="CompReqDPSModif" layoutX="10.0" layoutY="243.0" promptText="Comp1;Comp2;Comp3" />
                   <Label layoutX="99.0" layoutY="37.0" prefHeight="17.0" text="Sport" />
                   <TextField fx:id="sportDPSModif" layoutX="10.0" layoutY="54.0" prefHeight="25.0" prefWidth="488.0" />
                   <Button fx:id="ModifButtonDPS" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Modifier" />

@@ -1,8 +1,9 @@
 package model.service;
 
-import dao.DAOEstAffecteA;
 import java.sql.SQLException;
 import java.util.List;
+
+import model.dao.DAOEstAffecteA;
 import model.persistence.*;
 
 /**

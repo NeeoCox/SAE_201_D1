@@ -21,14 +21,14 @@ import javafx.scene.Node;
 import model.persistence.Secouriste;
 import model.persistence.Site;
 import model.persistence.Sport;
-import dao.DAODPS;
-import dao.DAOSite;
-import dao.DAOSport;
-import dao.DAOSecouriste;
 import model.service.MngtDPS;
 import model.service.MngtSecouriste;
 import model.service.MngtSite;
 import model.service.MngtSport;
+import model.dao.DAODPS;
+import model.dao.DAOSecouriste;
+import model.dao.DAOSite;
+import model.dao.DAOSport;
 import model.persistence.Journee;
 
 /**
@@ -160,6 +160,10 @@ public class Controller {
 	private TextField sportDPSModif;
 	@FXML
 	private Button ModifButtonDPS;
+	@FXML
+	private TextField CompReqDPSCreate;
+	@FXML
+	private TextField CompReqDPSModif;
 
 	private MngtDPS mngtDPS;
 
@@ -446,6 +450,9 @@ public class Controller {
 			
 			Journee journee = new Journee(jour, mois, annee);
 
+			String[] compReqStr = CompReqDPSCreate.getText().split(";");
+			int nbCompReq = compReqStr.length;
+
 			try{
 				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
 				mngtSite = new MngtSite(daoSite);
@@ -544,4 +551,12 @@ public class Controller {
 			}
 		}
 	}
+
+	/**
+	 ***********************************
+	 * GESTION DES COMPETENCES
+	 ***********************************
+	 */
+
+	
 }

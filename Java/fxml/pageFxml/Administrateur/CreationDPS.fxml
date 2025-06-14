@@ -42,6 +42,8 @@
                   <TextField fx:id="lieuRencDPSCreate" />
                   <Label layoutX="99.0" layoutY="37.0" prefHeight="17.0" text="Sport" />
                   <TextField fx:id="sportDPSCreate" layoutX="10.0" layoutY="54.0" prefHeight="25.0" prefWidth="488.0" />
+                  <Label layoutX="74.0" layoutY="226.0" prefHeight="17.0" text="Compétences requises" />
+                  <TextField fx:id="CompReqDPSCreate" layoutX="10.0" layoutY="243.0" promptText="Comp1;Comp2;Comp3" />
                   <Button fx:id="createButtonDPS" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Créer" />
                </children>
             </VBox>

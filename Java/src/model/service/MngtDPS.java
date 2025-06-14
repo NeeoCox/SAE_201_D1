@@ -1,8 +1,9 @@
 package model.service;
 
-import dao.DAODPS;
 import java.sql.SQLException;
 import java.util.List;
+
+import model.dao.DAODPS;
 import model.persistence.*;
 
 /**

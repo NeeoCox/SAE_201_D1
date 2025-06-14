@@ -1,8 +1,9 @@
 package model.service;
 
-import dao.DAOEstDisponible;
 import java.sql.SQLException;
 import java.util.List;
+
+import model.dao.DAOEstDisponible;
 import model.persistence.*;
 
 /**

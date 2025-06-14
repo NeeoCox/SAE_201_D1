@@ -1,8 +1,9 @@
 package model.service;
 
-import dao.DAOSecouriste;
 import java.sql.SQLException;
 import java.util.List;
+
+import model.dao.DAOSecouriste;
 import model.persistence.Secouriste;
 
 /**

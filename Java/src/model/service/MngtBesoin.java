@@ -1,8 +1,9 @@
 package model.service;
 
-import dao.DAOBesoin;
 import java.sql.SQLException;
 import java.util.List;
+
+import model.dao.DAOBesoin;
 import model.persistence.Besoin;
 
 /**
