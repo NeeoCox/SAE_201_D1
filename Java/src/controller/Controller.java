@@ -4,10 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.persistence.Secouriste;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Node;
+import dao.DAOSecouriste;
 
 /**
  * La classe Controller de l'application
@@ -69,17 +72,47 @@ public class Controller {
 	 ***********************************
 	 */
 
-	 @FXML
-	 private Button buttonMesComp;
-	 @FXML
-	 private Button buttonMonPlanning;
-	 @FXML
-	 private Button buttonMesDisp;
+	@FXML
+	private Button buttonMesComp;
+	@FXML
+	private Button buttonMonPlanning;
+	@FXML
+	private Button buttonMesDisp;
+
+	/**
+	 ***********************************
+	 * Texte field et Button pour secouriste
+	 ***********************************
+	 */
+	@FXML
+	private TextField nomSec;
+	@FXML
+	private TextField prenomSec;
+	@FXML
+	private TextField idSec;
+	@FXML
+	private TextField passWordSec;
+	@FXML
+	private TextField dateNaissSec;
+	@FXML
+	private TextField mailSec;
+	@FXML
+	private TextField adressSec;
+	@FXML 
+	private Button createButtonSec;
+
 
 
 	public Controller(){
 		System.out.println("controller");
+		initializer();
 	}
+
+	public void initializer(){
+		System.out.println("Initializer");
+		DAOSecouriste daoSecouriste = new DAOSecouriste(null); // changer pour la connexion a la base de données
+	}
+
 
 	/**
 	 ***********************************
@@ -226,9 +259,38 @@ public class Controller {
 		}
 	}
 
-	public void initializer(){
-		System.out.println("Initializer");
+	
+	public void createSecouriste(){
+		System.out.println("createSecouriste");
+		// Recup des valeur dans les textField
+		if (nomSec.getText().isEmpty() || prenomSec.getText().isEmpty() || dateNaissSec.getText().isEmpty() || 
+			mailSec.getText().isEmpty() || adressSec.getText().isEmpty() || idSec.getText().isEmpty() || passWordSec.getText().isEmpty()) {
+			System.out.println("Veuillez remplir tous les champs.");
+			
+		}
+		else{
+			String nom = nomSec.getText();
+			String prenom = prenomSec.getText();
+			String dateNaissance = dateNaissSec.getText();
+			String email = mailSec.getText();
+			String adresse = adressSec.getText();
+			String id = idSec.getText();
+			long idLong = Long.parseLong(id); 
+			String passWord = passWordSec.getText();
 
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
+			// On appele la methode du dao pour creer un secoutiste en récuperent ce qui est ecrit dans les champ de texte
+		}
+		 
 	}
+
+	public void updateSecouriste(){
+		System.out.println("updateSecouriste");
+		Secouriste secouriste = DAOSecouriste.read(id);
+
+		// On appele la methode du dao pour modifier un secoutiste en récuperent ce qui est ecrit dans les champ de texte 
+	}
+
+	
 	
 }
