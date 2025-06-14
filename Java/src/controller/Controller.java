@@ -146,6 +146,21 @@ public class Controller {
 	@FXML
 	private Button createButtonDPS;
 
+	@FXML
+	private TextField idDPSModif;
+	@FXML
+	private TextField heureDebutDPSModif;
+	@FXML
+	private TextField heureFinDPSModif;
+	@FXML
+	private DatePicker dateModifDPS;
+	@FXML
+	private TextField lieuRencDPSModif;
+	@FXML
+	private TextField sportDPSModif;
+	@FXML
+	private Button ModifButtonDPS;
+
 	private MngtDPS mngtDPS;
 
 	private MngtSite mngtSite;
@@ -431,10 +446,6 @@ public class Controller {
 			
 			Journee journee = new Journee(jour, mois, annee);
 
-
-			// Site
-			
-
 			try{
 				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
 				mngtSite = new MngtSite(daoSite);
@@ -459,4 +470,78 @@ public class Controller {
 			}
 		}
 	}	
+
+	public void updateDispositifDeSecours(){
+		System.out.println("crateDispositifDeSecours");
+		if (idDPSModif.getText().isEmpty() || heureDebutDPSModif.getText().isEmpty() || 
+			heureFinDPSModif.getText().isEmpty() 
+			|| lieuRencDPSModif.getText().isEmpty() || sportDPSModif.getText().isEmpty()) {
+			System.out.println("Veuillez remplir tous les champs.");
+		}
+		else{
+			String idDPS = idDPSModif.getText();
+			long idDPSLong = Long.parseLong(idDPS);
+
+			String heureDebutStr = heureDebutDPSModif.getText();
+			int heureDebut = Integer.parseInt(heureDebutStr);
+
+			String heureFinStr = heureFinDPSModif.getText();
+			int heureFin = Integer.parseInt(heureFinStr);
+
+			//DATE
+			LocalDate selectedDate = dateModifDPS.getValue();
+    
+			int jour = selectedDate.getDayOfMonth(); 
+			int mois = selectedDate.getMonthValue();   
+			int annee = selectedDate.getYear();        
+			
+			Journee journee = new Journee(jour, mois, annee);
+
+			try{
+				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
+				mngtSite = new MngtSite(daoSite);
+				
+				String lieuRenc = lieuRencDPSModif.getText();
+				Site site = mngtSite.lireSite(lieuRenc);
+
+				// Sport
+				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné 
+				mngtSport = new MngtSport(daoSport);
+
+				String sport = sportDPSModif.getText();
+				Sport sportObj = mngtSport.lireSport(sport);
+
+				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné 
+				mngtDPS = new MngtDPS(daoDPS);
+				mngtDPS.modifierDPS(idDPSLong, heureDebut,heureFin, journee, site, sportObj);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la création du DPS : " + e.getMessage());
+			}
+		}
+	}
+	
+	public void deleteDispositifDeSecours(){
+		System.out.println("crateDispositifDeSecours");
+		if (idDPSModif.getText().isEmpty() || heureDebutDPSModif.getText().isEmpty() || 
+			heureFinDPSModif.getText().isEmpty() 
+			|| lieuRencDPSModif.getText().isEmpty() || sportDPSModif.getText().isEmpty()) {
+			System.out.println("Veuillez remplir tous les champs.");
+		}
+		else{
+			String idDPS = idDPSModif.getText();
+			long idDPSLong = Long.parseLong(idDPS);
+
+			try{
+				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné 
+				mngtDPS = new MngtDPS(daoDPS);
+				mngtDPS.supprimerDPS(idDPSLong);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la création du DPS : " + e.getMessage());
+			}
+		}
+	}
 }
