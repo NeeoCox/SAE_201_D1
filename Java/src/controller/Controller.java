@@ -199,7 +199,30 @@ public class Controller {
 	@FXML
 	private Button deleteButtonDPS;
 
+	/**
+	 ***********************************
+	 * Texte field et Button pour Compétences
+	 ***********************************
+	 */
+	
+	//Pour créer une compétence
+	@FXML
+	private TextField intitulerCreateComp;
+	@FXML
+	private TextField necessiteCreateComp;
+	@FXML
+	private Button createButtonComp;
 
+	//Pour modifier une compétence
+	@FXML
+	private TextField intitulerUpdateComp;
+	@FXML
+	private TextField necessiteUpdateComp;
+	@FXML
+	private Button updateButtonComp;
+
+	//Pour supprimer une compétence
+	
 	
 	public Controller(){
 		System.out.println("controller");
@@ -516,7 +539,7 @@ public class Controller {
 	}	
 
 	public void updateDispositifDeSecours(){
-		System.out.println("crateDispositifDeSecours");
+		System.out.println("updateDispositifDeSecours");
 		if (idDPSModif.getText().isEmpty() || heureDebutDPSModif.getText().isEmpty() || 
 			heureFinDPSModif.getText().isEmpty() 
 			|| lieuRencDPSModif.getText().isEmpty() || sportDPSModif.getText().isEmpty()
@@ -578,7 +601,7 @@ public class Controller {
 	}
 	
 	public void deleteDispositifDeSecours(){
-		System.out.println("crateDispositifDeSecours");
+		System.out.println("deleteDispositifDeSecours");
 		if (idDPSDelete.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
 		}
@@ -613,7 +636,13 @@ public class Controller {
 	 */
 
 	public void createCompetences(){
-		
+		System.out.println();
+		if(idDPSDelete.getText().isEmpty()){
+
+		}
+		else{
+
+		}
 	}
 	
 }
