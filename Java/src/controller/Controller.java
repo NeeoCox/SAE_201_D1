@@ -5,6 +5,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import org.w3c.dom.Text;
+
+import java.util.List;
+
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,11 +24,10 @@ import javafx.scene.Node;
 //Import de nos class
 import model.persistence.Secouriste;
 import model.persistence.Site;
+import model.persistence.Besoin;
 import model.persistence.Sport;
-import model.service.MngtDPS;
-import model.service.MngtSecouriste;
-import model.service.MngtSite;
-import model.service.MngtSport;
+import model.persistence.DPS;
+import model.dao.DAOBesoin;
 import model.dao.DAODPS;
 import model.dao.DAOSecouriste;
 import model.dao.DAOSite;
@@ -103,6 +106,7 @@ public class Controller {
 	 * Texte field et Button pour secouriste
 	 ***********************************
 	 */
+	//Pour la creation d'un secouriste
 	@FXML
 	private TextField nomSec;
 	@FXML
@@ -117,20 +121,39 @@ public class Controller {
 	private TextField mailSec;
 	@FXML
 	private TextField adressSec;
-	@FXML 
+	@FXML
 	private Button createButtonSec;
+
+	//Pour la modification d'un secouriste
+	@FXML
+	private TextField nomSecModif;
+	@FXML
+	private TextField prenomSecModif;
+	@FXML
+	private TextField dateNaissSecModif;
+	@FXML
+	private TextField mailSecModif;
+	@FXML
+	private TextField adressSecModif;
+	@FXML
+	private TextField idSecModif;
+	@FXML
+	private TextField passWordSecModif;
+	@FXML 
+	private Button ModifButtonSec;
+
+	//Pour la suppression d'un secouriste
 	@FXML
 	private TextField idSecDelete;
-	@FXML
+	@FXML 
 	private Button deleteButtonSec;
-
-	private MngtSecouriste mngtSecouriste;
 
 	/**
 	 ***********************************
 	 * Texte field et Button pour DPS
 	 ***********************************
 	 */
+	//Pour la création d'un DPS
 	@FXML
 	private TextField idDPSCreate;
 	@FXML
@@ -144,8 +167,13 @@ public class Controller {
 	@FXML
 	private TextField sportDPSCreate;
 	@FXML
+	private TextField CompReqDPSCreate;
+	@FXML 
+	private TextField nbSecDPSCreate;
+	@FXML
 	private Button createButtonDPS;
 
+	//Pour la modification d'un DPS
 	@FXML
 	private TextField idDPSModif;
 	@FXML
@@ -159,17 +187,18 @@ public class Controller {
 	@FXML
 	private TextField sportDPSModif;
 	@FXML
-	private Button ModifButtonDPS;
-	@FXML
-	private TextField CompReqDPSCreate;
-	@FXML
 	private TextField CompReqDPSModif;
+	@FXML 
+	private TextField nbSecDPSModif;
+	@FXML
+	private Button ModifButtonDPS;
 
-	private MngtDPS mngtDPS;
+	//Pour la suppression d'un DPS
+	@FXML
+	private TextField idDPSDelete;
+	@FXML
+	private Button deleteButtonDPS;
 
-	private MngtSite mngtSite;
-
-	private MngtSport mngtSport;
 
 	
 	public Controller(){
@@ -353,11 +382,11 @@ public class Controller {
 			long idLong = Long.parseLong(id); 
 			String passWord = passWordSec.getText();
 
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
 			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné 
-			mngtSecouriste = new MngtSecouriste(daoSecouriste);
-
+			
 			try{
-				mngtSecouriste.creerSecouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
+				daoSecouriste.create(secouriste);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -369,25 +398,27 @@ public class Controller {
 
 	public void updateSecouriste(){
 		System.out.println("updateSecouriste");
-		if (nomSec.getText().isEmpty() || prenomSec.getText().isEmpty() || dateNaissSec.getText().isEmpty() || 
-			mailSec.getText().isEmpty() || adressSec.getText().isEmpty() || idSec.getText().isEmpty() || passWordSec.getText().isEmpty()) {
+		if (nomSecModif.getText().isEmpty() || prenomSecModif.getText().isEmpty() ||
+			dateNaissSecModif.getText().isEmpty() || 
+			mailSecModif.getText().isEmpty() || adressSecModif.getText().isEmpty() || 
+			idSecModif.getText().isEmpty() || passWordSecModif.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
 		}
 		else{
-			String nom = nomSec.getText();
-			String prenom = prenomSec.getText();
-			String dateNaissance = dateNaissSec.getText();
-			String email = mailSec.getText();
-			String adresse = adressSec.getText();
-			String id = idSec.getText();
+			String nom = nomSecModif.getText();
+			String prenom = prenomSecModif.getText();
+			String dateNaissance = dateNaissSecModif.getText();
+			String email = mailSecModif.getText();
+			String adresse = adressSecModif.getText();
+			String id = idSecModif.getText();
 			long idLong = Long.parseLong(id); 
-			String passWord = passWordSec.getText();
+			String passWord = passWordSecModif.getText();
 
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
 			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné 
-			mngtSecouriste = new MngtSecouriste(daoSecouriste);
-
+			
 			try{
-				mngtSecouriste.modifierSecouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
+				daoSecouriste.update(secouriste);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -398,18 +429,17 @@ public class Controller {
 
 	public void deleteSecouriste(){
 		System.out.println("deleteSecouriste");
-		if (idSec.getText().isEmpty()) {
+		if (idSecDelete.getText().isEmpty()) {
 			System.out.println("Veuillez remplir le champ id.");
 		}
 		else{
 			String id = idSecDelete.getText();
 			long idLong = Long.parseLong(id); 
 
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné 
-			mngtSecouriste = new MngtSecouriste(daoSecouriste);
+			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné
 
 			try{
-				mngtSecouriste.supprimerSecouriste(idLong);
+				daoSecouriste.delete(idLong);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -428,7 +458,8 @@ public class Controller {
 		System.out.println("crateDispositifDeSecours");
 		if (idDPSCreate.getText().isEmpty() || heureDebutDPSCreate.getText().isEmpty() || 
 			heureFinDPSCreate.getText().isEmpty() 
-			|| lieuRencDPSCreate.getText().isEmpty() || sportDPSCreate.getText().isEmpty()) {
+			|| lieuRencDPSCreate.getText().isEmpty() || sportDPSCreate.getText().isEmpty()
+			|| nbSecDPSCreate.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
 		}
 		else{
@@ -453,23 +484,29 @@ public class Controller {
 			String[] compReqStr = CompReqDPSCreate.getText().split(";");
 			int nbCompReq = compReqStr.length;
 
+			String nombreStr = nbSecDPSCreate.getText();
+			int nombre = Integer.parseInt(nombreStr);
 			try{
+				DAOBesoin daoBesoin = new DAOBesoin(null);
+				Besoin besoin;
+				for(int i = 0; i<nbCompReq; i++){
+					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
+					daoBesoin.create(besoin);
+				}
 				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
-				mngtSite = new MngtSite(daoSite);
 				
 				String lieuRenc = lieuRencDPSCreate.getText();
-				Site site = mngtSite.lireSite(lieuRenc);
+				Site site = daoSite.read(lieuRenc);
 
 				// Sport
-				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné 
-				mngtSport = new MngtSport(daoSport);
+				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné
 
 				String sport = sportDPSCreate.getText();
-				Sport sportObj = mngtSport.lireSport(sport);
+				Sport sportObj = daoSport.read(sport);
 
-				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné 
-				mngtDPS = new MngtDPS(daoDPS);
-				mngtDPS.creerDPS(idDPSLong, heureDebut,heureFin, journee, site, sportObj);
+				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné
+				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
+				daoDPS.create(dps);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -482,7 +519,8 @@ public class Controller {
 		System.out.println("crateDispositifDeSecours");
 		if (idDPSModif.getText().isEmpty() || heureDebutDPSModif.getText().isEmpty() || 
 			heureFinDPSModif.getText().isEmpty() 
-			|| lieuRencDPSModif.getText().isEmpty() || sportDPSModif.getText().isEmpty()) {
+			|| lieuRencDPSModif.getText().isEmpty() || sportDPSModif.getText().isEmpty()
+			|| nbSecDPSModif.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
 		}
 		else{
@@ -504,23 +542,33 @@ public class Controller {
 			
 			Journee journee = new Journee(jour, mois, annee);
 
+			String[] compReqStr = CompReqDPSCreate.getText().split(";");
+			int nbCompReq = compReqStr.length;
+
+			String nombreStr = nbSecDPSModif.getText();
+			int nombre = Integer.parseInt(nombreStr);
 			try{
+				DAOBesoin daoBesoin = new DAOBesoin(null);
+				Besoin besoin;
+				for(int i = 0; i<nbCompReq; i++){
+					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
+					daoBesoin.update(besoin);
+				}
+
 				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
-				mngtSite = new MngtSite(daoSite);
 				
 				String lieuRenc = lieuRencDPSModif.getText();
-				Site site = mngtSite.lireSite(lieuRenc);
+				Site site = daoSite.read(lieuRenc);
 
 				// Sport
-				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné 
-				mngtSport = new MngtSport(daoSport);
+				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné
 
 				String sport = sportDPSModif.getText();
-				Sport sportObj = mngtSport.lireSport(sport);
+				Sport sportObj = daoSport.read(sport);
 
-				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné 
-				mngtDPS = new MngtDPS(daoDPS);
-				mngtDPS.modifierDPS(idDPSLong, heureDebut,heureFin, journee, site, sportObj);
+				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné
+				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
+				daoDPS.update(dps);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -531,19 +579,25 @@ public class Controller {
 	
 	public void deleteDispositifDeSecours(){
 		System.out.println("crateDispositifDeSecours");
-		if (idDPSModif.getText().isEmpty() || heureDebutDPSModif.getText().isEmpty() || 
-			heureFinDPSModif.getText().isEmpty() 
-			|| lieuRencDPSModif.getText().isEmpty() || sportDPSModif.getText().isEmpty()) {
+		if (idDPSDelete.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
 		}
-		else{
-			String idDPS = idDPSModif.getText();
+		else{		
+			String idDPS = idDPSDelete.getText();
 			long idDPSLong = Long.parseLong(idDPS);
 
 			try{
+				DAOBesoin daoBesoin = new DAOBesoin(null);
+				List<Besoin> besoin = daoBesoin.readAll();
+
+				for (Besoin b : besoin) {
+					Long idDPSFor = b.getIdDPS();
+					if(idDPSFor == idDPSLong){
+						daoBesoin.delete(idDPSLong, idDPS);
+					}
+				}
 				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné 
-				mngtDPS = new MngtDPS(daoDPS);
-				mngtDPS.supprimerDPS(idDPSLong);
+				daoDPS.delete(idDPSLong);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -558,5 +612,8 @@ public class Controller {
 	 ***********************************
 	 */
 
+	public void createCompetences(){
+		
+	}
 	
 }
