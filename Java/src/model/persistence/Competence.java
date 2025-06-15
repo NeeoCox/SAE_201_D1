@@ -11,7 +11,6 @@ public class Competence {
      */
     private String intitule;
 
-    
     /**
      * Accesseur de l'attribut intitule.
      * @return L'intitulé de la compétence.

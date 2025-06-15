@@ -35,13 +35,14 @@
                   <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Supprimer" />
                </children>
             </HBox>
-            <TableView layoutX="19.0" prefHeight="255.0" prefWidth="562.0">
-              <columns>
-                <TableColumn prefWidth="158.0" text="Dispositif de secours" />
-                <TableColumn prefWidth="183.0" text="Competence requise" />
-                  <TableColumn prefWidth="220.0" text="Secouristes affectés" />
-              </columns>
+            <TableView fx:id="tableViewDPS" layoutX="19.0" prefHeight="255.0" prefWidth="562.0">
+               <columns>
+                  <TableColumn fx:id="columnDPS" prefWidth="158.0" text="Dispositif de secours" />
+                  <TableColumn fx:id="columnCompReq" prefWidth="183.0" text="Competence requise" />
+                  <TableColumn fx:id="columnSecAffect" prefWidth="220.0" text="Secouristes affectés" />
+               </columns>
             </TableView>
+
          </children>
       </AnchorPane>
    </center>

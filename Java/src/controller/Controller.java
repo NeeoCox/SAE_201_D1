@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-
-import org.w3c.dom.Text;
-
 import java.util.List;
+
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
@@ -16,29 +14,49 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Node;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 //Import de nos class
 import model.persistence.Secouriste;
 import model.persistence.Site;
 import model.persistence.Besoin;
+import model.persistence.Competence;
 import model.persistence.Sport;
 import model.persistence.DPS;
 import model.dao.DAOBesoin;
+import model.dao.DAOCompetence;
 import model.dao.DAODPS;
+import model.dao.DAONecessite;
 import model.dao.DAOSecouriste;
 import model.dao.DAOSite;
 import model.dao.DAOSport;
 import model.persistence.Journee;
+import model.persistence.Necessite;
 
 /**
  * La classe Controller de l'application
  * @author M.COIGNARD, L.VIMART, A.COUDIERE
  */
 public class Controller {
+
+	/**
+	 ***********************************
+	 * Connection base de donnée
+	 ***********************************
+	 */
+	
+	// Mettre les DAOSecouriste et autre la
+
 
 	/**
 	 ***********************************
@@ -222,8 +240,21 @@ public class Controller {
 	private Button updateButtonComp;
 
 	//Pour supprimer une compétence
-	
-	
+
+	@FXML
+    private TableView<DPS> tableViewDPS;
+
+    @FXML
+    private TableColumn<DPS, String> columnDPS;
+
+    @FXML
+    private TableColumn<DPS, String> columnCompReq;
+
+    @FXML
+    private TableColumn<DPS, String> columnSecAffect;
+
+    private final ObservableList<DPS> dpsList = FXCollections.observableArrayList();
+
 	public Controller(){
 		System.out.println("controller");
 
@@ -445,7 +476,7 @@ public class Controller {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Erreur lors de la création du secouriste : " + e.getMessage());
+				System.out.println("Erreur lors de la modification du secouriste : " + e.getMessage());
 			}
 		}
 	}
@@ -466,7 +497,7 @@ public class Controller {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Erreur lors de la création du secouriste : " + e.getMessage());
+				System.out.println("Erreur lors de la suppression du secouriste : " + e.getMessage());
 			}
 		}
 	}
@@ -595,7 +626,7 @@ public class Controller {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Erreur lors de la création du DPS : " + e.getMessage());
+				System.out.println("Erreur lors de la modification du DPS : " + e.getMessage());
 			}
 		}
 	}
@@ -624,7 +655,7 @@ public class Controller {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Erreur lors de la création du DPS : " + e.getMessage());
+				System.out.println("Erreur lors de la suppression du DPS : " + e.getMessage());
 			}
 		}
 	}
@@ -637,12 +668,126 @@ public class Controller {
 
 	public void createCompetences(){
 		System.out.println();
-		if(idDPSDelete.getText().isEmpty()){
-
+		if(intitulerCreateComp.getText().isEmpty()){
+			System.out.println("Veuillez remplir tous les champs.");
 		}
 		else{
+			String intitulerStr = intitulerCreateComp.getText();
+			String compNecStr = null;
+			boolean necessiteVide = necessiteCreateComp.getText().isEmpty();
+			if(!necessiteVide){
+				compNecStr = necessiteCreateComp.getText();
+			}
+			Competence comp = new Competence();
+			comp.setIntitule(intitulerStr);
+
+			try{
+				DAOCompetence daoCompetence = new DAOCompetence(null);
+				daoCompetence.create(comp);
+
+				if(!necessiteVide){
+					DAONecessite daoNecessite = new DAONecessite(null);
+					
+					Competence compNec = new Competence();
+					compNec.setIntitule(compNecStr);
+					
+					Necessite nec = new Necessite();
+					nec.setLaCompetence(comp);
+					nec.setCompetenceNecessaire(compNec);
+
+					nec.setIntituleCompetence(intitulerStr);
+					nec.setIntituleCompetenceNecessaire(compNecStr);
+					daoNecessite.create(nec);
+				}
+				
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la création de la Compétence : " + e.getMessage());
+			}
+
 
 		}
 	}
+
+	//A REFAIRE QUAND MEIUX COMPRIS DAO COMP ET NEC
+	/*public void updateCompetences(){
+		System.out.println();
+		if(intitulerCreateComp.getText().isEmpty()){
+			System.out.println("Veuillez remplir tous les champs.");
+		}
+		else{
+			String intitulerStr = intitulerCreateComp.getText();
+			String compNecStr = null;
+			boolean necessiteVide = necessiteCreateComp.getText().isEmpty();
+			if(!necessiteVide){
+				compNecStr = necessiteCreateComp.getText();
+			}
+			Competence comp = new Competence();
+			comp.setIntitule(intitulerStr);
+
+			try{
+				DAOCompetence daoCompetence = new DAOCompetence(null);
+				daoCompetence.update(comp, intitulerStr);
+
+				if(!necessiteVide){
+					DAONecessite daoNecessite = new DAONecessite(null);
+					
+					Competence compNec = new Competence();
+					compNec.setIntitule(compNecStr);
+					
+					Necessite nec = new Necessite();
+					nec.setLaCompetence(comp);
+					nec.setCompetenceNecessaire(compNec);
+
+					nec.setIntituleCompetence(intitulerStr);
+					nec.setIntituleCompetenceNecessaire(compNecStr);
+					daoNecessite.update(nec);
+				}
+				
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la modification de la Compétence : " + e.getMessage());
+			}
+
+
+		}
+	}*/
+
+	/*public void initialize() {
+
+		System.out.println("columnDPS is null? " + (columnDPS == null));
+		System.out.println("columnCompReq is null? " + (columnCompReq == null));
+		System.out.println("columnSecAffect is null? " + (columnSecAffect == null));
+		System.out.println("tableViewDPS is null? " + (tableViewDPS == null));
+
+        // Dispositif de secours → site
+        columnDPS.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getALieuDans().getNom())
+        );
+
+        // Compétence requise → sport (à adapter si besoin)
+        columnCompReq.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getConcerne().getNom())
+        );
+
+        // Secouristes affectés → valeur fictive ou champ à ajouter dans DPS
+        columnSecAffect.setCellValueFactory(cellData ->
+            new SimpleStringProperty("Jean, Marie") // Remplacer par une vraie propriété si disponible
+        );
+
+        tableViewDPS.setItems(dpsList);
+
+        // Données de test
+        dpsList.add(new DPS(
+            1L,
+            10,
+            12,
+            new Journee(10,5,2025), 
+            new Site("1", "Fott", 12.00F, 12.00F), 
+            new Sport("12","Football")
+        ));
+    }*/
 	
 }
