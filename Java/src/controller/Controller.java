@@ -241,19 +241,29 @@ public class Controller {
 
 	//Pour supprimer une compétence
 
+	/**
+	 ***********************************
+	 * Variable pour affichage des secouristes
+	 ***********************************
+	 */
+
 	@FXML
-    private TableView<DPS> tableViewDPS;
-
+    private TableView<Secouriste> tableViewSec;
     @FXML
-    private TableColumn<DPS, String> columnDPS;
-
+    private TableColumn<Secouriste, Long> idSecTable;
     @FXML
-    private TableColumn<DPS, String> columnCompReq;
-
+    private TableColumn<Secouriste, String> nomSecTable;
     @FXML
-    private TableColumn<DPS, String> columnSecAffect;
-
-    private final ObservableList<DPS> dpsList = FXCollections.observableArrayList();
+    private TableColumn<Secouriste, String> prenomSecTable;
+	@FXML
+    private TableColumn<Secouriste, String> dateNaisSecTable; 
+	@FXML
+    private TableColumn<Secouriste, String> emailSecTable; 
+	@FXML
+    private TableColumn<Secouriste, String> telSecTable; 
+	@FXML
+    private TableColumn<Secouriste, String> adresseSecTable; 
+	private ObservableList<Secouriste> data = FXCollections.observableArrayList();
 
 	public Controller(){
 		System.out.println("controller");
@@ -755,7 +765,22 @@ public class Controller {
 		}
 	}*/
 
-	/*public void initialize() {
+	/*
+		@FXML
+    private TableView<DPS> tableViewDPS;
+
+    @FXML
+    private TableColumn<DPS, String> columnDPS;
+
+    @FXML
+    private TableColumn<DPS, String> columnCompReq;
+
+    @FXML
+    private TableColumn<DPS, String> columnSecAffect;
+
+    private final ObservableList<DPS> dpsList = FXCollections.observableArrayList();
+	
+	public void initialize() {
 
 		System.out.println("columnDPS is null? " + (columnDPS == null));
 		System.out.println("columnCompReq is null? " + (columnCompReq == null));
@@ -790,4 +815,33 @@ public class Controller {
         ));
     }*/
 	
+
+	/**
+	 ***********************************
+	 * Integration des valeur dans les tables view 
+	 ***********************************
+	 */
+
+	public void viewAllSecouristes(){
+		try{
+			DAOSecouriste daoSecouriste = new DAOSecouriste(null);
+			List<Secouriste> listSec = daoSecouriste.readAll();
+
+			for(Secouriste s : listSec){
+				data.add(s);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'affichage des secouristes : " + e.getMessage());
+		}
+
+		idSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, Long>("id"));
+		nomSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("nom"));
+		prenomSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("prenom"));
+		dateNaisSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("date de naissance"));
+		emailSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("email"));
+		telSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("tel"));
+		adresseSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("adresse"));
+	}
 }

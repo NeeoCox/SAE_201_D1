@@ -1,7 +1,7 @@
 package model.graph;
 import java.util.*;
 
-public class GrapheCompetences {
+public class GrapheCompetencesDAG {
 
     /**
      * Variable pou représenter les état des sommets lors du parcours 
@@ -16,7 +16,7 @@ public class GrapheCompetences {
     private final Map<String, Etat> etats = new HashMap<>();
 
     // Constructeur : initialise le graphe avec les relations hiérarchiques
-    public GrapheCompetences() {
+    public GrapheCompetencesDAG() {
         ajouterAretesDepuisFigure();
     }
 
@@ -80,7 +80,7 @@ public class GrapheCompetences {
 
     // Méthode de test
     public static void main(String[] args) {
-        GrapheCompetences graphe = new GrapheCompetences();
+        GrapheCompetencesDAG graphe = new GrapheCompetencesDAG();
         if (graphe.verifierDAG()) {
             System.out.println("Le graphe des compétences est un DAG (aucun cycle détecté).");
         } else {
