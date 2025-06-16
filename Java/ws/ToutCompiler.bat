@@ -9,6 +9,6 @@ javac -d ../class -sourcepath ../src ../src/model/persistence/*.java
 javac -d ../class -sourcepath ../src ../src/model/service/*.java
 javac --module-path ../lib/javafx --add-modules javafx.controls,javafx.graphics,javafx.fxml -sourcepath ../src -d ../class ../src/view/App.java
 
-java -cp ../class model.graph.DAGVerifier
+java --module-path ../lib/javafx --add-modules javafx.controls,javafx.graphics,javafx.fxml -cp ../fxml;../class view.App
 
 pause

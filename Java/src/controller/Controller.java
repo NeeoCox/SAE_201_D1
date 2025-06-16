@@ -263,7 +263,29 @@ public class Controller {
     private TableColumn<Secouriste, String> telSecTable; 
 	@FXML
     private TableColumn<Secouriste, String> adresseSecTable; 
-	private ObservableList<Secouriste> data = FXCollections.observableArrayList();
+	private ObservableList<Secouriste> dataSec = FXCollections.observableArrayList();
+
+	/**
+	 ***********************************
+	 * Variable pour affichage des DPS
+	 ***********************************
+	 */
+
+	@FXML
+    private TableView<DPS> tableDPS;
+    @FXML
+    private TableColumn<DPS, Long> idTableDPS;
+    @FXML
+    private TableColumn<DPS, String> heureDebTableDPS;
+    @FXML
+    private TableColumn<DPS, String> heureFinTableDPS;
+	@FXML
+    private TableColumn<DPS, String> dateTableDPS; 
+	@FXML
+    private TableColumn<DPS, String> lieuTableDPS; 
+	@FXML
+    private TableColumn<DPS, String> sportTableDPS;
+	private ObservableList<DPS> dataDPS = FXCollections.observableArrayList();
 
 	public Controller(){
 		System.out.println("controller");
@@ -828,7 +850,7 @@ public class Controller {
 			List<Secouriste> listSec = daoSecouriste.readAll();
 
 			for(Secouriste s : listSec){
-				data.add(s);
+				dataSec.add(s);
 			}
 		}
 		catch(Exception e){
@@ -843,5 +865,20 @@ public class Controller {
 		emailSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("email"));
 		telSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("tel"));
 		adresseSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("adresse"));
+	}
+
+	public void viewAllDPS(){
+		try{
+			DAODPS daoDPS = new DAODPS(null);
+			List<DPS> listDPS = daoDPS.readAll();
+
+			for(DPS dps : listDPS){
+				dataDPS.add(dps);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'affichage des DPS : " + e.getMessage());
+		}
 	}
 }
