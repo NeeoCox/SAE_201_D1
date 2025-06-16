@@ -26,9 +26,9 @@
    <bottom>
       <HBox prefHeight="53.0" prefWidth="600.0" spacing="75.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Créer" />
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Modifier" />
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Supprimer" />
+            <Button fx:id="buttonCreationDPS" mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Créer" />
+            <Button fx:id="buttonModifierDPS" mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Modifier" />
+            <Button fx:id="buttonSupprimerDPS" mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Supprimer" />
          </children>
          <padding>
             <Insets left="75.0" right="75.0" top="5.0" />

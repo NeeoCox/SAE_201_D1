@@ -2,10 +2,11 @@ package controller;
 // Import des librairies Java
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.List;
-
+import java.net.URL;
+import java.time.DayOfWeek;
+import java.time.ZonedDateTime;
+import java.time.format.TextStyle;
+import java.util.*;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
@@ -21,10 +22,15 @@ import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.Initializable;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 //Import de nos class
 import model.persistence.Secouriste;
@@ -42,12 +48,17 @@ import model.dao.DAOSite;
 import model.dao.DAOSport;
 import model.persistence.Journee;
 import model.persistence.Necessite;
+import model.CalendarActivity;
+
+
+
+
 
 /**
  * La classe Controller de l'application
  * @author M.COIGNARD, L.VIMART, A.COUDIERE
  */
-public class Controller {
+public class Controller implements Initializable {
 
 	/**
 	 ***********************************
@@ -286,6 +297,20 @@ public class Controller {
 	@FXML
     private TableColumn<DPS, String> sportTableDPS;
 	private ObservableList<DPS> dataDPS = FXCollections.observableArrayList();
+
+
+	private ZonedDateTime dateFocus; // date du lundi de la semaine affichée
+    private ZonedDateTime today;
+
+    @FXML
+    private Text year;
+
+    @FXML
+    private Text month;
+
+    @FXML
+    private FlowPane calendar;
+
 
 	public Controller(){
 		System.out.println("controller");
@@ -787,56 +812,6 @@ public class Controller {
 		}
 	}*/
 
-	/*
-		@FXML
-    private TableView<DPS> tableViewDPS;
-
-    @FXML
-    private TableColumn<DPS, String> columnDPS;
-
-    @FXML
-    private TableColumn<DPS, String> columnCompReq;
-
-    @FXML
-    private TableColumn<DPS, String> columnSecAffect;
-
-    private final ObservableList<DPS> dpsList = FXCollections.observableArrayList();
-	
-	public void initialize() {
-
-		System.out.println("columnDPS is null? " + (columnDPS == null));
-		System.out.println("columnCompReq is null? " + (columnCompReq == null));
-		System.out.println("columnSecAffect is null? " + (columnSecAffect == null));
-		System.out.println("tableViewDPS is null? " + (tableViewDPS == null));
-
-        // Dispositif de secours → site
-        columnDPS.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getALieuDans().getNom())
-        );
-
-        // Compétence requise → sport (à adapter si besoin)
-        columnCompReq.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getConcerne().getNom())
-        );
-
-        // Secouristes affectés → valeur fictive ou champ à ajouter dans DPS
-        columnSecAffect.setCellValueFactory(cellData ->
-            new SimpleStringProperty("Jean, Marie") // Remplacer par une vraie propriété si disponible
-        );
-
-        tableViewDPS.setItems(dpsList);
-
-        // Données de test
-        dpsList.add(new DPS(
-            1L,
-            10,
-            12,
-            new Journee(10,5,2025), 
-            new Site("1", "Fott", 12.00F, 12.00F), 
-            new Sport("12","Football")
-        ));
-    }*/
-	
 
 	/**
 	 ***********************************
@@ -881,4 +856,140 @@ public class Controller {
 			System.out.println("Erreur lors de l'affichage des DPS : " + e.getMessage());
 		}
 	}
+
+	@Override
+	public void initialize(URL url, ResourceBundle resourceBundle) {
+		dateFocus = ZonedDateTime.now();
+		today = ZonedDateTime.now();
+
+		// Empêche l'appel de drawCalendar si les éléments FXML ne sont pas chargés
+		if (year != null && month != null && calendar != null) {
+			drawCalendar();
+		}
+	}
+
+
+    @FXML
+    void backOneWeek(ActionEvent event) {
+        dateFocus = dateFocus.minusWeeks(1);
+        calendar.getChildren().clear();
+        drawCalendar();
+    }
+
+    @FXML
+    void forwardOneWeek(ActionEvent event) {
+        dateFocus = dateFocus.plusWeeks(1);
+        calendar.getChildren().clear();
+        drawCalendar();
+    }
+
+    private ZonedDateTime getStartOfWeek(ZonedDateTime date) {
+        // Trouver le lundi de la semaine courante
+        return date.with(DayOfWeek.MONDAY).withHour(0).withMinute(0).withSecond(0).withNano(0);
+    }
+
+    private void drawCalendar() {
+        year.setText(String.valueOf(dateFocus.getYear()));
+        month.setText(dateFocus.getMonth().getDisplayName(TextStyle.FULL, Locale.FRENCH));
+
+        double calendarWidth = calendar.getPrefWidth();
+        double calendarHeight = calendar.getPrefHeight();
+        double strokeWidth = 1;
+        double spacingH = calendar.getHgap();
+        double spacingV = calendar.getVgap();
+
+        // Récupérer les activités pour la semaine affichée
+        Map<Integer, List<CalendarActivity>> calendarActivityMap = getCalendarActivitiesWeek(dateFocus);
+
+        for (int i = 0; i < 7; i++) {
+            StackPane stackPane = new StackPane();
+
+            Rectangle rectangle = new Rectangle();
+            rectangle.setFill(Color.TRANSPARENT);
+            rectangle.setStroke(Color.BLACK);
+            rectangle.setStrokeWidth(strokeWidth);
+            double rectangleWidth = (calendarWidth / 7) - strokeWidth - spacingH;
+            rectangle.setWidth(rectangleWidth);
+            double rectangleHeight = calendarHeight - strokeWidth - spacingV;
+            rectangle.setHeight(rectangleHeight);
+            stackPane.getChildren().add(rectangle);
+
+            ZonedDateTime currentDate = dateFocus.plusDays(i);
+            int dayOfMonth = currentDate.getDayOfMonth();
+
+            // Afficher la date dans la case
+            Text date = new Text(String.valueOf(dayOfMonth));
+            double textTranslationY = -(rectangleHeight / 2) * 0.75;
+            date.setTranslateY(textTranslationY);
+            stackPane.getChildren().add(date);
+
+            // Afficher les activités du jour
+            /*List<CalendarActivity> calendarActivities = calendarActivityMap.get(dayOfMonth);
+            if (calendarActivities != null) {
+                createCalendarActivity(calendarActivities, rectangleHeight, rectangleWidth, stackPane);
+            }*/
+
+            // Mettre en surbrillance la date d'aujourd'hui
+            if (today.toLocalDate().equals(currentDate.toLocalDate())) {
+                rectangle.setStroke(Color.BLUE);
+            }
+
+            calendar.getChildren().add(stackPane);
+        }
+    }
+
+    private void createCalendarActivity(List<CalendarActivity> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
+        VBox calendarActivityBox = new VBox();
+        for (int k = 0; k < calendarActivities.size(); k++) {
+            if (k >= 2) {
+                Text moreActivities = new Text("...");
+                calendarActivityBox.getChildren().add(moreActivities);
+                moreActivities.setOnMouseClicked(mouseEvent -> {
+                    // Sur clic sur "..." afficher toutes les activités dans la console
+                    System.out.println(calendarActivities);
+                });
+                break;
+            }
+            CalendarActivity activity = calendarActivities.get(k);
+            Text text = new Text(activity.getClientName() + ", " + activity.getDate().toLocalTime());
+            calendarActivityBox.getChildren().add(text);
+            text.setOnMouseClicked(mouseEvent -> {
+                System.out.println(text.getText());
+            });
+        }
+        calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
+        calendarActivityBox.setMaxWidth(rectangleWidth * 0.8);
+        calendarActivityBox.setMaxHeight(rectangleHeight * 0.65);
+        calendarActivityBox.setStyle("-fx-background-color:GRAY");
+        stackPane.getChildren().add(calendarActivityBox);
+    }
+
+    private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
+        Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
+
+        for (CalendarActivity activity : calendarActivities) {
+            int activityDate = activity.getDate().getDayOfMonth();
+            if (!calendarActivityMap.containsKey(activityDate)) {
+                calendarActivityMap.put(activityDate, new ArrayList<>(List.of(activity)));
+            } else {
+                List<CalendarActivity> oldList = calendarActivityMap.get(activityDate);
+                oldList.add(activity);
+                calendarActivityMap.put(activityDate, oldList);
+            }
+        }
+        return calendarActivityMap;
+    }
+
+    private Map<Integer, List<CalendarActivity>> getCalendarActivitiesWeek(ZonedDateTime startOfWeek) {
+        List<CalendarActivity> calendarActivities = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < 50; i++) {
+            int dayOffset = random.nextInt(7); // 0 à 6 jours dans la semaine
+            ZonedDateTime time = startOfWeek.plusDays(dayOffset).withHour(16).withMinute(0).withSecond(0).withNano(0);
+            calendarActivities.add(new CalendarActivity(time, "Hans", 111111));
+        }
+
+        return createCalendarMap(calendarActivities);
+    }
 }
