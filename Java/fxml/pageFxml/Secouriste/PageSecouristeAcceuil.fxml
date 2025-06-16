@@ -1,82 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.geometry.Pos?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.Controller"
-            prefWidth="600.0" prefHeight="400.0">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
-   <!-- Top: VBox with Retour (left) and Title (center) -->
    <top>
-   <HBox spacing="10" alignment="CENTER" BorderPane.alignment="CENTER" style="-fx-background-color: #156082;">
+   <HBox alignment="CENTER" spacing="10" style="-fx-background-color: #156082;" BorderPane.alignment="CENTER">
       <padding>
-         <Insets top="10" bottom="10" left="10" right="10"/>
+         <Insets bottom="10" left="10" right="10" top="10" />
       </padding>
       <children>
-         <!-- Bouton retour à gauche -->
-         <Button fx:id="buttonRetourAcceuilSec" text="Retour" onAction="#goToPageConnection" />
 
-         <!-- Espace extensible à gauche du titre -->
-         <Region HBox.hgrow="ALWAYS"/>
+         <Button fx:id="buttonRetourAcceuilSec" onAction="#goToPageConnection" text="Retour" />
 
-         <!-- Titre stylisé au centre -->
-         <Label text="Secouriste" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
 
-         <!-- Espace extensible à droite du titre -->
-         <Region HBox.hgrow="ALWAYS"/>
-
-         <!-- Logo à droite -->
-         <ImageView fitHeight="40.0" fitWidth="40.0">
-            <image>
-               <Image url="@..\..\img\logo.png"/>
-            </image>
-         </ImageView>
+         <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="Secouriste" />
       </children>
    </HBox>
 </top>
 
-   <!-- Center: GridPane with 3 buttons -->
+
    <center>
       <VBox alignment="CENTER" spacing="30.0" BorderPane.alignment="CENTER">
          <children>
-            <GridPane hgap="30.0" vgap="30.0" alignment="CENTER">
+            <GridPane alignment="CENTER" hgap="30.0" vgap="30.0">
                <children>
-                  <!-- 1er bouton : #46b1e1 -->
-                  <Button fx:id="buttonMonPlanning"
-                          text="Mon planning&#10;et mes affectations"
-                          wrapText="true"
-                          style="-fx-background-color: #46b1e1; -fx-text-fill: white;"
-                          onAction="#goToMonPlanningEtAffectations"
-                          prefWidth="165.0" prefHeight="90.0"
-                          GridPane.columnIndex="0" GridPane.rowIndex="0"/>
 
-                  <!-- 2e bouton : #156082 -->
-                  <Button fx:id="buttonMesDisp"
-                          text="Mes disponibilités"
-                          style="-fx-background-color: #156082; -fx-text-fill: white;"
-                          onAction="#goToMesDisponibilite"
-                          prefWidth="165.0" prefHeight="90.0"
-                          GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                  <Button fx:id="buttonMonPlanning" onAction="#goToMonPlanningEtAffectations" prefHeight="90.0" prefWidth="165.0" style="-fx-background-color: #46b1e1; -fx-text-fill: white;" text="Mon planning&#10;et mes affectations" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
 
-                  <!-- 3e bouton : #819aae -->
-                  <Button fx:id="buttonMesComp"
-                          text="Mes compétences"
-                          style="-fx-background-color: #819aae; -fx-text-fill: white;"
-                          onAction="#goToMesCompetences"
-                          prefWidth="165.0" prefHeight="90.0"
-                          GridPane.columnIndex="0" GridPane.rowIndex="1"
-                          GridPane.columnSpan="2"
-                          GridPane.halignment="CENTER"/>
+                  <Button fx:id="buttonMesDisp" onAction="#goToMesDisponibilite" prefHeight="90.0" prefWidth="165.0" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Mes disponibilités" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+
+                  <Button fx:id="buttonMesComp" onAction="#goToMesCompetences" prefHeight="90.0" prefWidth="165.0" style="-fx-background-color: #819aae; -fx-text-fill: white;" text="Mes compétences" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                </children>
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
             </GridPane>
          </children>
       </VBox>
