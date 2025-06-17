@@ -1,18 +1,18 @@
 S2.01 partie POO (13/06/2025 23h59) :
 
 - Le diagramme de classes correspondant au diagramme de conception de la base de données, 
-    accompagné d’une explication textuelle des différents choix effectués (explication des méthodes ajoutées, des associations, des types des attributs lorsque ceux-ci ne sont pas évidents, etc.);
+    accompagné d’une explication textuelle des différents choix effectués (explication des méthodes ajoutées, des associations, des types des attributs lorsque ceux-ci ne sont pas évidents, etc.); Adrien & Léa
 
-- Le diagramme de séquence du scénario choisi;
+- Le diagramme de séquence du scénario choisi; 
 
-- Le code complet de la partie « modèle », commenté en français ou en anglais;
+- Le code complet de la partie « modèle », commenté en français ou en anglais; Adrien (model et service), Maël (persistence et graph), Léa (model et persistence)
 
 - Une classe Scenario permettant d’implémenter et tester le scénario modélisé par le diagramme de séquence.
 
 
 S2.01 partie IHM (13/06/2025 23h59) :
 
-- Le code source de l'application, commenté en français ou en anglais;
+- Le code source de l'application, commenté en français ou en anglais; Adrien Maël Léa
 
 - Un fichier texte contenant les commandes de compilation et d'exécution de l'application. Ces commandes devront placer les fichiers compilés dans un dossier nommé classes et les fichiers sources doivent être placés dans un dossier nommé sources;
 
@@ -24,10 +24,10 @@ S2.01 partie IHM (13/06/2025 23h59) :
 S2.02 (13/06/2025 23h59) :
 
 - Le code source Java des fonctionnalités suivantes (commenté) :
-    - Vérification du DAG;
-    - Approche exhaustive;
-    - Approche gloutonne;
-    - Intégration dans l'application finale.
+    - Vérification du DAG; Maël
+    - Approche exhaustive; Léa
+    - Approche gloutonne; Adrien
+    - Intégration dans l'application finale. Maël,
 
 - Un rapport (2 à 4 pages) comprenant :
     - Une description détaillée des algorithmes utilisés;

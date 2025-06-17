@@ -3,7 +3,7 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.persistence.EstAffecteA;
+import model.data.EstAffecteA;
 
 public class DAOEstAffecteA extends DAO<EstAffecteA>{
     private final Connection connection;

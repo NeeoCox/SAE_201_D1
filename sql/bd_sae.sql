@@ -3,7 +3,7 @@ USE bd_sae;
 --                CREATION DES TABLES              --
 -----------------------------------------------------
 
-DROP TABLES IF EXISTS sessions;
+DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS affectation;
 DROP TABLE IF EXISTS secouriste_journee;
@@ -35,92 +35,125 @@ CREATE TABLE sessions (
 
 
 
-/*###################Création des table de base##########################*/
-CREATE TABLE secouriste (
-    id INT PRIMARY KEY,
-    nom VARCHAR(50) NOT NULL,
-    prenom VARCHAR(50) NOT NULL,
-    dateNaissance DATE NOT NULL,
-    email VARCHAR(50) NOT NULL,
-    tel VARCHAR(20) NOT NULL,
-    adresse VARCHAR(100) NOT NULL
+/*###################Création des tables de base##########################*/
+
+CREATE TABLE Secoursite (
+    id INT,
+    nom VARCHAR(100),
+    prenom VARCHAR(100),
+    dateNaissance VARCHAR(10),
+    email VARCHAR(100),
+    telephone VARCHAR(20),
+    adresse VARCHAR(100),
+    CONSTRAINT pk_Secouriste PRIMARY KEY (id)
 );
 
-CREATE TABLE journee (
+CREATE TABLE Journee (
     jour INT,
     mois INT,
     annee INT,
-    PRIMARY KEY (jour, mois, annee)
+    CONSTRAINT pk_Journee PRIMARY KEY (jour, mois, annee)
 );
 
-CREATE TABLE competence (
-    intitule VARCHAR(50) PRIMARY KEY
+CREATE TABLE Competence (
+    intitule VARCHAR(50),
+    CONSTRAINT pk_Competence PRIMARY KEY (intitule)
 );
 
-CREATE TABLE sport (
-    code VARCHAR(50) PRIMARY KEY,
-    nom VARCHAR(50) NOT NULL
+CREATE TABLE DPS (
+    id INT,
+    horaire_depart int NOT NULL,
+    horaire_fin int NOT NULL,
+    concerneSport VARCHAR(10)
+        CONSTRAINT fk_DPS_Sport REFERENCES Sport(code),
+    aLieuDansSite VARCHAR(10)
+        CONSTRAINT fk_DPS_Site REFERENCES Site(code),
+    estProgrammeJour INT,
+    estProgrammeMois INT,
+    estProgrammeAnnee INT,
+    CONSTRAINT pk_DPS PRIMARY KEY (id),
+    CONSTRAINT uq_DPS_Horaire UNIQUE (horaire_depart, horaire_fin),
+    CONSTRAINT fk_DPS_Journee FOREIGN KEY (estProgrammeJour, estProgrammeMois, estProgrammeAnnee) REFERENCES Journee(jour, mois, annee)
 );
 
-CREATE TABLE site (
-    code VARCHAR(50) PRIMARY KEY,
-    nom VARCHAR(50) NOT NULL,
-    longitude FLOAT,
-    latitude FLOAT
+CREATE TABLE Site (
+    code VARCHAR(10),
+    nom VARCHAR(100),
+    longitude DECIMAL(9,6),
+    latitude DECIMAL(9,6),
+    CONSTRAINT pk_Site PRIMARY KEY (code)
 );
 
-/*############################ Table dps relation vers site, sport et journee######################*/
-CREATE TABLE dps (
-    id INT PRIMARY KEY,
-    horaire_depart INT,
-    horaire_fin INT,
-    jour INT,
-    mois INT,
-    annee INT,
-    site_code VARCHAR(50),
-    sport_code VARCHAR(50),
-    FOREIGN KEY (jour, mois, annee) REFERENCES journee(jour, mois, annee),
-    FOREIGN KEY (site_code) REFERENCES site(code),
-    FOREIGN KEY (sport_code) REFERENCES sport(code)
+CREATE TABLE Sport (
+    code VARCHAR(10),
+    nom VARCHAR(100),
+    CONSTRAINT pk_Sport PRIMARY KEY (code)
 );
 
-/*###################### Table besoin relation à dps et competance####################*/
-CREATE TABLE besoin (
-    dps_id INT,
-    competence_intitule VARCHAR(50),
-    nombre INT NOT NULL,
-    PRIMARY KEY (dps_id, competence_intitule),
-    FOREIGN KEY (dps_id) REFERENCES dps(id),
-    FOREIGN KEY (competence_intitule) REFERENCES competence(intitule)
+
+
+CREATE TABLE Besoin (
+    laCompetence VARCHAR(50) NOT NULL
+        CONSTRAINT fk_Besoin_Competence REFERENCES Competence(intitule),
+    leDPS INT
+        CONSTRAINT fk_Besoin_DPS REFERENCES DPS(id),
+    CONSTRAINT pk_Besoin PRIMARY KEY (laCompetence, leDPS)
 );
 
-/*###############Table associative########################*/
-
--- Compétences posséder par les secouriste
-CREATE TABLE secouriste_competence (
-    secouriste_id INT,
-    competence_intitule VARCHAR(50),
-    PRIMARY KEY (secouriste_id, competence_intitule),
-    FOREIGN KEY (secouriste_id) REFERENCES secouriste(id),
-    FOREIGN KEY (competence_intitule) REFERENCES competence(intitule)
+CREATE TABLE Necessite (
+    laCompetence VARCHAR(50)
+        CONSTRAINT fk_Necessite_Competence REFERENCES Competence(intitule),
+    laCompetenceNecessaire VARCHAR(50)
+        CONSTRAINT fk_Necessite_CompetenceNecessaire REFERENCES Competence(intitule),
+    CONSTRAINT pk_Necessite PRIMARY KEY (laCompetence, laCompetenceNecessaire)
 );
 
--- Disponibiliter des secouriste pour une journée
-CREATE TABLE secouriste_journee (
-    secouriste_id INT,
-    jour INT,
-    mois INT,
-    annee INT,
-    PRIMARY KEY (secouriste_id, jour, mois, annee),
-    FOREIGN KEY (secouriste_id) REFERENCES secouriste(id),
-    FOREIGN KEY (jour, mois, annee) REFERENCES journee(jour, mois, annee)
+CREATE TABLE Possede (
+    leSecouriste INT
+        CONSTRAINT fk_Possede_Secouriste REFERENCES Secoursite(id),
+    laCompetence VARCHAR(50)
+        CONSTRAINT fk_Possede_Competence REFERENCES Competence(intitule),
+    CONSTRAINT pk_Possede PRIMARY KEY (leSecouriste, laCompetence)
 );
 
--- Affectation des secouriste a un DPS
-CREATE TABLE affectation (
-    secouriste_id INT,
-    dps_id INT,
-    PRIMARY KEY (secouriste_id, dps_id),
-    FOREIGN KEY (secouriste_id) REFERENCES secouriste(id),
-    FOREIGN KEY (dps_id) REFERENCES dps(id)
+CREATE TABLE EstDisponible (
+    leSecouriste INT
+        CONSTRAINT fk_EstDisponible_Secouriste REFERENCES Secoursite(id),
+    laJournee INT
+        CONSTRAINT fk_EstDisponible_Journee REFERENCES Journee(jour, mois, annee),
+    CONSTRAINT pk_EstDisponible PRIMARY KEY (leSecouriste, laJournee)
 );
+
+CREATE TABLE EstAffecteA (
+    leSecouriste INT
+        CONSTRAINT fk_EstAffecteA_Secouriste REFERENCES Secoursite(id),
+    leDPS INT
+        CONSTRAINT fk_EstAffecteA_DPS REFERENCES DPS(id),
+    laCompetence VARCHAR(50)
+        CONSTRAINT fk_EstAffecteA_Competence REFERENCES Competence(intitule),
+    CONSTRAINT pk_EstAffecteA PRIMARY KEY (leSecouriste, leDPS, laCompetence)
+);
+
+
+
+/*########################### Ininitalisation du graphe des compétences #############################*/
+
+INSERT INTO Competence (intitule) VALUES
+('PSE1'),
+('PSE2'),
+('SSA'),
+('VPSP'),
+('CE'),
+('CP'),
+('CO'),
+('PBC'),
+('PBF');
+
+INSERT INTO Necessite (laCompetence, laCompetenceNecessaire) VALUES
+('PSE2', 'PSE1'),
+('CE', 'PSE2'),
+('CP', 'CE'),
+('CO', 'CP'),
+('SSA', 'PSE2'),
+('VPSP', 'PSE2'),
+('PBF', 'PBC');

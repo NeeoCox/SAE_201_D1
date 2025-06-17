@@ -2,9 +2,8 @@ package model.service;
 
 import java.sql.SQLException;
 import java.util.List;
-
 import model.dao.DAOSecouriste;
-import model.persistence.Secouriste;
+import model.data.Secouriste;
 
 /**
  * Classe de gestion des secouristes avec persistance en base.
