@@ -67,6 +67,13 @@ public class Controller {
 	 */
 	
 	// Mettre les DAOSecouriste et autre la
+	DAOSecouriste daoSecouriste = new DAOSecouriste(null);
+	DAOBesoin daoBesoin = new DAOBesoin(null);
+	DAOSite daoSite = new DAOSite(null);
+	DAODPS daoDPS = new DAODPS(null);
+	DAOSport daoSport = new DAOSport(null);
+	DAOCompetence daoCompetence = new DAOCompetence(null);
+	DAONecessite daoNecessite = new DAONecessite(null);
 
 
 	/**
@@ -621,8 +628,7 @@ public class Controller {
 			String passWord = passWordSec.getText();
 
 			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné 
-			
+						
 			try{
 				daoSecouriste.create(secouriste);
 			}
@@ -653,8 +659,7 @@ public class Controller {
 			String passWord = passWordSecModif.getText();
 
 			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné 
-			
+						
 			try{
 				daoSecouriste.update(secouriste);
 			}
@@ -674,9 +679,7 @@ public class Controller {
 			String id = idSecDelete.getText();
 			long idLong = Long.parseLong(id); 
 
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné
-
-			try{
+						try{
 				daoSecouriste.delete(idLong);
 			}
 			catch (Exception e) {
@@ -725,24 +728,23 @@ public class Controller {
 			String nombreStr = nbSecDPSCreate.getText();
 			int nombre = Integer.parseInt(nombreStr);
 			try{
-				DAOBesoin daoBesoin = new DAOBesoin(null);
+				
 				Besoin besoin;
 				for(int i = 0; i<nbCompReq; i++){
 					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
 					daoBesoin.create(besoin);
 				}
-				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
+				 
 				
 				String lieuRenc = lieuRencDPSCreate.getText();
 				Site site = daoSite.read(lieuRenc);
 
 				// Sport
-				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné
-
+				
 				String sport = sportDPSCreate.getText();
 				Sport sportObj = daoSport.read(sport);
 
-				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné
+				
 				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
 				daoDPS.create(dps);
 			}
@@ -786,25 +788,20 @@ public class Controller {
 			String nombreStr = nbSecDPSModif.getText();
 			int nombre = Integer.parseInt(nombreStr);
 			try{
-				DAOBesoin daoBesoin = new DAOBesoin(null);
 				Besoin besoin;
 				for(int i = 0; i<nbCompReq; i++){
 					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
 					daoBesoin.update(besoin);
 				}
 
-				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
-				
 				String lieuRenc = lieuRencDPSModif.getText();
 				Site site = daoSite.read(lieuRenc);
 
 				// Sport
-				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné
 
 				String sport = sportDPSModif.getText();
 				Sport sportObj = daoSport.read(sport);
 
-				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné
 				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
 				daoDPS.update(dps);
 			}
@@ -825,7 +822,6 @@ public class Controller {
 			long idDPSLong = Long.parseLong(idDPS);
 
 			try{
-				DAOBesoin daoBesoin = new DAOBesoin(null);
 				List<Besoin> besoin = daoBesoin.readAll();
 
 				for (Besoin b : besoin) {
@@ -834,7 +830,6 @@ public class Controller {
 						daoBesoin.delete(idDPSLong, idDPS);
 					}
 				}
-				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné 
 				daoDPS.delete(idDPSLong);
 			}
 			catch (Exception e) {
@@ -867,8 +862,7 @@ public class Controller {
 		comp.setIntitule(intitulerStr);
 
 		try {
-			DAOCompetence daoCompetence = new DAOCompetence(null);
-			DAONecessite daoNecessite = new DAONecessite(null);
+			
 
 			//Implémentation vérification de DAG
 			// Étape 1 : vérifier existence des compétences nécessaires
@@ -976,7 +970,6 @@ public class Controller {
 
 	public void viewAllSecouristes(){
 		try{
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);
 			List<Secouriste> listSec = daoSecouriste.readAll();
 
 			for(Secouriste s : listSec){
@@ -999,7 +992,6 @@ public class Controller {
 
 	public void viewAllDPS(){
 		try{
-			DAODPS daoDPS = new DAODPS(null);
 			List<DPS> listDPS = daoDPS.readAll();
 
 			for(DPS dps : listDPS){
