@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Action;
+
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,9 +42,11 @@ import model.persistence.Besoin;
 import model.persistence.Competence;
 import model.persistence.Sport;
 import model.persistence.DPS;
+import model.dao.DAO;
 import model.dao.DAOBesoin;
 import model.dao.DAOCompetence;
 import model.dao.DAODPS;
+import model.dao.DAOJournee;
 import model.dao.DAONecessite;
 import model.dao.DAOPossede;
 import model.dao.DAOSecouriste;
@@ -68,14 +72,15 @@ public class Controller {
 	 */
 	
 	// Mettre les DAOSecouriste et autre la
-	DAOSecouriste daoSecouriste = new DAOSecouriste(null);
-	DAOBesoin daoBesoin = new DAOBesoin(null);
-	DAOSite daoSite = new DAOSite(null);
-	DAODPS daoDPS = new DAODPS(null);
-	DAOSport daoSport = new DAOSport(null);
-	DAOCompetence daoCompetence = new DAOCompetence(null);
-	DAONecessite daoNecessite = new DAONecessite(null);
-	DAOPossede DAOPossede = new DAOPossede(null);
+	DAOSecouriste daoSecouriste = new DAOSecouriste();
+	DAOBesoin daoBesoin = new DAOBesoin();
+	DAOSite daoSite = new DAOSite();
+	DAODPS daoDPS = new DAODPS();
+	DAOSport daoSport = new DAOSport();
+	DAOCompetence daoCompetence = new DAOCompetence();
+	DAONecessite daoNecessite = new DAONecessite();
+	DAOPossede DAOPossede = new DAOPossede();
+	DAOJournee daoJournee = new DAOJournee();
 
 
 	/**
@@ -90,13 +95,18 @@ public class Controller {
 
 	/**
 	 ***********************************
-	 * Bouton pour la page de connection Admin
+	 * Bouton et TextField pour la page de connection Admin
 	 ***********************************
 	 */
 	@FXML
 	private Button buttonConncetionAdmin;
 	@FXML 
 	private Button buttonRetourConnectAdmin;
+	@FXML 
+	private TextField usernameFieldAmin;
+	@FXML 
+	private TextField passwordFieldAdmin;
+
 
 	/**
 	 ***********************************
@@ -107,6 +117,10 @@ public class Controller {
 	private Button buttonRetourAcceuilSec;
 	@FXML 
 	private Button buttonConnectSec;
+	@FXML 
+	private TextField usernameFieldSec;
+	@FXML 
+	private TextField passwordFieldSec;
 
 
 	/**
@@ -411,6 +425,17 @@ public class Controller {
 	public Controller(){
 		System.out.println("controller");
 
+	}
+	/**
+	 ***********************************
+	 * Connection BDD
+	 ***********************************
+	 */
+	public void connect(ActionEvent event){
+		String username = usernameFieldAmin.getText();
+		String password = passwordFieldAdmin.getText();
+
+		DAO.setCredentials(username, password);		
 	}
 
 

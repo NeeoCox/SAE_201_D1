@@ -50,10 +50,10 @@
                     </rowConstraints>
                     <children>
                         <Label text="Identifiant" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="usernameFieldAmin" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label text="Mot de passe" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="passwordFieldAdmin" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     </children>
                 </GridPane>
 

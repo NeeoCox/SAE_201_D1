@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import model.persistence.Necessite;
 
-public class DAONecessite {
+public class DAONecessite extends DAO<Necessite>{
     private final Connection connection;
 
-    public DAONecessite(Connection connection) {
-        this.connection = connection;
+    public DAONecessite() {
+        try {
+            this.connection = createConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create database connection", e);
+        }
     }
 
     public void create(Necessite necessite) throws SQLException {

@@ -35,11 +35,9 @@ public class Secouriste {
      */
     private String adresse;
 
-
     public Secouriste(){
-
+        
     }
-
     public Secouriste(long id, String nom, String prenom, String dateNaissance, String email, String tel, String adresse) {
         this.id = id;
         this.nom = nom;
