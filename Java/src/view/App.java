@@ -9,17 +9,21 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
+import controller.Controller;
+
 public class App extends Application {
     @Override
     public void start(Stage stage) {
         try {
             System.out.println("lancement de l'application");
+
             URL fxmlLocation = new URL("file:../fxml/pageFxml/PageConnection/PageConnection.fxml");
             Parent root = FXMLLoader.load(fxmlLocation);
+
             stage.setTitle("Application gestion planning");
             stage.setScene(new Scene(root));
             
-            stage.getIcons().add(new Image("file:../fxml/img/chara.jpg"));
+            stage.getIcons().add(new Image("file:../fxml/img/logo.png"));
             
 		    stage.centerOnScreen();
             

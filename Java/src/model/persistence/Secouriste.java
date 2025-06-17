@@ -36,6 +36,20 @@ public class Secouriste {
     private String adresse;
 
 
+    public Secouriste(){
+
+    }
+
+    public Secouriste(long id, String nom, String prenom, String dateNaissance, String email, String tel, String adresse) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+        this.email = email;
+        this.tel = tel;
+        this.adresse = adresse;
+    }
+
     /**
      * Accesseur de l'attribut id.
      * @return L'identifiant unique du secouriste.

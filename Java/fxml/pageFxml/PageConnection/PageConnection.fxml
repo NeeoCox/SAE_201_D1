@@ -1,31 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<BorderPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.Controller">
+
    <top>
-      <Label alignment="CENTER" prefHeight="54.0" prefWidth="620.0" style="-fx-background-color: #125f7d;" text="Se connecter en tant que" textAlignment="CENTER" BorderPane.alignment="CENTER">
-         <font>
-            <Font name="System Bold" size="22.0" />
-         </font>
-      </Label>
+      
+      <StackPane style="-fx-background-color: #125f7d;" BorderPane.alignment="CENTER">
+         <children>
+            
+            <Label text="Se connecter en tant que" style="-fx-text-fill: white;">
+               <font>
+                  <Font name="System Bold" size="22.0"/>
+               </font>
+            </Label>
+
+            
+            <HBox alignment="CENTER_RIGHT">
+               <children>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <ImageView fitHeight="40.0" fitWidth="40.0">
+                     <image>
+                        <Image url="@..\..\img\logo.png"/>
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets right="10" top="10" bottom="10"/>
+               </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets top="10" bottom="10"/>
+         </padding>
+      </StackPane>
    </top>
-   <left>
-      <AnchorPane prefHeight="346.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+
+   <center>
+      <HBox alignment="CENTER" spacing="40.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonAdmin" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" onAction="#goToConnectionAdmin" prefHeight="90.0" prefWidth="125.0" text="Administrateur" />
+            <VBox alignment="CENTER">
+               <Button fx:id="buttonAdmin"
+                       onAction="#goToConnectionAdmin"
+                       prefHeight="90.0" prefWidth="150.0"
+                       style="-fx-background-color: #125f7d; -fx-text-fill: white; -fx-font-size: 14;"
+                       text="Administrateur"/>
+            </VBox>
+
+            <VBox alignment="CENTER">
+               <Button fx:id="buttonSecouriste"
+                       onAction="#goToConnectionSecouriste"
+                       prefHeight="90.0" prefWidth="150.0"
+                       style="-fx-background-color: #125f7d; -fx-text-fill: white; -fx-font-size: 14px;"
+                       text="Secouriste"/>
+            </VBox>
          </children>
-      </AnchorPane>
-   </left>
-   <right>
-      <AnchorPane prefHeight="346.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="buttonSecouriste" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" onAction="#goToConnectionSecouriste" prefHeight="90.0" prefWidth="125.0" style="-fx-background-color: #125f7d;" text="Secouriste" />
-         </children>
-      </AnchorPane>
-   </right>
+      </HBox>
+   </center>
+
 </BorderPane>

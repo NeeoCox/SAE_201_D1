@@ -1,8 +1,16 @@
 {
     "java.project.sourcePaths": [
-        "java\\src"
+        "java\\src",
+        "java\\lib\\calendar"
     ],
     "java.project.referencedLibraries": [
-        "java\\lib\\javafx\\*.jar"
+        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.graphics.jar",
+        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.controls.jar",
+        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.swing.jar",
+        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.web.jar",
+        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.fxml.jar",
+        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx-swt.jar",
+        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.media.jar",
+        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.base.jar",
     ]
 }
