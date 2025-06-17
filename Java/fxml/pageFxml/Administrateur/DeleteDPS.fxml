@@ -3,40 +3,66 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
-   <top>
-      <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="buttonRetourAcSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageAdminAcceuil" text="Retour" />
-            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="303.0" text="Supprimer DPS">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-         </children>
-      </AnchorPane>
-   </top>
-   <center>
-      <HBox prefHeight="402.0" prefWidth="669.0" BorderPane.alignment="CENTER">
-         <children>
-            <Pane prefHeight="200.0" prefWidth="200.0" />
-            <VBox alignment="CENTER" prefHeight="338.0" prefWidth="232.0">
-               <children>
-                  <Label prefHeight="17.0" text="Identifiant" />
-                  <TextField fx:id="idDPSDelete" prefHeight="25.0" prefWidth="488.0" />
-                  <Pane prefHeight="68.0" prefWidth="232.0" />
-                  <Button fx:id="deleteButtonDPS" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Supprimer" />
-               </children>
+<BorderPane fx:controller="controller.Controller"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="435.0" prefWidth="641.0">
+
+    <!-- Bande bleue en haut -->
+    <top>
+        <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
+            
+            <!-- Bouton Retour -->
+            <Button fx:id="buttonRetourAcSec"
+                    text="Retour"
+                    onAction="#goToPageAdminAcceuil"
+                    prefHeight="30" prefWidth="80"
+                    style="-fx-background-color: white; -fx-text-fill: #156082;" />
+            
+            <Region HBox.hgrow="ALWAYS" />
+            
+            <!-- Titre centré -->
+            <Label text="Supprimer DPS"
+                   style="-fx-text-fill: white; -fx-font-size: 24px;"
+                   maxWidth="300" alignment="CENTER" />
+            
+            <Region HBox.hgrow="ALWAYS" />
+            
+            <!-- Logo -->
+            <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../../img/logo.png" />
+                </image>
+            </ImageView>
+        </HBox>
+    </top>
+
+    <!-- Centre avec formulaire centré -->
+    <center>
+        <HBox alignment="CENTER" prefHeight="338.0" prefWidth="600" spacing="40">
+            <Region HBox.hgrow="ALWAYS" />
+            
+            <VBox alignment="CENTER" spacing="20" prefWidth="300">
+
+                <Label text="Identifiant" />
+
+                <TextField fx:id="idDPSDelete" prefWidth="300" prefHeight="30" />
+
+                <Button fx:id="deleteButtonDPS"
+                        text="Supprimer"
+                        prefWidth="160" prefHeight="40"
+                        style="-fx-background-color: #156082; -fx-text-fill: white;" />
             </VBox>
-            <Pane prefHeight="388.0" prefWidth="200.0" />
-         </children>
-      </HBox>
-   </center>
+
+            <Region HBox.hgrow="ALWAYS" />
+        </HBox>
+    </center>
+
 </BorderPane>
