@@ -17,11 +17,11 @@ public class GrapheCompetencesDAG {
 
     // Constructeur : initialise le graphe avec les relations hiérarchiques
     public GrapheCompetencesDAG() {
-        ajouterAretesDepuisFigure();
+        initCompDep();
     }
 
     // Ajoute les arêtes orientées comme dans la figure 1
-    private void ajouterAretesDepuisFigure() {
+    private void initCompDep() {
         ajouterArete("CO", "CP");
         ajouterArete("CP", "CE");
         ajouterArete("CE", "PSE2");
@@ -31,8 +31,14 @@ public class GrapheCompetencesDAG {
         ajouterArete("PBF", "PBC");
     }
 
+    // Vérifie si une compétence est présente dans le graphe
+    public boolean contientCompetence(String competence) {
+        return graphe.containsKey(competence);
+    }
+
+
     // Ajoute une arête dirigée dans le graphe
-    private void ajouterArete(String depuis, String vers) {
+    public void ajouterArete(String depuis, String vers) {
         graphe.putIfAbsent(depuis, new ArrayList<>());
         graphe.get(depuis).add(vers);
         graphe.putIfAbsent(vers, new ArrayList<>());

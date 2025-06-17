@@ -2,11 +2,13 @@ package controller;
 // Import des librairies Java
 import java.io.IOException;
 import java.time.LocalDate;
-import java.net.URL;
 import java.time.DayOfWeek;
-import java.time.ZonedDateTime;
-import java.time.format.TextStyle;
-import java.util.*;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
@@ -14,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -24,12 +27,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 //Import de nos class
@@ -48,8 +49,7 @@ import model.dao.DAOSite;
 import model.dao.DAOSport;
 import model.persistence.Journee;
 import model.persistence.Necessite;
-import model.CalendarActivity;
-
+import model.graph.GrapheCompetencesDAG;
 
 
 
@@ -58,7 +58,7 @@ import model.CalendarActivity;
  * La classe Controller de l'application
  * @author M.COIGNARD, L.VIMART, A.COUDIERE
  */
-public class Controller implements Initializable {
+public class Controller {
 
 	/**
 	 ***********************************
@@ -152,6 +152,8 @@ public class Controller implements Initializable {
 	private TextField adressSec;
 	@FXML
 	private Button createButtonSec;
+	@FXML
+	private Button buttonRetAcceuilSec;
 
 	//Pour la modification d'un secouriste
 	@FXML
@@ -299,8 +301,8 @@ public class Controller implements Initializable {
 	private ObservableList<DPS> dataDPS = FXCollections.observableArrayList();
 
 
-	private ZonedDateTime dateFocus; // date du lundi de la semaine affichée
-    private ZonedDateTime today;
+	@FXML
+    private FlowPane calendar;
 
     @FXML
     private Text year;
@@ -308,17 +310,46 @@ public class Controller implements Initializable {
     @FXML
     private Text month;
 
+	private GrapheCompetencesDAG compDAG= new GrapheCompetencesDAG();
+
+	/**
+	 ***********************************
+	 * Variable pour le PLANNING
+	 ***********************************
+	 */
+	@FXML private Label lblWeek;
+    @FXML private Label lblMon, lblTue, lblWed, lblThu, lblFri, lblSat, lblSun;
+    @FXML private Button btnPrevWeek, btnNextWeek;
+
+    // VBox qui contiennent les labels des jours + les tâches
     @FXML
-    private FlowPane calendar;
+    private VBox vboxMon;
+    @FXML
+    private VBox vboxTue;
+    @FXML
+    private VBox vboxWed;
+    @FXML
+    private VBox vboxThu;
+    @FXML
+    private VBox vboxFri;
+    @FXML
+    private VBox vboxSat;
+    @FXML
+    private VBox vboxSun;
+
+    private LocalDate currentMonday;
+
+    private Map<LocalDate, List<String>> tasksByDate = new HashMap<>();
+
+
+    @FXML private GridPane gridWeek;
+
+    private VBox[][] taskBoxes = new VBox[7][24]; // 7 jours * 24h
 
 
 	public Controller(){
 		System.out.println("controller");
 
-	}
-
-	public void initializer(){
-		System.out.println("Initializer");
 	}
 
 
@@ -723,49 +754,77 @@ public class Controller implements Initializable {
 	 ***********************************
 	 */
 
-	public void createCompetences(){
-		System.out.println();
-		if(intitulerCreateComp.getText().isEmpty()){
+	public void createCompetences() {
+		if (intitulerCreateComp.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
+			return;
 		}
-		else{
-			String intitulerStr = intitulerCreateComp.getText();
-			String compNecStr = null;
-			boolean necessiteVide = necessiteCreateComp.getText().isEmpty();
-			if(!necessiteVide){
-				compNecStr = necessiteCreateComp.getText();
-			}
-			Competence comp = new Competence();
-			comp.setIntitule(intitulerStr);
 
-			try{
-				DAOCompetence daoCompetence = new DAOCompetence(null);
-				daoCompetence.create(comp);
+		String intitulerStr = intitulerCreateComp.getText();
+		String[] compNecStr = null;
+		boolean necessiteVide = necessiteCreateComp.getText().isEmpty();
+		if (!necessiteVide) {
+			compNecStr = necessiteCreateComp.getText().split(";");
+		}
 
-				if(!necessiteVide){
-					DAONecessite daoNecessite = new DAONecessite(null);
-					
-					Competence compNec = new Competence();
-					compNec.setIntitule(compNecStr);
-					
-					Necessite nec = new Necessite();
-					nec.setLaCompetence(comp);
-					nec.setCompetenceNecessaire(compNec);
+		Competence comp = new Competence();
+		comp.setIntitule(intitulerStr);
 
-					nec.setIntituleCompetence(intitulerStr);
-					nec.setIntituleCompetenceNecessaire(compNecStr);
-					daoNecessite.create(nec);
+		try {
+			DAOCompetence daoCompetence = new DAOCompetence(null);
+			DAONecessite daoNecessite = new DAONecessite(null);
+
+			//Implémentation vérification de DAG
+			// Étape 1 : vérifier existence des compétences nécessaires
+			List<String> dependances = new ArrayList<>();
+			if (!necessiteVide) {
+				for (String nec : compNecStr) {
+					if (!compDAG.contientCompetence(nec)) {
+						System.out.println("Compétence requise inexistante dans le graphe : " + nec);
+						return;
+					}
+					dependances.add(nec);
 				}
-				
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la création de la Compétence : " + e.getMessage());
 			}
 
+			// Étape 2 : créer une copie temporaire du graphe et tester DAG
+			GrapheCompetencesDAG grapheTemp = new GrapheCompetencesDAG();
+			for (String nec : dependances) {
+				grapheTemp.ajouterArete(nec, intitulerStr); // dépendance = arête orientée nec -> intituler
+			}
 
+			if (!grapheTemp.verifierDAG()) {
+				System.out.println("Impossible d'ajouter la compétence : cela créerait un cycle dans le graphe !");
+				return;
+			}
+
+			// Étape 3 : insérer la compétence
+			daoCompetence.create(comp);
+
+			// Étape 4 : insérer les dépendances dans la base + DAG actuel
+			for (String nec : dependances) {
+				Competence compNec = daoCompetence.read(nec);
+
+				// Base de données
+				Necessite besoin = new Necessite();
+				besoin.setLaCompetence(comp);
+				besoin.setCompetenceNecessaire(compNec);
+				besoin.setIntituleCompetence(intitulerStr);
+				besoin.setIntituleCompetenceNecessaire(nec);
+				daoNecessite.create(besoin);
+
+				// Graphe actuel (modèle interne)
+				compDAG.ajouterArete(nec, intitulerStr);
+			}
+
+			System.out.println("Compétence ajoutée avec succès.");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la création de la Compétence : " + e.getMessage());
 		}
 	}
+
 
 	//A REFAIRE QUAND MEIUX COMPRIS DAO COMP ET NEC
 	/*public void updateCompetences(){
@@ -857,139 +916,162 @@ public class Controller implements Initializable {
 		}
 	}
 
-	@Override
-	public void initialize(URL url, ResourceBundle resourceBundle) {
-		dateFocus = ZonedDateTime.now();
-		today = ZonedDateTime.now();
+	/**
+	 ***********************************
+	 * GESTION DU PLANNING
+	 ***********************************
+	 */
 
-		// Empêche l'appel de drawCalendar si les éléments FXML ne sont pas chargés
-		if (year != null && month != null && calendar != null) {
-			drawCalendar();
+	@FXML
+    public void initialize() {
+		if (gridWeek == null) {
+			System.err.println("Le FXML n'a pas encore injecté gridWeek. Initialisation différée.");
+			return;
+		}
+        LocalDate today = LocalDate.now();
+        currentMonday = today.with(DayOfWeek.MONDAY);
+
+        generateHourLabelsAndTaskBoxes();
+        afficherSemaine(currentMonday);
+
+        btnPrevWeek.setOnAction(e -> {
+            afficherSemaine(currentMonday.minusWeeks(1));
+        });
+
+        btnNextWeek.setOnAction(e -> {
+            afficherSemaine(currentMonday.plusWeeks(1));
+        });
+
+        vboxMon.setFillWidth(true);
+        vboxTue.setFillWidth(true);
+        vboxWed.setFillWidth(true);
+        vboxThu.setFillWidth(true);
+        vboxFri.setFillWidth(true);
+        vboxSat.setFillWidth(true);
+        vboxSun.setFillWidth(true);
+    }
+
+    public void addTask(LocalDate date, String taskDescription) {
+        tasksByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(taskDescription);
+        if (isDateInCurrentWeek(date)) {
+            afficherTachesPourDate(date);
+        }
+    }
+
+    private boolean isDateInCurrentWeek(LocalDate date) {
+        return !date.isBefore(currentMonday) && !date.isAfter(currentMonday.plusDays(6));
+    }
+
+    public void afficherSemaine(LocalDate monday) {
+        currentMonday = monday;
+
+        // Met à jour les labels des jours avec les dates
+        updateDayLabels();
+
+        // Vide les VBoxes des jours (sauf le label titre)
+        clearAllDayBoxes();
+
+        // Ajoute les tâches existantes dans la semaine
+        for (int i = 0; i < 7; i++) {
+            LocalDate date = currentMonday.plusDays(i);
+            afficherTachesPourDate(date);
+        }
+    }
+
+    private void afficherTachesPourDate(LocalDate date) {
+        int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
+        if (dayIndex < 0 || dayIndex > 6) return;
+
+        VBox dayBox = getDayVBox(dayIndex);
+        if (dayBox == null) return;
+
+        // Le premier enfant est le label du jour, on vide le reste
+        // Donc on garde uniquement le label du jour (enfant 0)
+        while (dayBox.getChildren().size() > 1) {
+            dayBox.getChildren().remove(1);
+        }
+
+        List<String> tasks = tasksByDate.getOrDefault(date, Collections.emptyList());
+        for (String task : tasks) {
+            Label taskLabel = new Label(task);
+            taskLabel.setStyle("-fx-background-color: #D3D3D3; -fx-padding: 3; -fx-border-radius: 3; -fx-background-radius: 3;");
+            dayBox.getChildren().add(taskLabel);
+        }
+    }
+
+    private void clearAllDayBoxes() {
+        vboxMon.getChildren().retainAll(lblMon);
+        vboxTue.getChildren().retainAll(lblTue);
+        vboxWed.getChildren().retainAll(lblWed);
+        vboxThu.getChildren().retainAll(lblThu);
+        vboxFri.getChildren().retainAll(lblFri);
+        vboxSat.getChildren().retainAll(lblSat);
+        vboxSun.getChildren().retainAll(lblSun);
+    }
+
+    private void updateDayLabels() {
+        lblMon.setText("Lundi\n" + currentMonday);
+        lblTue.setText("Mardi\n" + currentMonday.plusDays(1));
+        lblWed.setText("Mercredi\n" + currentMonday.plusDays(2));
+        lblThu.setText("Jeudi\n" + currentMonday.plusDays(3));
+        lblFri.setText("Vendredi\n" + currentMonday.plusDays(4));
+        lblSat.setText("Samedi\n" + currentMonday.plusDays(5));
+        lblSun.setText("Dimanche\n" + currentMonday.plusDays(6));
+    }
+
+
+
+    private VBox getDayVBox(int dayIndex) {
+        switch (dayIndex) {
+            case 0: return vboxMon;
+            case 1: return vboxTue;
+            case 2: return vboxWed;
+            case 3: return vboxThu;
+            case 4: return vboxFri;
+            case 5: return vboxSat;
+            case 6: return vboxSun;
+            default: return null;
+        }
+    }
+
+    /**
+     * 
+     * @param event
+     */
+    @FXML
+    public void onAddTaskClicked(ActionEvent event) {
+        // Exemple : on ajoute une tâche fixe au mercredi de la semaine affichée
+        LocalDate taskDate = currentMonday.plusDays(2); // mercredi
+        String taskDesc = "Tâche prédéfinie";
+
+        addTask(taskDate, taskDesc);
+    }
+
+    private void generateHourLabelsAndTaskBoxes() {
+		if (gridWeek == null) {
+			System.err.println("gridWeek n'est pas encore initialisé. Ignoré.");
+			return;
+		}
+
+		for (int hour = 0; hour < 24; hour++) {
+			// Colonne 0 : heure
+			Label hourLabel = new Label(String.format("%02dh", hour));
+			hourLabel.setStyle("-fx-font-size: 10px;");
+			GridPane.setRowIndex(hourLabel, hour + 1); // +1 car ligne 0 = titres
+			GridPane.setColumnIndex(hourLabel, 0);
+			gridWeek.getChildren().add(hourLabel);
+
+			// Colonnes 1 à 7 : VBoxes pour chaque jour
+			for (int day = 0; day < 7; day++) {
+				VBox box = new VBox();
+				box.setSpacing(2);
+				box.setPadding(new Insets(2));
+				box.setStyle("-fx-background-color: #f4f4f4; -fx-border-color: #cccccc;");
+				GridPane.setRowIndex(box, hour + 1);
+				GridPane.setColumnIndex(box, day + 1);
+				gridWeek.getChildren().add(box);
+				taskBoxes[day][hour] = box;
+			}
 		}
 	}
-
-
-    @FXML
-    void backOneWeek(ActionEvent event) {
-        dateFocus = dateFocus.minusWeeks(1);
-        calendar.getChildren().clear();
-        drawCalendar();
-    }
-
-    @FXML
-    void forwardOneWeek(ActionEvent event) {
-        dateFocus = dateFocus.plusWeeks(1);
-        calendar.getChildren().clear();
-        drawCalendar();
-    }
-
-    private ZonedDateTime getStartOfWeek(ZonedDateTime date) {
-        // Trouver le lundi de la semaine courante
-        return date.with(DayOfWeek.MONDAY).withHour(0).withMinute(0).withSecond(0).withNano(0);
-    }
-
-    private void drawCalendar() {
-        year.setText(String.valueOf(dateFocus.getYear()));
-        month.setText(dateFocus.getMonth().getDisplayName(TextStyle.FULL, Locale.FRENCH));
-
-        double calendarWidth = calendar.getPrefWidth();
-        double calendarHeight = calendar.getPrefHeight();
-        double strokeWidth = 1;
-        double spacingH = calendar.getHgap();
-        double spacingV = calendar.getVgap();
-
-        // Récupérer les activités pour la semaine affichée
-        Map<Integer, List<CalendarActivity>> calendarActivityMap = getCalendarActivitiesWeek(dateFocus);
-
-        for (int i = 0; i < 7; i++) {
-            StackPane stackPane = new StackPane();
-
-            Rectangle rectangle = new Rectangle();
-            rectangle.setFill(Color.TRANSPARENT);
-            rectangle.setStroke(Color.BLACK);
-            rectangle.setStrokeWidth(strokeWidth);
-            double rectangleWidth = (calendarWidth / 7) - strokeWidth - spacingH;
-            rectangle.setWidth(rectangleWidth);
-            double rectangleHeight = calendarHeight - strokeWidth - spacingV;
-            rectangle.setHeight(rectangleHeight);
-            stackPane.getChildren().add(rectangle);
-
-            ZonedDateTime currentDate = dateFocus.plusDays(i);
-            int dayOfMonth = currentDate.getDayOfMonth();
-
-            // Afficher la date dans la case
-            Text date = new Text(String.valueOf(dayOfMonth));
-            double textTranslationY = -(rectangleHeight / 2) * 0.75;
-            date.setTranslateY(textTranslationY);
-            stackPane.getChildren().add(date);
-
-            // Afficher les activités du jour
-            /*List<CalendarActivity> calendarActivities = calendarActivityMap.get(dayOfMonth);
-            if (calendarActivities != null) {
-                createCalendarActivity(calendarActivities, rectangleHeight, rectangleWidth, stackPane);
-            }*/
-
-            // Mettre en surbrillance la date d'aujourd'hui
-            if (today.toLocalDate().equals(currentDate.toLocalDate())) {
-                rectangle.setStroke(Color.BLUE);
-            }
-
-            calendar.getChildren().add(stackPane);
-        }
-    }
-
-    private void createCalendarActivity(List<CalendarActivity> calendarActivities, double rectangleHeight, double rectangleWidth, StackPane stackPane) {
-        VBox calendarActivityBox = new VBox();
-        for (int k = 0; k < calendarActivities.size(); k++) {
-            if (k >= 2) {
-                Text moreActivities = new Text("...");
-                calendarActivityBox.getChildren().add(moreActivities);
-                moreActivities.setOnMouseClicked(mouseEvent -> {
-                    // Sur clic sur "..." afficher toutes les activités dans la console
-                    System.out.println(calendarActivities);
-                });
-                break;
-            }
-            CalendarActivity activity = calendarActivities.get(k);
-            Text text = new Text(activity.getClientName() + ", " + activity.getDate().toLocalTime());
-            calendarActivityBox.getChildren().add(text);
-            text.setOnMouseClicked(mouseEvent -> {
-                System.out.println(text.getText());
-            });
-        }
-        calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
-        calendarActivityBox.setMaxWidth(rectangleWidth * 0.8);
-        calendarActivityBox.setMaxHeight(rectangleHeight * 0.65);
-        calendarActivityBox.setStyle("-fx-background-color:GRAY");
-        stackPane.getChildren().add(calendarActivityBox);
-    }
-
-    private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
-        Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
-
-        for (CalendarActivity activity : calendarActivities) {
-            int activityDate = activity.getDate().getDayOfMonth();
-            if (!calendarActivityMap.containsKey(activityDate)) {
-                calendarActivityMap.put(activityDate, new ArrayList<>(List.of(activity)));
-            } else {
-                List<CalendarActivity> oldList = calendarActivityMap.get(activityDate);
-                oldList.add(activity);
-                calendarActivityMap.put(activityDate, oldList);
-            }
-        }
-        return calendarActivityMap;
-    }
-
-    private Map<Integer, List<CalendarActivity>> getCalendarActivitiesWeek(ZonedDateTime startOfWeek) {
-        List<CalendarActivity> calendarActivities = new ArrayList<>();
-        Random random = new Random();
-
-        for (int i = 0; i < 50; i++) {
-            int dayOffset = random.nextInt(7); // 0 à 6 jours dans la semaine
-            ZonedDateTime time = startOfWeek.plusDays(dayOffset).withHour(16).withMinute(0).withSecond(0).withNano(0);
-            calendarActivities.add(new CalendarActivity(time, "Hans", 111111));
-        }
-
-        return createCalendarMap(calendarActivities);
-    }
 }

@@ -10,7 +10,7 @@ public class DAG {
     // Structure du graphe : compétence -> liste des compétences préalables
     private Map<String, List<String>> competencesDep = new HashMap<>();
 
-    private static final String[] COMPETENCES = {"PSE1", "PSE2", "SSA", "VPSP", "CE", "CP", "CO", "PBF", "PBC"};
+    private String[] COMPETENCES = {"PSE1", "PSE2", "SSA", "VPSP", "CE", "CP", "CO", "PBF", "PBC"};
 
     public DAG(){
         initDep();
@@ -139,5 +139,9 @@ public class DAG {
             }
         }
         return respect;
+    }
+
+    public void addCompetences(String comp){
+        
     }
 }

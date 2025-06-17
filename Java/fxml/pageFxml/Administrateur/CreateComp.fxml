@@ -33,6 +33,8 @@
                   <TextField fx:id="intitulerCreateComp" prefHeight="25.0" prefWidth="488.0" />
                   <Label prefHeight="17.0" text="nécessite" />
                   <TextField fx:id="necessiteCreateComp" prefHeight="25.0" prefWidth="488.0" promptText="Rien si pas besoin d'autre compétences" />
+                  <Label text="Si plus de une compétence faire" />
+                  <Label text="Comp1;Comp2" />
                   <Pane prefHeight="68.0" prefWidth="232.0" />
                   <Button fx:id="createButtonComp" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Créer" />
                </children>

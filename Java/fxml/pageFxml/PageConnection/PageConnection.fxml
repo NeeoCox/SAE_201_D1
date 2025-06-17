@@ -14,17 +14,17 @@
             fx:controller="controller.Controller">
 
    <top>
-      <!-- StackPane pour centrer le titre et placer le logo à droite -->
+      
       <StackPane style="-fx-background-color: #125f7d;" BorderPane.alignment="CENTER">
          <children>
-            <!-- Titre centré -->
+            
             <Label text="Se connecter en tant que" style="-fx-text-fill: white;">
                <font>
                   <Font name="System Bold" size="22.0"/>
                </font>
             </Label>
 
-            <!-- Logo à droite via un HBox "invisible" -->
+            
             <HBox alignment="CENTER_RIGHT">
                <children>
                   <Region HBox.hgrow="ALWAYS"/>
