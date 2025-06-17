@@ -44,6 +44,7 @@ import model.dao.DAOBesoin;
 import model.dao.DAOCompetence;
 import model.dao.DAODPS;
 import model.dao.DAONecessite;
+import model.dao.DAOPossede;
 import model.dao.DAOSecouriste;
 import model.dao.DAOSite;
 import model.dao.DAOSport;
@@ -74,6 +75,7 @@ public class Controller {
 	DAOSport daoSport = new DAOSport(null);
 	DAOCompetence daoCompetence = new DAOCompetence(null);
 	DAONecessite daoNecessite = new DAONecessite(null);
+	DAOPossede DAOPossede = new DAOPossede(null);
 
 
 	/**
