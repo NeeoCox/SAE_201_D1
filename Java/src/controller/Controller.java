@@ -57,6 +57,7 @@ import model.data.Competence;
 import model.data.DPS;
 import model.data.Journee;
 import model.data.Necessite;
+import model.data.Possede;
 import model.data.Secouriste;
 import model.data.Site;
 import model.data.Sport;
@@ -397,6 +398,8 @@ public class Controller {
     @FXML
     private Text month;
 
+	@FXML 
+	private TextField compSecCreate;
 	/**
 	 ***********************************
 	 * Variable pour le PLANNING
@@ -664,8 +667,16 @@ public class Controller {
 			String id = idSec.getText();
 			long idLong = Long.parseLong(id); 
 			String passWord = passWordSec.getText();
+			String[] compPossede = compSecCreate.getText().split(";");
+			List<Possede> listCompPos = new ArrayList<Possede>();
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
+			for(int i = 0; i<compPossede.length; i++){
+				Possede compPos = new Possede();
+				compPos.setIdSecouriste(idLong);
+				compPos.setIntituleCompetence(compPossede[i]);
+			}
+
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, listCompPos);
 						
 			try{
 				daoSecouriste.create(secouriste);
@@ -695,8 +706,16 @@ public class Controller {
 			String id = idSecModif.getText();
 			long idLong = Long.parseLong(id); 
 			String passWord = passWordSecModif.getText();
+			String[] compPossede = compSecCreate.getText().split(";");
+			List<Possede> listCompPos = new ArrayList<Possede>();
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
+			for(int i = 0; i<compPossede.length; i++){
+				Possede compPos = new Possede();
+				compPos.setIdSecouriste(idLong);
+				compPos.setIntituleCompetence(compPossede[i]);
+			}
+
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, listCompPos);
 						
 			try{
 				daoSecouriste.update(secouriste);
@@ -884,8 +903,6 @@ public class Controller {
 	 */
 	public void initGrapheCompetences() {
 		try {
-			DAOCompetence daoCompetence = new DAOCompetence(null);
-			DAONecessite daoNecessite = new DAONecessite(null);
 
 			List<Competence> competences = daoCompetence.readAll();
 			List<Necessite> necessites = daoNecessite.readAll();
@@ -1101,7 +1118,6 @@ public class Controller {
 				return;
 			}
 
-			DAONecessite daoNecessite = new DAONecessite(null);
 			daoNecessite.create(n);
 			grapheCompetences.ajouterNecessite(n);
 
@@ -1151,7 +1167,6 @@ public class Controller {
 			}
 
 			// Mise à jour en base
-			DAONecessite daoNecessite = new DAONecessite(null);
 			daoNecessite.delete(intituleComp, ancienNec);
 			daoNecessite.create(nouvelleNecessite);
 
@@ -1186,7 +1201,6 @@ public class Controller {
 		String intituleNec = necessiteCreateComp.getText();
 
 		try {
-			DAONecessite daoNecessite = new DAONecessite(null);
 			daoNecessite.delete(intituleComp, intituleNec);
 
 			// Suppression dans le graphe

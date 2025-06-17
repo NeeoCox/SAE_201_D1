@@ -6,32 +6,25 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:controller="controller.Controller"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            prefHeight="435.0" prefWidth="641.0">
+<BorderPane prefHeight="621.0" prefWidth="1030.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
     <!-- Bande bleue en haut -->
     <top>
-        <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;">
 
             <!-- Bouton Retour à gauche -->
-            <Button fx:id="buttonRetourAcSec"
-                    text="Retour"
-                    onAction="#goToPageAdminAcceuil"
-                    prefHeight="30" prefWidth="80"
-                    style="-fx-background-color: white; -fx-text-fill: #156082;" />
+            <Button fx:id="buttonRetourAcSec" onAction="#goToPageAdminAcceuil" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
             <Region HBox.hgrow="ALWAYS" />
 
             <!-- Titre centré -->
-            <Label text="Création de Secouriste"
-                   style="-fx-text-fill: white; -fx-font-size: 24px;"
-                   maxWidth="300" alignment="CENTER" />
+            <Label alignment="CENTER" maxWidth="300" style="-fx-text-fill: white; -fx-font-size: 24px;" text="Création de Secouriste" />
 
             <Region HBox.hgrow="ALWAYS" />
 
@@ -47,42 +40,62 @@
 
     <!-- Centre avec deux colonnes -->
     <center>
-        <HBox alignment="CENTER" spacing="60" style="-fx-padding: 40 20 40 20;">
+        <HBox alignment="CENTER" prefHeight="554.0" prefWidth="907.0" spacing="60" style="-fx-padding: 40 20 40 20;">
 
             <!-- Colonne de gauche avec GridPane -->
-            <GridPane hgap="10" vgap="10" alignment="CENTER_LEFT" >
+            <GridPane alignment="CENTER_LEFT" hgap="10" prefHeight="397.0" prefWidth="356.0" vgap="10">
 
-                <Label text="Nom" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                <TextField fx:id="nomSec" prefWidth="250" prefHeight="30" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                <Label text="Nom" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="nomSec" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Date de naissance" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                <TextField fx:id="dateNaissSec" prefWidth="250" prefHeight="30" promptText="AAAA-MM-JJ" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                <Label text="Date de naissance" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="dateNaissSec" prefHeight="30" prefWidth="250" promptText="AAAA-MM-JJ" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Label text="Adresse mail" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                <TextField fx:id="mailSec" prefWidth="250" prefHeight="30" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                <Label text="Adresse mail" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <TextField fx:id="mailSec" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                <Label text="Identifiant" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                <TextField fx:id="idSec" prefWidth="250" prefHeight="30" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                <Label text="Identifiant" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <TextField fx:id="idSec" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" />
+            </rowConstraints>
             </GridPane>
 
             <!-- Colonne de droite avec GridPane -->
-            <GridPane hgap="10" vgap="10" alignment="CENTER_LEFT" >
+            <GridPane alignment="CENTER_LEFT" hgap="10" prefHeight="481.0" prefWidth="368.0" vgap="10">
 
-                <Label text="Prénom" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                <TextField fx:id="prenomSec" prefWidth="250" prefHeight="30" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                <Label text="Prénom" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="prenomSec" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Adresse" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                <TextField fx:id="adressSec" prefWidth="250" prefHeight="30" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                <Label text="Adresse" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="adressSec" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Label text="Mot de passe" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                <TextField fx:id="passWordSec" prefWidth="250" prefHeight="30" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                <Label text="Mot de passe" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <TextField fx:id="passWordSec" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                 <!-- Bouton sous la dernière ligne, centré sur la colonne -->
-                <Button fx:id="createButtonSec"
-                        text="Créer"
-                        prefWidth="160" prefHeight="40"
-                        style="-fx-background-color: #156082; -fx-text-fill: white;"
-                        GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                <Button fx:id="createButtonSec" prefHeight="40" prefWidth="160" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Créer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Compétences" GridPane.rowIndex="3" />
+            <TextField fx:id="compSecCreate" layoutX="92.0" layoutY="201.0" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" />
+               <RowConstraints />
+            </rowConstraints>
             </GridPane>
 
         </HBox>
