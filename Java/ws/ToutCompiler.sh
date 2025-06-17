@@ -19,5 +19,5 @@ javac --module-path ../lib/javafx --add-modules javafx.controls,javafx.graphics,
   -sourcepath ../src -d ../class ../src/view/App.java
 
 # Exécution de l'application
-java --module-path ../lib/javafx --add-modules javafx.controls,javafx.graphics,javafx.fxml \
-  -cp ../fxml:../class view.App
+#java --module-path ../lib/javafx --add-modules javafx.controls,javafx.graphics,javafx.fxml \
+#  -cp ../fxml:../class view.App
