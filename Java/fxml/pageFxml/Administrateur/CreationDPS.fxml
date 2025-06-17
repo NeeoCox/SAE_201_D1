@@ -4,53 +4,85 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.Region?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
-   <top>
-      <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="buttonRetourAcSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageAdminAcceuil" text="Retour" />
-            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="303.0" text="Crétation de DPS">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-         </children>
-      </AnchorPane>
-   </top>
-   <center>
-      <HBox prefHeight="402.0" prefWidth="669.0" BorderPane.alignment="CENTER">
-         <children>
-            <Pane prefHeight="200.0" prefWidth="200.0" />
-            <VBox alignment="CENTER" prefHeight="338.0" prefWidth="232.0">
-               <children>
-                  <Label prefHeight="17.0" text="Identifiant" />
-                  <TextField fx:id="idDPSCreate" prefHeight="25.0" prefWidth="488.0" />
-                  <Label prefHeight="17.0" text="Heure debut" />
-                  <TextField fx:id="heureDebutDPSCreate" promptText="pour 10h50 -&gt; 1050" />
-                  <Label layoutX="72.0" layoutY="146.0" prefHeight="17.0" text="Heure fin" />
-                  <TextField fx:id="heureFinDPSCreate" layoutX="10.0" layoutY="163.0" promptText="pour 11h50 -&gt; 1150" />
-                  <Label prefHeight="17.0" text="Date" />
-                  <DatePicker fx:id="dateCreateDPS" />
-                  <Label prefHeight="17.0" text="Lieu de la rencontre" />
-                  <TextField fx:id="lieuRencDPSCreate" />
-                  <Label layoutX="99.0" layoutY="37.0" prefHeight="17.0" text="Sport" />
-                  <TextField fx:id="sportDPSCreate" layoutX="10.0" layoutY="54.0" prefHeight="25.0" prefWidth="488.0" />
-                  <Label layoutX="74.0" layoutY="226.0" prefHeight="17.0" text="Compétences requises" />
-                  <TextField fx:id="CompReqDPSCreate" layoutX="10.0" layoutY="243.0" promptText="Comp1;Comp2;Comp3" />
-                  <Label layoutX="112.0" layoutY="247.0" prefHeight="17.0" text="Nombre de Secouriste" />
-                  <TextField fx:id="nbSecDPSCreate" layoutX="10.0" layoutY="264.0" prefHeight="25.0" prefWidth="488.0" promptText="nbSecComp1;nbSecComp2;nbSecComp3" />
-                  <Button fx:id="createButtonDPS" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Créer" />
-               </children>
-            </VBox>
-            <Pane prefHeight="388.0" prefWidth="200.0" />
-         </children>
-      </HBox>
-   </center>
+<BorderPane fx:controller="controller.Controller"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="435.0" prefWidth="641.0">
+
+    <!-- Bande bleue en haut -->
+    <top>
+        <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
+
+            <!-- Bouton Retour -->
+            <Button fx:id="buttonRetourAcSec"
+                    text="Retour"
+                    onAction="#goToPageAdminAcceuil"
+                    prefHeight="30" prefWidth="80"
+                    style="-fx-background-color: white; -fx-text-fill: #156082;" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Titre centré -->
+            <Label text="Création de DPS"
+                   style="-fx-text-fill: white; -fx-font-size: 24px;"
+                   maxWidth="300" alignment="CENTER" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Logo -->
+            <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../../img/logo.png" />
+                </image>
+            </ImageView>
+        </HBox>
+    </top>
+
+    <!-- Centre avec 2 colonnes alignées dans un seul GridPane -->
+    <center>
+        <GridPane hgap="20" vgap="15" style="-fx-padding: 40 20 40 20;" alignment="CENTER">
+
+            <!-- Colonne gauche -->
+            <Label text="Identifiant" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <TextField fx:id="idDPSCreate" prefWidth="250" prefHeight="30" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+            <Label text="Heure début" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <TextField fx:id="heureDebutDPSCreate" promptText="ex : 1050" prefWidth="250" prefHeight="30" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+            <Label text="Date" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <DatePicker fx:id="dateCreateDPS" prefWidth="250" prefHeight="30" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+            <Label text="Compétences requises" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <TextField fx:id="CompReqDPSCreate" promptText="Comp1;Comp2;Comp3" prefWidth="250" prefHeight="30" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+            <!-- Colonne droite -->
+            <Label text="Heure fin" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+            <TextField fx:id="heureFinDPSCreate" promptText="ex : 1150" prefWidth="250" prefHeight="30" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+
+            <Label text="Lieu de la rencontre" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+            <TextField fx:id="lieuRencDPSCreate" prefWidth="250" prefHeight="30" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+
+            <Label text="Sport" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+            <TextField fx:id="sportDPSCreate" prefWidth="250" prefHeight="30" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+
+            <Label text="Nombre de Secouriste" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+            <TextField fx:id="nbSecDPSCreate" promptText="nbSecComp1;nbSecComp2;nbSecComp3" prefWidth="250" prefHeight="30" GridPane.rowIndex="3" GridPane.columnIndex="3" />
+
+            <!-- Bouton créer -->
+            <Button fx:id="createButtonDPS"
+               text="Créer"
+               prefWidth="160" prefHeight="40"
+               style="-fx-background-color: #156082; -fx-text-fill: white;"
+               GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="2" 
+               GridPane.halignment="CENTER" />
+
+        </GridPane>
+    </center>
 </BorderPane>

@@ -5,46 +5,94 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="628.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
-   <top>
-      <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="buttonRetourAcDPS" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageAdminAcceuil" text="Retour" />
-            <Label alignment="CENTER" layoutX="263.0" layoutY="14.0" prefHeight="35.0" prefWidth="272.0" text="Dispositifs de Secours">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-         </children>
-      </AnchorPane>
-   </top>
-   <bottom>
-      <HBox prefHeight="53.0" prefWidth="600.0" spacing="75.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="buttonCreationDPS" mnemonicParsing="false" onAction="#goToCreationDPS" prefHeight="38.0" prefWidth="163.0" text="Créer" />
-            <Button fx:id="buttonModifierDPS" mnemonicParsing="false" onAction="#goToModifDPS" prefHeight="38.0" prefWidth="163.0" text="Modifier" />
-            <Button fx:id="buttonSupprimerDPS" mnemonicParsing="false" onAction="#goToDeleteDPS" prefHeight="38.0" prefWidth="163.0" text="Supprimer" />
-         </children>
-         <padding>
-            <Insets left="75.0" right="75.0" top="5.0" />
-         </padding>
-      </HBox>
-   </bottom>
-   <center>
-      <TableView fx:id="tableDPS" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn fx:id="idTableDPS" prefWidth="125.0" text="id" />
-          <TableColumn fx:id="heureDebTableDPS" prefWidth="125.0" text="heure début" />
-            <TableColumn fx:id="heureFinTableDPS" prefWidth="125.0" text="heure fin" />
-            <TableColumn fx:id="dateTableDPS" prefWidth="125.0" text="date" />
-            <TableColumn fx:id="lieuTableDPS" prefWidth="125.0" text="lieu" />
-            <TableColumn fx:id="sportTableDPS" prefWidth="171.0" text="sport" />
-        </columns>
-      </TableView>
-   </center>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="628.0" prefWidth="797.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.Controller">
+
+    <!-- Bande bleue en haut -->
+    <top>
+        <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
+
+            <!-- Bouton Retour -->
+            <Button fx:id="buttonRetourAcSec"
+                    text="Retour"
+                    onAction="#goToPageAdminAcceuil"
+                    prefHeight="30" prefWidth="80"
+                    style="-fx-background-color: white; -fx-text-fill: #156082;" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Titre centré -->
+            <Label text="DPS"
+                   style="-fx-text-fill: white; -fx-font-size: 24px;"
+                   maxWidth="300" alignment="CENTER" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Logo -->
+            <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../../img/logo.png" />
+                </image>
+            </ImageView>
+        </HBox>
+    </top>
+
+    <!-- Tableau au centre -->
+    <center>
+        <TableView fx:id="tableDPS"
+                   prefHeight="400.0"
+                   prefWidth="700.0"
+                   minWidth="400.0"
+                   maxWidth="Infinity"
+                   BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn fx:id="idTableDPS" prefWidth="125.0" text="id" />
+                <TableColumn fx:id="heureDebTableDPS" prefWidth="125.0" text="heure début" />
+                <TableColumn fx:id="heureFinTableDPS" prefWidth="125.0" text="heure fin" />
+                <TableColumn fx:id="dateTableDPS" prefWidth="125.0" text="date" />
+                <TableColumn fx:id="lieuTableDPS" prefWidth="125.0" text="lieu" />
+                <TableColumn fx:id="sportTableDPS" prefWidth="171.0" text="sport" />
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- Boutons en bas, centrés -->
+    <bottom>
+        <HBox spacing="30" alignment="CENTER" BorderPane.alignment="CENTER" style="-fx-padding: 10 50 10 50;">
+            <children>
+                <Button fx:id="buttonCreationDPS"
+                        mnemonicParsing="false"
+                        onAction="#goToCreationDPS"
+                        prefHeight="38.0"
+                        prefWidth="163.0"
+                        text="Créer"
+                        style="-fx-background-color: #156082; -fx-text-fill: white;" />
+                <Button fx:id="buttonModifierDPS"
+                        mnemonicParsing="false"
+                        onAction="#goToModifDPS"
+                        prefHeight="38.0"
+                        prefWidth="163.0"
+                        text="Modifier"
+                        style="-fx-background-color: #156082; -fx-text-fill: white;" />
+                <Button fx:id="buttonSupprimerDPS"
+                        mnemonicParsing="false"
+                        onAction="#goToDeleteDPS"
+                        prefHeight="38.0"
+                        prefWidth="163.0"
+                        text="Supprimer"
+                        style="-fx-background-color: #156082; -fx-text-fill: white;" />
+            </children>
+        </HBox>
+    </bottom>
+
 </BorderPane>
