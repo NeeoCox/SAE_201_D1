@@ -1,4 +1,5 @@
 package model.dao;
+import java.sql.Connection;
 
 public class TestConnexion {
     public static void main(String[] args) {
