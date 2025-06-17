@@ -4,9 +4,12 @@
 <?import javafx.geometry.Pos?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1"
@@ -14,40 +17,64 @@
             fx:controller="controller.Controller"
             prefHeight="400.0" prefWidth="600.0">
 
+    <!-- Bande bleue en haut -->
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="10" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
+        <HBox spacing="10" alignment="CENTER_LEFT"
+              style="-fx-background-color: #156082; -fx-padding: 10 20;" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="buttonRetourAcceuilAdmin" text="Retour" onAction="#goToPageConnection"/>
-                <Label text="Accueil Administrateur">
-                    <font>
-                        <Font size="24"/>
-                    </font>
-                </Label>
+                <Button fx:id="buttonRetourAcceuilAdmin"
+                        text="Retour"
+                        onAction="#goToPageConnection"
+                        prefHeight="30" prefWidth="80"
+                        style="-fx-background-color: white; -fx-text-fill: #156082;" />
+
+                <StackPane HBox.hgrow="ALWAYS" alignment="CENTER">
+                    <Label text="Accueil Administrateur" style="-fx-text-fill: white; -fx-font-size: 24px;" />
+                </StackPane>
+
+                <ImageView fitHeight="40" fitWidth="40" preserveRatio="true" pickOnBounds="true">
+                    <image>
+                        <Image url="@../../img/logo.png" />
+                    </image>
+                </ImageView>
             </children>
         </HBox>
     </top>
 
+    <!-- Centre avec boutons -->
     <center>
         <GridPane hgap="20" vgap="20" alignment="CENTER" BorderPane.alignment="CENTER">
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
             <children>
-                <Button fx:id="buttonAffectSec" text="Affectation des secouristes"
-                        onAction="#goToPageAffectationSecouristes" prefWidth="200" prefHeight="90"
-                        GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <Button fx:id="buttonDPS" text="Dispositif de secours"
-                        onAction="#goToDispositifsDeSecours" prefWidth="200" prefHeight="90"
-                        GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-                <Button fx:id="buttonGestSec" text="Gestion des secouristes"
-                        onAction="#goToGestionDesSecouristes" prefWidth="200" prefHeight="90"
-                        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <Button fx:id="buttonGestComp" text="Gestion des compétences des secouristes"
-                        onAction="#goToGestionDesCompetences" prefWidth="200" prefHeight="90"
-                        GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Button fx:id="buttonAffectSec"
+                        text="Affectation&#10;des secouristes"
+                        onAction="#goToPageAffectationSecouristes"
+                        prefWidth="200" prefHeight="90"
+                        GridPane.rowIndex="0" GridPane.columnIndex="0"
+                        style="-fx-background-color: #46b1e1; -fx-text-fill: white; -fx-font-weight: bold;" />
+
+                <Button fx:id="buttonDPS"
+                        text="Dispositif de secours"
+                        onAction="#goToDispositifsDeSecours"
+                        prefWidth="200" prefHeight="90"
+                        GridPane.rowIndex="0" GridPane.columnIndex="1"
+                        style="-fx-background-color: #156082; -fx-text-fill: white; -fx-font-weight: bold;" />
+
+                <Button fx:id="buttonGestSec"
+                        text="Gestion des secouristes"
+                        onAction="#goToGestionDesSecouristes"
+                        prefWidth="200" prefHeight="90"
+                        GridPane.rowIndex="1" GridPane.columnIndex="0"
+                        style="-fx-background-color: #819aae; -fx-text-fill: white; -fx-font-weight: bold;" />
+
+                <Button fx:id="buttonGestComp"
+                        text="Gestion des compétences&#10;des secouristes"
+                        onAction="#goToGestionDesCompetences"
+                        prefWidth="200" prefHeight="90"
+                        GridPane.rowIndex="1" GridPane.columnIndex="1"
+                        style="-fx-background-color: #85c1ec; -fx-text-fill: white; -fx-font-weight: bold;" />
             </children>
         </GridPane>
     </center>
