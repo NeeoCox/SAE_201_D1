@@ -91,6 +91,17 @@ public class Controller {
 
 	/**
 	 ***********************************
+	 * Bouton pour la page connection Secouriste
+	 ***********************************
+	 */
+	@FXML 
+	private Button buttonRetourAcceuilSec;
+	@FXML 
+	private Button buttonConnectSec;
+
+
+	/**
+	 ***********************************
 	 * Bouton pour la page acceuil Admin
 	 ***********************************
 	 */
@@ -104,18 +115,59 @@ public class Controller {
 	private Button buttonDPS;
 	@FXML 
 	private Button buttonGestComp;
-	@FXML 
-	private Button buttonCreationSec;
 
 	/**
 	 ***********************************
-	 * Bouton pour la page connction Secouriste
+	 * Bouton pour la page gestion des secouriste
 	 ***********************************
 	 */
-	@FXML 
-	private Button buttonRetourAcceuilSec;
-	@FXML 
-	private Button buttonConnectSec;
+	@FXML
+	private Button buttonRetGestSec;
+	@FXML
+	private Button buttonCreategestSec;
+	@FXML
+	private Button buttonUpdategestSec;
+	@FXML
+	private Button buttonDeletegestSec;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page gestion des compétences
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonRetourAcGestComp;
+	@FXML
+	private Button buttonCreateComp;
+	@FXML
+	private Button buttonUpdateComp;
+	@FXML
+	private Button buttonDeleteComp;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page DPS
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonRetourAcDPS;
+	@FXML
+	private Button buttonCreationDPS;
+	@FXML
+	private Button buttonModifierDPS;
+	@FXML
+	private Button buttonSupprimerDPS;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page Affectation des secouriste
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonRetAcAffectSec;
+	
+
+
 
 	/**
 	 ***********************************
@@ -355,7 +407,13 @@ public class Controller {
 
 	/**
 	 ***********************************
-	 * TOUTES LES METHODE DES BOUTON DES PAGES DE CONNEXION 
+	 * Les methode pour changer de page 
+	 ***********************************
+	 */
+
+	/**
+	 ***********************************
+	 * Les methode PageConnection 
 	 ***********************************
 	 */
 
@@ -386,24 +444,7 @@ public class Controller {
 		goTo("/pageFxml/PageConnection/ConnectionSecouriste.fxml", event);
 	}
 
-	/**
-	 * Methode pour aller a la page ResetPassWord
-	 * @param event l'evenement de l'action
-	 */
-	public void goToResetPassWord(ActionEvent event){
-		System.out.println("goToResetPassWord");
-		goTo("/pageFxml/PageConnection/ResetPassWord.fxml", event);
-	}
-
-	/**
-	 * Methode pour aller a la page ChangePassWord
-	 * @param event l'evenement de l'action
-	 */
-	public void goToChangePassWord(ActionEvent event){
-		System.out.println("goToChangePassWord");
-		goTo("/pageFxml/PageConnection/ChangePassWord.fxml", event);
-	}
-
+	
     /**
 	 * Methode pour aller a la page acceuil admin
 	 * @param event l'evenement de l'action
@@ -424,20 +465,11 @@ public class Controller {
 
 	/**
 	 ***********************************
-	 * METHODE POUR LES BOUTON DE LA PAGE ADMIN
+	 * Les methode PageAdmin Acceuil
 	 ***********************************
 	 */
 
-	/**
-	 * 
-	 * @param event
-	 */
-	public void goToCreationDeSouriste(ActionEvent event){
-		System.out.println("goToCreationDeSouriste");
-		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
-	}
-
-
+	
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
 		goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
@@ -457,6 +489,70 @@ public class Controller {
 		System.out.println("goToDispositifsDeSecours");
 		goTo("/pageFxml/Administrateur/DispositifsDeSecours.fxml", event);
 	}
+
+	/**
+	 ***********************************
+	 * Les methode PageAdmin Gestion des secouristes
+	 ***********************************
+	 */
+
+	public void goToCreationDeSouriste(ActionEvent event){
+		System.out.println("goToCreationDeSouriste");
+		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
+	}
+
+	public void goToModifSecouriste(ActionEvent event){
+		System.out.println("goToModifSecouriste");
+		goTo("/pageFxml/Administrateur/ModifSecouriste.fxml", event);
+	}
+
+	public void goToDeleteSec(ActionEvent event){
+		System.out.println("goToDeleteSec");
+		goTo("/pageFxml/Administrateur/DeleteSec.fxml", event);
+	}
+
+	/**
+	 ***********************************
+	 * Les methode PageAdmin Gestion des DPS
+	 ***********************************
+	 */
+
+	public void goToCreationDPS(ActionEvent event){
+		System.out.println("goToCreationDPS");
+		goTo("/pageFxml/Administrateur/CreationDPS.fxml", event);
+	}
+
+	public void goToModifDPS(ActionEvent event){
+		System.out.println("goToModifDPS");
+		goTo("/pageFxml/Administrateur/ModifDPS.fxml", event);
+	}
+
+	public void goToDeleteDPS(ActionEvent event){
+		System.out.println("goToDeleteDPS");
+		goTo("/pageFxml/Administrateur/DeleteDPS.fxml", event);
+	}
+
+	/**
+	 ***********************************
+	 * Les methode PageAdmin Gestion des Compétences
+	 ***********************************
+	 */
+
+	public void goToCreateComp(ActionEvent event){
+		System.out.println("goToCreateComp");
+		goTo("/pageFxml/Administrateur/CreateComp.fxml", event);
+	}
+
+	public void goToModifComp(ActionEvent event){
+		System.out.println("goToModifComp");
+		goTo("/pageFxml/Administrateur/ModifComp.fxml", event);
+	}
+
+	public void goToDeleteComp(ActionEvent event){
+		System.out.println("goToDeleteComp");
+		goTo("/pageFxml/Administrateur/DeleteComp.fxml", event);
+	}
+	
 
 	/**
 	 ***********************************
@@ -1049,7 +1145,7 @@ public class Controller {
 
     private void generateHourLabelsAndTaskBoxes() {
 		if (gridWeek == null) {
-			System.err.println("gridWeek n'est pas encore initialisé. Ignoré.");
+			System.err.println("gridWeek n'est pas encore initialisé");
 			return;
 		}
 
