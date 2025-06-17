@@ -1,7 +1,6 @@
 package model.dao;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class TestConnexion {
     public static void main(String[] args) {
@@ -10,7 +9,8 @@ public class TestConnexion {
             System.out.println("Connexion réussie !");
             conn.close();
         } catch (Exception e) {
-            System.out.println("Erreur : " + e.getMessage());
+            System.err.println("Erreur de connexion : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
