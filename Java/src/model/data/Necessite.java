@@ -1,4 +1,4 @@
-package model.persistence;
+package model.data;
 
 /**
  * Représente une relation de nécessité entre deux compétences.

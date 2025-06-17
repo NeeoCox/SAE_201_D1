@@ -1,4 +1,4 @@
-package model.graph;
+package model.graph.graphmodel;
 
 public class Glouton {
 

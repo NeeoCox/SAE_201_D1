@@ -1,13 +1,12 @@
 package model.dao;
 
-import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public abstract class DAO<T> {
-    private static String driver = "com.mysql.cj.jdbc.Driver"; // peut etre changer 
-    private static String url="jdbc:mysql://localhost:3306/Secouristes"; //changer pour avoir acces au donnée des commune 
+    private final static String driver = "com.mysql.cj.jdbc.Driver"; // peut être changé 
+    private final static String url = "jdbc:mysql://localhost:3306/Secouristes"; //changer pour avoir acces aux donnée
     private static String username = "client";
     private static String pwd = "password";
     Connection connection;

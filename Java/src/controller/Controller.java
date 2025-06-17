@@ -32,14 +32,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
-//Import de nos class
-import model.persistence.Secouriste;
-import model.persistence.Site;
-import model.persistence.Besoin;
-import model.persistence.Competence;
-import model.persistence.Sport;
-import model.persistence.DPS;
 import model.dao.DAOBesoin;
 import model.dao.DAOCompetence;
 import model.dao.DAODPS;
@@ -47,9 +39,15 @@ import model.dao.DAONecessite;
 import model.dao.DAOSecouriste;
 import model.dao.DAOSite;
 import model.dao.DAOSport;
-import model.persistence.Journee;
-import model.persistence.Necessite;
-import model.graph.GrapheCompetencesDAG;
+import model.data.Besoin;
+import model.data.Competence;
+import model.data.DPS;
+import model.data.Journee;
+import model.data.Necessite;
+import model.data.Secouriste;
+import model.data.Site;
+import model.data.Sport;
+import model.graphs.GrapheCompetencesDAG;
 
 
 

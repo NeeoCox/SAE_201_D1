@@ -3,8 +3,7 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import model.persistence.Secouriste;
+import model.data.Secouriste;
 
 public class DAOSecouriste {
     private final Connection connection;

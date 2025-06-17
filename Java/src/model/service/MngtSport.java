@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAOSport;
-import model.persistence.Sport;
+import model.data.Sport;
 
 /**
  * Classe de gestion des sports avec persistance en base.

@@ -1,4 +1,4 @@
-package model.persistence;
+package model.data;
 
 /**
  * Représente une journée avec une date précise.

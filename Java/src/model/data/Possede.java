@@ -1,4 +1,4 @@
-package model.persistence;
+package model.data;
 
 /**
  * Représente la possession d'une compétence par un secouriste.

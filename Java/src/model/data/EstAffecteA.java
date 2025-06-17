@@ -1,4 +1,4 @@
-package model.persistence;
+package model.data;
 
 /**
  * Représente l'affectation d'un secouriste à une compétence pour un DPS.

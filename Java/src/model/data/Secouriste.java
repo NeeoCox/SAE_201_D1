@@ -1,4 +1,7 @@
-package model.persistence;
+package model.data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Représente un secouriste avec ses informations personnelles.
@@ -34,13 +37,17 @@ public class Secouriste {
      * L'adresse postale du secouriste.
      */
     private String adresse;
+    /**
+     * Liste des compétences possédées par le secouriste.
+     */
+    private List<Possede> possessions = new ArrayList<>();
 
-
-    public Secouriste(){
+    
+    public Secouriste() {
 
     }
 
-    public Secouriste(long id, String nom, String prenom, String dateNaissance, String email, String tel, String adresse) {
+    public Secouriste(long id, String nom, String prenom, String dateNaissance, String email, String tel, String adresse, List<Possede> possessions) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -48,7 +55,9 @@ public class Secouriste {
         this.email = email;
         this.tel = tel;
         this.adresse = adresse;
+        this.possessions = possessions != null ? possessions : new ArrayList<>();
     }
+
 
     /**
      * Accesseur de l'attribut id.
@@ -166,6 +175,23 @@ public class Secouriste {
      */
     public void setAdresse(String uneAdresse) {
         this.adresse = uneAdresse;
+    }
+
+
+    /**
+     * Accesseur de la liste des possessions.
+     * @return La liste des compétences possédées.
+     */
+    public List<Possede> getPossessions() {
+        return possessions;
+    }
+
+    /**
+     * Mutateur de la liste des possessions.
+     * @param possessions La nouvelle liste de compétences possédées.
+     */
+    public void setPossessions(List<Possede> possessions) {
+        this.possessions = possessions;
     }
 
 

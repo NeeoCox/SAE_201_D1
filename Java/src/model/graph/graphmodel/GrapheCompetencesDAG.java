@@ -1,4 +1,4 @@
-package model.graph;
+package model.graph.graphmodel;
 import java.util.*;
 
 public class GrapheCompetencesDAG {

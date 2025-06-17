@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAOEstDisponible;
-import model.persistence.*;
+import model.data.*;
 
 /**
  * Classe de gestion des disponibilités (EstDisponible) avec persistance en base.

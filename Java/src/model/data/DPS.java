@@ -1,4 +1,4 @@
-package model.persistence;
+package model.data;
 
 /**
  * Représente un Dispositif Prévisionnel de Secours (DPS).

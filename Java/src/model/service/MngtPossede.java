@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAOPossede;
-import model.persistence.Possede;
+import model.data.Possede;
 
 /**
  * Classe de gestion des relations Possede (compétences des secouristes).
