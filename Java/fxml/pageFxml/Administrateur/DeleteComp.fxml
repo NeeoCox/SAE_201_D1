@@ -15,7 +15,7 @@
       <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="buttonRetourAcSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageAdminAcceuil" text="Retour" />
-            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="303.0" text="Création de compétence">
+            <Label alignment="CENTER" layoutX="164.0" layoutY="14.0" prefHeight="35.0" prefWidth="303.0" text="Supprimer DPS">
                <font>
                   <Font size="24.0" />
                </font>
@@ -29,14 +29,10 @@
             <Pane prefHeight="200.0" prefWidth="200.0" />
             <VBox alignment="CENTER" prefHeight="338.0" prefWidth="232.0">
                <children>
-                  <Label prefHeight="17.0" text="Intituler" />
-                  <TextField fx:id="intitulerCreateComp" prefHeight="25.0" prefWidth="488.0" />
-                  <Label prefHeight="17.0" text="nécessite" />
-                  <TextField fx:id="necessiteCreateComp" prefHeight="25.0" prefWidth="488.0" promptText="Rien si pas besoin d'autre compétences" />
-                  <Label text="Si plus de une compétence faire" />
-                  <Label text="Comp1;Comp2" />
+                  <Label prefHeight="17.0" text="Identifiant" />
+                  <TextField fx:id="idDPSDelete" prefHeight="25.0" prefWidth="488.0" />
                   <Pane prefHeight="68.0" prefWidth="232.0" />
-                  <Button fx:id="createButtonComp" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Créer" />
+                  <Button fx:id="deleteButtonDPS" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Supprimer" />
                </children>
             </VBox>
             <Pane prefHeight="388.0" prefWidth="200.0" />
