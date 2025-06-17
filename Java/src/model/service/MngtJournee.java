@@ -1,8 +1,8 @@
 package model.service;
 
-import dao.DAOJournee;
 import java.sql.SQLException;
 import java.util.List;
+import model.dao.DAOJournee;
 import model.persistence.Journee;
 
 /**

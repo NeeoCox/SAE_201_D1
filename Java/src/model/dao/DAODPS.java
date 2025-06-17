@@ -1,8 +1,9 @@
-package dao;
+package model.dao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 import model.persistence.DPS;
 import model.persistence.Journee;
 import model.persistence.Site;

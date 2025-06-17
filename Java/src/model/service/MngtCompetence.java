@@ -1,8 +1,8 @@
 package model.service;
 
-import dao.DAOCompetence;
 import java.sql.SQLException;
 import java.util.List;
+import model.dao.DAOCompetence;
 import model.persistence.Competence;
 
 /**

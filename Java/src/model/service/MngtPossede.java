@@ -1,8 +1,8 @@
 package model.service;
 
-import dao.DAOPossede;
 import java.sql.SQLException;
 import java.util.List;
+import model.dao.DAOPossede;
 import model.persistence.Possede;
 
 /**
