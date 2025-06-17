@@ -1,5 +1,7 @@
 package model.graph;
+
 public class Glouton {
+
     public static void main(String[] args) {
         int n = 5;
         int[][] M = {
@@ -10,16 +12,34 @@ public class Glouton {
             {0, 0, 1, 1, 1}
         };
 
-        int[] ordreLignes = new int[n];
-        int[] ordreColonnes = new int[n];
-        for (int i = 0; i < n; i++) {
-            ordreLignes[i] = i;
-            ordreColonnes[i] = i;
-        }
+        int[] ordreLignes = initialiserOrdre(n);
+        int[] ordreColonnes = initialiserOrdre(n);
 
-        // Tri des lignes (par degré croissant)
+        trierLignesParDegre(M, ordreLignes);
+        trierColonnes(M, ordreColonnes);
+
+        afficherOrdre("lignes", ordreLignes);
+        afficherOrdre("colonnes", ordreColonnes);
+        afficherMatrice(M);
+
+        int[] S = selectionnerSommets(M);
+
+        System.out.println("Sommets S sélectionnés : " + toString(S, n));
+    }
+
+    private static int[] initialiserOrdre(int n) {
+        int[] ordre = new int[n];
+        for (int i = 0; i < n; i++) {
+            ordre[i] = i;
+        }
+        return ordre;
+    }
+
+    private static void trierLignesParDegre(int[][] M, int[] ordreLignes) {
+        int n = M.length;
         int[] L = new int[n];
         for (int i = 0; i < n; i++) {
+            L[i] = 0;
             for (int j = 0; j < n; j++) {
                 L[i] += M[i][j];
             }
@@ -35,15 +55,16 @@ public class Glouton {
                     M[i] = M[j];
                     M[j] = tempM;
 
-                    // Mettre à jour l'ordre des lignes
                     int tempOrdre = ordreLignes[i];
                     ordreLignes[i] = ordreLignes[j];
                     ordreLignes[j] = tempOrdre;
                 }
             }
         }
+    }
 
-        // Tri des colonnes
+    private static void trierColonnes(int[][] M, int[] ordreColonnes) {
+        int n = M.length;
         for (int j = 0; j < n - 1; j++) {
             int minCol = j;
             for (int k = j + 1; k < n; k++) {
@@ -61,43 +82,45 @@ public class Glouton {
                     M[i][j] = M[i][minCol];
                     M[i][minCol] = temp;
                 }
-                // Mettre à jour l'ordre des colonnes
                 int tempOrdre = ordreColonnes[j];
                 ordreColonnes[j] = ordreColonnes[minCol];
                 ordreColonnes[minCol] = tempOrdre;
             }
         }
+    }
 
-        
-        System.out.print("Ordre des lignes : ");
-        for (int i = 0; i < n; i++) System.out.print(ordreLignes[i] + " ");
+    private static void afficherOrdre(String nom, int[] ordre) {
+        System.out.print("Ordre des " + nom + " : ");
+        for (int i = 0; i < ordre.length; i++) {
+            System.out.print(ordre[i] + " ");
+        }
         System.out.println();
-        System.out.print("Ordre des colonnes : ");
-        for (int i = 0; i < n; i++) System.out.print(ordreColonnes[i] + " ");
-        System.out.println();
+    }
 
-
+    private static void afficherMatrice(int[][] M) {
         System.out.println("Matrice d'adjacence M avec colonnes triées dans l'ordre croissant :");
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                System.out.print(M[i][j] + " ");
+        for (int[] row : M) {
+            for (int j = 0; j < row.length; j++) {
+                System.out.print(row[j] + " ");
             }
             System.out.println();
         }
+    }
 
+    private static int[] selectionnerSommets(int[][] M) {
+        int n = M.length;
         int[] S = new int[n];
-        for (int i = 0; i <= n - 1; i++) {
+        for (int i = 0; i < n; i++) {
             S[i] = -1;
         }
-
-        for (int i = 0; i <= n - 1; i++) {
+        for (int i = 0; i < n; i++) {
             int j = 0;
             boolean posValide = false;
-            while (j <= n - 1 && !posValide) {
+            while (j < n && !posValide) {
                 if (M[i][j] == 1) {
                     boolean estDansS = false;
                     int k = 0;
-                    while (k <= n - 1 && !estDansS) {
+                    while (k < n && !estDansS) {
                         if (S[k] == j) {
                             estDansS = true;
                         }
@@ -111,11 +134,8 @@ public class Glouton {
                 j++;
             }
         }
-
-        System.out.println("Sommets S sélectionnés : " + toString(S, n));
+        return S;
     }
-
-
 
     public static String toString(int[] tab, int length) {
         StringBuilder sb = new StringBuilder();

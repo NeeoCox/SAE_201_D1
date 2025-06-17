@@ -4,7 +4,7 @@ import java.util.*;
 public class GrapheCompetencesDAG {
 
     /**
-     * Variable pou représenter les état des sommets lors du parcours 
+     * Variable pour représenter les états des sommets lors du parcours 
      */
     private enum Etat {
         BLANC,  // Non visité
@@ -82,15 +82,5 @@ public class GrapheCompetencesDAG {
 
         etats.put(noeud, Etat.NOIR);
         return false;
-    }
-
-    // Méthode de test
-    public static void main(String[] args) {
-        GrapheCompetencesDAG graphe = new GrapheCompetencesDAG();
-        if (graphe.verifierDAG()) {
-            System.out.println("Le graphe des compétences est un DAG (aucun cycle détecté).");
-        } else {
-            System.out.println("Le graphe des compétences contient un cycle.");
-        }
     }
 }
