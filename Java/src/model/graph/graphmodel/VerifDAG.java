@@ -1,7 +1,7 @@
 package model.graph.graphmodel;
 import java.util.*;
 
-public class DAG {
+public class VerifDAG {
 
     /**
      * Variable pour représenter les états des sommets lors du parcours 
@@ -16,7 +16,7 @@ public class DAG {
     private final Map<String, Etat> etats = new HashMap<>();
 
     // Constructeur : initialise le graphe avec les relations hiérarchiques
-    public DAG() {
+    public VerifDAG() {
         initCompDep();
     }
 

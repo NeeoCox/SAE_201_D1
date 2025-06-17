@@ -32,6 +32,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+//Import des classes du modèle
 import model.dao.DAOBesoin;
 import model.dao.DAOCompetence;
 import model.dao.DAODPS;
@@ -47,7 +49,13 @@ import model.data.Necessite;
 import model.data.Secouriste;
 import model.data.Site;
 import model.data.Sport;
-import model.graphs.GrapheCompetencesDAG;
+import model.graph.algorithm.Affectation;
+import model.graph.algorithm.exhaustive.AffectationExhaustive;
+import model.graph.algorithm.greedy.AffectationGloutonne;
+import model.graph.algorithm.ResultatAffectation;
+import model.graph.algorithm.dag.VerificationDAG;
+import model.graph.algorithm.BesoinUnitaire;
+import model.graph.algorithm.GrapheCompetences;
 
 
 
@@ -236,7 +244,7 @@ public class Controller {
 	
 	//Pour créer une compétence
 	@FXML
-	private TextField intitulerCreateComp;
+	private TextField intituleCreateComp;
 	@FXML
 	private TextField necessiteCreateComp;
 	@FXML
@@ -244,7 +252,7 @@ public class Controller {
 
 	//Pour modifier une compétence
 	@FXML
-	private TextField intitulerUpdateComp;
+	private TextField intituleUpdateComp;
 	@FXML
 	private TextField necessiteUpdateComp;
 	@FXML
@@ -308,8 +316,6 @@ public class Controller {
     @FXML
     private Text month;
 
-	private GrapheCompetencesDAG compDAG= new GrapheCompetencesDAG();
-
 	/**
 	 ***********************************
 	 * Variable pour le PLANNING
@@ -339,11 +345,12 @@ public class Controller {
 
     private Map<LocalDate, List<String>> tasksByDate = new HashMap<>();
 
-
     @FXML private GridPane gridWeek;
 
     private VBox[][] taskBoxes = new VBox[7][24]; // 7 jours * 24h
 
+
+	GrapheCompetences grapheCompetences;
 
 	public Controller(){
 		System.out.println("controller");
@@ -522,8 +529,8 @@ public class Controller {
 			long idLong = Long.parseLong(id); 
 			String passWord = passWordSec.getText();
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné 
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, null);
+			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de données
 			
 			try{
 				daoSecouriste.create(secouriste);
@@ -554,7 +561,7 @@ public class Controller {
 			long idLong = Long.parseLong(id); 
 			String passWord = passWordSecModif.getText();
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse);
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, null);
 			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné 
 			
 			try{
@@ -576,7 +583,7 @@ public class Controller {
 			String id = idSecDelete.getText();
 			long idLong = Long.parseLong(id); 
 
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné
+			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de données
 
 			try{
 				daoSecouriste.delete(idLong);
@@ -751,14 +758,32 @@ public class Controller {
 	 * GESTION DES COMPETENCES
 	 ***********************************
 	 */
+	public void initGrapheCompetences() {
+		try {
+			DAOCompetence daoCompetence = new DAOCompetence(null);
+			DAONecessite daoNecessite = new DAONecessite(null);
+
+			List<Competence> competences = daoCompetence.readAll();
+			List<Necessite> necessites = daoNecessite.readAll();
+
+			this.grapheCompetences = new GrapheCompetences(competences, necessites);
+
+			if (!grapheCompetences.estDAG()) {
+				System.out.println("Attention : le graphe des compétences contient un cycle !");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'initialisation du graphe des compétences : " + e.getMessage());
+		}
+	}
 
 	public void createCompetences() {
-		if (intitulerCreateComp.getText().isEmpty()) {
+		if (intituleCreateComp.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
 			return;
 		}
 
-		String intitulerStr = intitulerCreateComp.getText();
+		String intituleStr = intituleCreateComp.getText();
 		String[] compNecStr = null;
 		boolean necessiteVide = necessiteCreateComp.getText().isEmpty();
 		if (!necessiteVide) {
@@ -766,53 +791,57 @@ public class Controller {
 		}
 
 		Competence comp = new Competence();
-		comp.setIntitule(intitulerStr);
+		comp.setIntitule(intituleStr);
 
 		try {
 			DAOCompetence daoCompetence = new DAOCompetence(null);
 			DAONecessite daoNecessite = new DAONecessite(null);
 
-			//Implémentation vérification de DAG
-			// Étape 1 : vérifier existence des compétences nécessaires
-			List<String> dependances = new ArrayList<>();
+			// Vérifier existence des compétences nécessaires
+			List<Competence> dependances = new ArrayList<>();
 			if (!necessiteVide) {
 				for (String nec : compNecStr) {
-					if (!compDAG.contientCompetence(nec)) {
+					Competence compNec = trouverCompetenceParIntitule(nec, grapheCompetences.getCompetences());
+					if (compNec == null) {
 						System.out.println("Compétence requise inexistante dans le graphe : " + nec);
 						return;
 					}
-					dependances.add(nec);
+					dependances.add(compNec);
 				}
 			}
 
-			// Étape 2 : créer une copie temporaire du graphe et tester DAG
-			GrapheCompetencesDAG grapheTemp = new GrapheCompetencesDAG();
-			for (String nec : dependances) {
-				grapheTemp.ajouterArete(nec, intitulerStr); // dépendance = arête orientée nec -> intituler
+			// Créer une copie temporaire du graphe et tester DAG
+			List<Competence> tempCompetences = new ArrayList<>(grapheCompetences.getCompetences());
+			tempCompetences.add(comp);
+			List<Necessite> tempNecessites = new ArrayList<>(grapheCompetences.getNecessites());
+			for (Competence nec : dependances) {
+				Necessite n = new Necessite();
+				n.setLaCompetence(comp);
+				n.setCompetenceNecessaire(nec);
+				n.setIntituleCompetence(intituleStr);
+				n.setIntituleCompetenceNecessaire(nec.getIntitule());
+				tempNecessites.add(n);
 			}
+			GrapheCompetences grapheTemp = new GrapheCompetences(tempCompetences, tempNecessites);
 
-			if (!grapheTemp.verifierDAG()) {
+			if (!grapheTemp.estDAG()) {
 				System.out.println("Impossible d'ajouter la compétence : cela créerait un cycle dans le graphe !");
 				return;
 			}
 
 			// Étape 3 : insérer la compétence
 			daoCompetence.create(comp);
+			grapheCompetences.ajouterCompetence(comp);
 
-			// Étape 4 : insérer les dépendances dans la base + DAG actuel
-			for (String nec : dependances) {
-				Competence compNec = daoCompetence.read(nec);
-
-				// Base de données
+			// Étape 4 : insérer les dépendances dans la base + graphe actuel
+			for (Competence nec : dependances) {
 				Necessite besoin = new Necessite();
 				besoin.setLaCompetence(comp);
-				besoin.setCompetenceNecessaire(compNec);
-				besoin.setIntituleCompetence(intitulerStr);
-				besoin.setIntituleCompetenceNecessaire(nec);
+				besoin.setCompetenceNecessaire(nec);
+				besoin.setIntituleCompetence(intituleStr);
+				besoin.setIntituleCompetenceNecessaire(nec.getIntitule());
 				daoNecessite.create(besoin);
-
-				// Graphe actuel (modèle interne)
-				compDAG.ajouterArete(nec, intitulerStr);
+				grapheCompetences.ajouterNecessite(besoin);
 			}
 
 			System.out.println("Compétence ajoutée avec succès.");
@@ -821,6 +850,21 @@ public class Controller {
 			e.printStackTrace();
 			System.out.println("Erreur lors de la création de la Compétence : " + e.getMessage());
 		}
+	}
+
+	/**
+	 * Recherche une compétence par son intitulé dans une liste.
+	 * @param intitule L'intitulé recherché.
+	 * @param competences La liste des compétences.
+	 * @return La compétence trouvée, ou null si absente.
+	 */
+	private Competence trouverCompetenceParIntitule(String intitule, List<Competence> competences) {
+		for (Competence c : competences) {
+			if (c.getIntitule().equals(intitule)) {
+				return c;
+			}
+		}
+		return null;
 	}
 
 
