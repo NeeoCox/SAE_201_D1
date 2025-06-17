@@ -922,7 +922,7 @@ public class Controller {
 	}
 
 
-	//A REFAIRE QUAND MEIUX COMPRIS DAO COMP ET NEC
+	//A REFAIRE QUAND MEIUX COMPRIS DAO COMP ET NEC 
 	/*public void updateCompetences(){
 		System.out.println();
 		if(intitulerCreateComp.getText().isEmpty()){
