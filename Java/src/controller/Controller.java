@@ -868,55 +868,227 @@ public class Controller {
 	}
 
 
-	//A REFAIRE QUAND MEIUX COMPRIS DAO COMP ET NEC
-	/*public void updateCompetences(){
-		System.out.println();
-		if(intitulerCreateComp.getText().isEmpty()){
+	public void updateCompetence() {
+		if (intituleUpdateComp.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
+			return;
 		}
-		else{
-			String intitulerStr = intitulerCreateComp.getText();
-			String compNecStr = null;
-			boolean necessiteVide = necessiteCreateComp.getText().isEmpty();
-			if(!necessiteVide){
-				compNecStr = necessiteCreateComp.getText();
+
+		String ancienIntitule = intituleCreateComp.getText(); // ou un champ dédié à l'ancien intitulé
+		String nouvelIntitule = intituleUpdateComp.getText();
+
+		try {
+			DAOCompetence daoCompetence = new DAOCompetence(null);
+
+			Competence ancienneComp = trouverCompetenceParIntitule(ancienIntitule, grapheCompetences.getCompetences());
+			if (ancienneComp == null) {
+				System.out.println("Compétence à modifier inexistante.");
+				return;
 			}
-			Competence comp = new Competence();
-			comp.setIntitule(intitulerStr);
 
-			try{
-				DAOCompetence daoCompetence = new DAOCompetence(null);
-				daoCompetence.update(comp, intitulerStr);
+			// Mise à jour en base
+			Competence nouvelleComp = new Competence();
+			nouvelleComp.setIntitule(nouvelIntitule);
+			daoCompetence.update(nouvelleComp, ancienIntitule);
 
-				if(!necessiteVide){
-					DAONecessite daoNecessite = new DAONecessite(null);
-					
-					Competence compNec = new Competence();
-					compNec.setIntitule(compNecStr);
-					
-					Necessite nec = new Necessite();
-					nec.setLaCompetence(comp);
-					nec.setCompetenceNecessaire(compNec);
+			// Mise à jour dans le graphe
+			ancienneComp.setIntitule(nouvelIntitule);
 
-					nec.setIntituleCompetence(intitulerStr);
-					nec.setIntituleCompetenceNecessaire(compNecStr);
-					daoNecessite.update(nec);
+			System.out.println("Compétence modifiée avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la modification de la compétence : " + e.getMessage());
+		}
+	}
+
+	public void deleteCompetence() {
+		if (intituleCreateComp.getText().isEmpty()) {
+			System.out.println("Veuillez indiquer l'intitulé de la compétence à supprimer.");
+			return;
+		}
+
+		String intitule = intituleCreateComp.getText();
+
+		try {
+			DAOCompetence daoCompetence = new DAOCompetence(null);
+			DAONecessite daoNecessite = new DAONecessite(null);
+
+			// Suppression en base
+			daoCompetence.delete(intitule);
+
+			// Suppression des dépendances associées en base
+			List<Necessite> necessites = new ArrayList<>(grapheCompetences.getNecessites());
+			for (Necessite n : necessites) {
+				if (n.getIntituleCompetence().equals(intitule) || n.getIntituleCompetenceNecessaire().equals(intitule)) {
+					daoNecessite.delete(n.getIntituleCompetence(), n.getIntituleCompetenceNecessaire());
+					grapheCompetences.supprimerNecessite(n);
 				}
-				
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la modification de la Compétence : " + e.getMessage());
 			}
 
+			// Suppression dans le graphe
+			Competence comp = trouverCompetenceParIntitule(intitule, grapheCompetences.getCompetences());
+			if (comp != null) {
+				grapheCompetences.supprimerCompetence(comp);
+			}
 
+			System.out.println("Compétence supprimée avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression de la compétence : " + e.getMessage());
 		}
-	}*/
+	}
+	/*
+	 * ***********************************
+	 * GESTION DES DÉPENDANCES DES COMPÉTENCES
+	 ***********************************
+	 */
+
+	public void createNecessite() {
+		if (intituleCreateComp.getText().isEmpty() || necessiteCreateComp.getText().isEmpty()) {
+			System.out.println("Veuillez remplir tous les champs.");
+			return;
+		}
+
+		String intituleComp = intituleCreateComp.getText();
+		String intituleNec = necessiteCreateComp.getText();
+
+		Competence comp = trouverCompetenceParIntitule(intituleComp, grapheCompetences.getCompetences());
+		Competence nec = trouverCompetenceParIntitule(intituleNec, grapheCompetences.getCompetences());
+
+		if (comp == null || nec == null) {
+			System.out.println("Compétence ou prérequis inexistant.");
+			return;
+		}
+
+		try {
+			// Créer une copie temporaire pour vérifier le DAG
+			List<Necessite> tempNecessites = new ArrayList<>(grapheCompetences.getNecessites());
+			Necessite n = new Necessite();
+			n.setLaCompetence(comp);
+			n.setCompetenceNecessaire(nec);
+			n.setIntituleCompetence(intituleComp);
+			n.setIntituleCompetenceNecessaire(intituleNec);
+			tempNecessites.add(n);
+
+			GrapheCompetences grapheTemp = new GrapheCompetences(grapheCompetences.getCompetences(), tempNecessites);
+
+			if (!grapheTemp.estDAG()) {
+				System.out.println("Impossible d'ajouter la dépendance : cela créerait un cycle !");
+				return;
+			}
+
+			DAONecessite daoNecessite = new DAONecessite(null);
+			daoNecessite.create(n);
+			grapheCompetences.ajouterNecessite(n);
+
+			System.out.println("Dépendance ajoutée avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la création de la dépendance : " + e.getMessage());
+		}
+	}
+
+	public void updateNecessite(String intituleComp, String ancienNec, String nouveauNec) {
+		// Vérification des champs
+		if (intituleComp == null || ancienNec == null || nouveauNec == null ||
+			intituleComp.isEmpty() || ancienNec.isEmpty() || nouveauNec.isEmpty()) {
+			System.out.println("Veuillez remplir tous les champs.");
+			return;
+		}
+
+		Competence comp = trouverCompetenceParIntitule(intituleComp, grapheCompetences.getCompetences());
+		Competence ancienneCompetenceNecessaire = trouverCompetenceParIntitule(ancienNec, grapheCompetences.getCompetences());
+		Competence nouvelleCompetenceNecessaire = trouverCompetenceParIntitule(nouveauNec, grapheCompetences.getCompetences());
+
+		if (comp == null || ancienneCompetenceNecessaire == null || nouvelleCompetenceNecessaire == null) {
+			System.out.println("Compétence ou dépendance inexistante.");
+			return;
+		}
+
+		try {
+			// Créer une copie temporaire du graphe pour tester le DAG
+			List<Necessite> tempNecessites = new ArrayList<>(grapheCompetences.getNecessites());
+			// Supprimer l'ancienne dépendance
+			tempNecessites.removeIf(n -> n.getIntituleCompetence().equals(intituleComp)
+									&& n.getIntituleCompetenceNecessaire().equals(ancienNec));
+			// Ajouter la nouvelle dépendance
+			Necessite nouvelleNecessite = new Necessite();
+			nouvelleNecessite.setLaCompetence(comp);
+			nouvelleNecessite.setCompetenceNecessaire(nouvelleCompetenceNecessaire);
+			nouvelleNecessite.setIntituleCompetence(intituleComp);
+			nouvelleNecessite.setIntituleCompetenceNecessaire(nouveauNec);
+			tempNecessites.add(nouvelleNecessite);
+
+			GrapheCompetences grapheTemp = new GrapheCompetences(grapheCompetences.getCompetences(), tempNecessites);
+
+			if (!grapheTemp.estDAG()) {
+				System.out.println("Impossible de modifier la dépendance : cela créerait un cycle !");
+				return;
+			}
+
+			// Mise à jour en base
+			DAONecessite daoNecessite = new DAONecessite(null);
+			daoNecessite.delete(intituleComp, ancienNec);
+			daoNecessite.create(nouvelleNecessite);
+
+			// Mise à jour dans le graphe interne
+			Necessite aSupprimer = null;
+			for (Necessite n : grapheCompetences.getNecessites()) {
+				if (n.getIntituleCompetence().equals(intituleComp)
+					&& n.getIntituleCompetenceNecessaire().equals(ancienNec)) {
+					aSupprimer = n;
+					break;
+				}
+			}
+			if (aSupprimer != null) {
+				grapheCompetences.supprimerNecessite(aSupprimer);
+			}
+			grapheCompetences.ajouterNecessite(nouvelleNecessite);
+
+			System.out.println("Dépendance modifiée avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la modification de la dépendance : " + e.getMessage());
+		}
+	}
+
+	public void deleteNecessite() {
+		if (intituleCreateComp.getText().isEmpty() || necessiteCreateComp.getText().isEmpty()) {
+			System.out.println("Veuillez remplir tous les champs.");
+			return;
+		}
+
+		String intituleComp = intituleCreateComp.getText();
+		String intituleNec = necessiteCreateComp.getText();
+
+		try {
+			DAONecessite daoNecessite = new DAONecessite(null);
+			daoNecessite.delete(intituleComp, intituleNec);
+
+			// Suppression dans le graphe
+			Necessite aSupprimer = null;
+			for (Necessite n : grapheCompetences.getNecessites()) {
+				if (n.getIntituleCompetence().equals(intituleComp) &&
+					n.getIntituleCompetenceNecessaire().equals(intituleNec)) {
+					aSupprimer = n;
+					break;
+				}
+			}
+			if (aSupprimer != null) {
+				grapheCompetences.supprimerNecessite(aSupprimer);
+			}
+
+			System.out.println("Dépendance supprimée avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression de la dépendance : " + e.getMessage());
+		}
+	}
 
 
 	/**
 	 ***********************************
-	 * Integration des valeur dans les tables view 
+	 * Integration des valeurs dans les tables view 
 	 ***********************************
 	 */
 
