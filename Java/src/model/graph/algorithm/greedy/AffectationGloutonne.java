@@ -3,9 +3,7 @@ package model.graph.algorithm.greedy;
 import java.util.*;
 
 import model.data.*;
-import model.graph.algorithm.Affectation;
-import model.graph.algorithm.BesoinUnitaire;
-import model.graph.algorithm.ResultatAffectation;
+import model.graph.algorithm.*;
 
 /**
  * Implémente l'affectation gloutonne des secouristes aux besoins des DPS.

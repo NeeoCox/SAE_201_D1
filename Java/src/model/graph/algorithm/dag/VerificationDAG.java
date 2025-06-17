@@ -25,8 +25,8 @@ public class VerificationDAG {
             graphe.put(c, new ArrayList<>());
         }
         for (Necessite n : necessites) {
-            Competence prerequis = n.getCompetenceNecessaire(); // compétence nécessaire (prérequis)
-            Competence cible = n.getLaCompetence();             // compétence principale (cible)
+            Competence prerequis = n.getCompetenceNecessaire();
+            Competence cible = n.getLaCompetence();
             if (graphe.containsKey(prerequis)) {
                 graphe.get(prerequis).add(cible);
             }
