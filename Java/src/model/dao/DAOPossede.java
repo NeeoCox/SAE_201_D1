@@ -41,8 +41,8 @@ public class DAOPossede extends DAO<Possede>{
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Possede p = new Possede();
-                p.setIdSecouriste(rs.getLong("idSecouriste"));
-                p.setIntituleCompetence(rs.getString("intituleCompetence"));
+                p.setIdSecouriste(rs.getLong("leSecouriste"));
+                p.setIntituleCompetence(rs.getString("laCompetence"));
                 possedes.add(p);
             }
         }
