@@ -1,7 +1,6 @@
 package model.graph.algorithm.greedy;
 
 import java.util.*;
-
 import model.graph.algorithm.*;
 import model.persistence.*;
 
@@ -22,35 +21,108 @@ public class AffectationGloutonne implements Affectation {
      */
     @Override
     public ResultatAffectation affecter(List<Secouriste> secouristes, List<DPS> dps, List<Besoin> besoins) {
+        // Générer la liste des besoins unitaires
         List<BesoinUnitaire> besoinsUnitaires = genererBesoinsUnitaires(besoins);
-        Map<DPS, List<Secouriste>> affectation = new HashMap<>();
-        Set<Secouriste> dejaAffectes = new HashSet<>();
 
-        for (BesoinUnitaire besoin : besoinsUnitaires) {
-            Secouriste choisi = trouverPremierSecouristeDisponible(secouristes, dejaAffectes, besoin);
-            if (choisi != null) {
-                affectation.computeIfAbsent(besoin.getDps(), k -> new ArrayList<>()).add(choisi);
-                dejaAffectes.add(choisi);
+        int n = secouristes.size();
+        int m = besoinsUnitaires.size();
+        int[][] matrice = new int[n][m];
+
+        // Construire la matrice binaire secouristes/besoinsUnitaires
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                matrice[i][j] = estAffectable(secouristes.get(i), besoinsUnitaires.get(j)) ? 1 : 0;
             }
-            // Si aucun secouriste n'est disponible, le besoin reste non couvert
         }
+
+        // Appliquer le tri des lignes et colonnes comme dans Glouton
+        int[] ordreSecouristes = initialiserOrdre(n);
+        int[] ordreBesoins = initialiserOrdre(m);
+        trierLignesParDegre(matrice, ordreSecouristes);
+        trierColonnes(matrice, ordreBesoins);
+
+        // Affecter les secouristes aux besoins dans l'ordre trié
+        Map<DPS, List<Secouriste>> affectation = new HashMap<>();
+        boolean[] secouristePris = new boolean[n];
+
+        for (int j = 0; j < m; j++) {
+            int besoinIdx = ordreBesoins[j];
+            for (int i = 0; i < n; i++) {
+                int secIdx = ordreSecouristes[i];
+                if (!secouristePris[secIdx] && matrice[secIdx][besoinIdx] == 1) {
+                    // Affecter secouriste à ce besoin
+                    Secouriste s = secouristes.get(secIdx);
+                    BesoinUnitaire b = besoinsUnitaires.get(besoinIdx);
+                    affectation.computeIfAbsent(b.getDps(), k -> new ArrayList<>()).add(s);
+                    secouristePris[secIdx] = true;
+                    break;
+                }
+            }
+        }
+
         return new ResultatAffectation(affectation);
     }
 
-    /**
-     * Cherche le premier secouriste disponible et compétent pour un besoin.
-     * @param secouristes Liste des secouristes.
-     * @param dejaAffectes Secouristes déjà affectés.
-     * @param besoin Le besoin à couvrir.
-     * @return Le secouriste trouvé ou null si aucun.
-     */
-    private Secouriste trouverPremierSecouristeDisponible(List<Secouriste> secouristes, Set<Secouriste> dejaAffectes, BesoinUnitaire besoin) {
-        for (Secouriste s : secouristes) {
-            if (!dejaAffectes.contains(s) && estAffectable(s, besoin)) {
-                return s;
+    private static int[] initialiserOrdre(int n) {
+        int[] ordre = new int[n];
+        for (int i = 0; i < n; i++) {
+            ordre[i] = i;
+        }
+        return ordre;
+    }
+
+    private static void trierLignesParDegre(int[][] M, int[] ordreLignes) {
+        int n = M.length;
+        int[] L = new int[n];
+        for (int i = 0; i < n; i++) {
+            L[i] = 0;
+            for (int j = 0; j < n; j++) {
+                L[i] += M[i][j];
             }
         }
-        return null;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (L[i] > L[j]) {
+                    int tempL = L[i];
+                    L[i] = L[j];
+                    L[j] = tempL;
+
+                    int[] tempM = M[i];
+                    M[i] = M[j];
+                    M[j] = tempM;
+
+                    int tempOrdre = ordreLignes[i];
+                    ordreLignes[i] = ordreLignes[j];
+                    ordreLignes[j] = tempOrdre;
+                }
+            }
+        }
+    }
+
+    private static void trierColonnes(int[][] M, int[] ordreColonnes) {
+        int n = M.length;
+        for (int j = 0; j < n - 1; j++) {
+            int minCol = j;
+            for (int k = j + 1; k < n; k++) {
+                int i = 0;
+                while (i < n && M[i][k] == M[i][minCol]) {
+                    i++;
+                }
+                if (i < n && M[i][k] < M[i][minCol]) {
+                    minCol = k;
+                }
+            }
+            if (minCol != j) {
+                for (int i = 0; i < n; i++) {
+                    int temp = M[i][j];
+                    M[i][j] = M[i][minCol];
+                    M[i][minCol] = temp;
+                }
+                int tempOrdre = ordreColonnes[j];
+                ordreColonnes[j] = ordreColonnes[minCol];
+                ordreColonnes[minCol] = tempOrdre;
+            }
+        }
     }
 
     /**
