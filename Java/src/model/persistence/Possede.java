@@ -101,4 +101,15 @@ public class Possede {
                 ", intituleCompetence='" + intituleCompetence + '\'' +
                 '}';
     }
+
+
+    /**
+     * Vérifie si la possession concerne une compétence donnée.
+     * @param intitule L'intitulé de la compétence recherchée.
+     * @return true si la compétence est possédée, false sinon.
+     */
+    public boolean possedeCompetence(String intitule) {
+        return (laCompetence != null && laCompetence.getIntitule().equals(intitule))
+            || (intituleCompetence != null && intituleCompetence.equals(intitule));
+    }
 }

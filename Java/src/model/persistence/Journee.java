@@ -101,4 +101,14 @@ public class Journee {
                 ", annee=" + annee +
                 '}';
     }
+
+
+    /**
+     * Vérifie si deux journées sont identiques.
+     * @param autre L'autre journée à comparer.
+     * @return true si les dates sont identiques, false sinon.
+     */
+    public boolean estEgale(Journee autre) {
+        return autre != null && this.jour == autre.jour && this.mois == autre.mois && this.annee == autre.annee;
+    }
 }

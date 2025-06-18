@@ -145,4 +145,15 @@ public class EstAffecteA {
                 ", idDPS=" + idDPS +
                 '}';
     }
+
+
+    /**
+     * Vérifie si l'affectation concerne un secouriste donné.
+     * @param idSecouriste L'identifiant du secouriste.
+     * @return true si l'affectation concerne ce secouriste, false sinon.
+     */
+    public boolean concerneSecouriste(long idSecouriste) {
+        return this.idSecouriste == idSecouriste
+            || (leSecouriste != null && leSecouriste.getId() == idSecouriste);
+    }
 }

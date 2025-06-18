@@ -115,4 +115,15 @@ public class Site {
                 ", latitude=" + latitude +
                 '}';
     }
+
+
+    /**
+     * Vérifie si le site est à une coordonnée donnée.
+     * @param longitude La longitude à tester.
+     * @param latitude La latitude à tester.
+     * @return true si les coordonnées correspondent, false sinon.
+     */
+    public boolean estALaCoordonnee(float longitude, float latitude) {
+        return this.longitude == longitude && this.latitude == latitude;
+    }
 }
