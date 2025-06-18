@@ -17,7 +17,7 @@ public class DAOPossede extends DAO<Possede>{
     }
 
     public void create(Possede possede) throws SQLException {
-        String sql = "INSERT INTO Possede (idSecouriste, intituleCompetence) VALUES (?, ?)";
+        String sql = "INSERT INTO Possede (leSecouriste, laCompetence) VALUES (?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, possede.getIdSecouriste());
             stmt.setString(2, possede.getIntituleCompetence());

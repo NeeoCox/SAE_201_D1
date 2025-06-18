@@ -229,7 +229,7 @@ public class Controller  {
 	@FXML
 	private TextField idSec;
 	@FXML
-	private TextField passWordSec;
+	private TextField telSec;
 	@FXML
 	private TextField dateNaissSec;
 	@FXML
@@ -375,9 +375,9 @@ public class Controller  {
     @FXML
     private TableColumn<DPS, Long> idTableDPS;
     @FXML
-    private TableColumn<DPS, String> heureDebTableDPS;
+    private TableColumn<DPS, Integer> heureDebTableDPS;
     @FXML
-    private TableColumn<DPS, String> heureFinTableDPS;
+    private TableColumn<DPS, Integer> heureFinTableDPS;
 	@FXML
     private TableColumn<DPS, String> dateTableDPS; 
 	@FXML
@@ -417,6 +417,12 @@ public class Controller  {
     private TableColumn<Necessite, String> colIntituleNec;
 	
 	private ObservableList<Necessite> dataCompNec = FXCollections.observableArrayList();
+
+	/**
+	 ***********************************
+	 * Variable pour affichage des Compétences
+	 ***********************************
+	 */
 
 	
 	@FXML
@@ -687,43 +693,67 @@ public class Controller  {
 	 /**
 	  * Permet de créer un secouriste
 	  */
-	public void createSecouriste(){
+	@FXML
+	public void createSecouriste() {
 		System.out.println("createSecouriste");
-		// Recup des valeur dans les textField
-		if (nomSec.getText().isEmpty() || prenomSec.getText().isEmpty() || dateNaissSec.getText().isEmpty() || 
-			mailSec.getText().isEmpty() || adressSec.getText().isEmpty() || idSec.getText().isEmpty() || passWordSec.getText().isEmpty()) {
+
+		// Vérification des champs requis
+		if (nomSec.getText().isEmpty() || prenomSec.getText().isEmpty() || dateNaissSec.getText().isEmpty() ||
+			mailSec.getText().isEmpty() || adressSec.getText().isEmpty() || telSec.getText().isEmpty() || idSec.getText().isEmpty()) {
+			
 			System.out.println("Veuillez remplir tous les champs.");
+			return;
 		}
-		else{
+
+		try {
 			String nom = nomSec.getText();
 			String prenom = prenomSec.getText();
 			String dateNaissance = dateNaissSec.getText();
 			String email = mailSec.getText();
 			String adresse = adressSec.getText();
-			String id = idSec.getText();
-			long idLong = Long.parseLong(id); 
-			String passWord = passWordSec.getText();
-			String[] compPossede = compSecCreate.getText().split(";");
-			List<Possede> listCompPos = new ArrayList<Possede>();
+			String telephone = telSec.getText();
+			long idLong = Long.parseLong(idSec.getText());
 
-			for(int i = 0; i<compPossede.length; i++){
+			// Liste des compétences possédées (si champ présent)
+			String[] compPossede = compSecCreate.getText().split(";");
+			List<Possede> listCompPos = new ArrayList<>();
+
+			// Création du secouriste
+			
+			
+			for (String comp : compPossede) {
 				Possede compPos = new Possede();
 				compPos.setIdSecouriste(idLong);
-				compPos.setIntituleCompetence(compPossede[i]);
+				compPos.setIntituleCompetence(comp.trim());
+				listCompPos.add(compPos);
+			}
+			
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, telephone, adresse, listCompPos);
+
+			daoSecouriste.create(secouriste);
+			
+			for (String comp : compPossede) {
+				Possede compPos = new Possede();
+				compPos.setIdSecouriste(idLong);
+				compPos.setSecouriste(secouriste);
+				compPos.setIntituleCompetence(comp.trim());
+				Competence competence = new Competence();
+				competence.setIntitule(comp.trim());
+
+				compPos.setLaCompetence(competence);
+				daoPossede.create(compPos);
 			}
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, listCompPos);
-						
-			try{
-				daoSecouriste.create(secouriste);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la création du secouriste : " + e.getMessage());
-			}
+			
+			
+
+			System.out.println("Secouriste créé avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la création du secouriste : " + e.getMessage());
 		}
-		 
 	}
+
 
 	public void updateSecouriste(){
 		System.out.println("updateSecouriste");
@@ -1273,17 +1303,31 @@ public class Controller  {
 
 	public void viewAllDPS(){
 		try{
+
+			dataDPS.clear();
+
 			List<DPS> listDPS = daoDPS.readAll();
 
-			for(DPS dps : listDPS){
-				dataDPS.add(dps);
-			}
+			dataDPS.addAll(listDPS);
+
+			tableDPS.setItems(dataDPS);
+
+			idTableDPS.setCellValueFactory(new PropertyValueFactory<>("id"));
+			heureDebTableDPS.setCellValueFactory(new PropertyValueFactory<>("horaireDepart"));
+			heureFinTableDPS.setCellValueFactory(new PropertyValueFactory<>("horaireFin"));
+
+			dateTableDPS.setCellValueFactory(new PropertyValueFactory<>("estProgrammeJournee"));
+			lieuTableDPS.setCellValueFactory(new PropertyValueFactory<>("ALieuDansSite"));
+			sportTableDPS.setCellValueFactory(new PropertyValueFactory<>("concerneSport"));
+
 		}
 		catch(Exception e){
 			e.printStackTrace();
 			System.out.println("Erreur lors de l'affichage des DPS : " + e.getMessage());
 		}
 	}
+
+	
 
 	
 
@@ -1322,6 +1366,10 @@ public class Controller  {
 
 		if(tableCompetencesSec != null){
 			viewAllComp();
+		}
+
+		if(tableDPS != null){
+			viewAllDPS();
 		}
 	}
 

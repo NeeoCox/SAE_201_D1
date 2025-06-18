@@ -17,7 +17,7 @@ public class DAOSecouriste extends DAO<Secouriste> {
     }
 
     public void create(Secouriste secouriste) throws SQLException {
-        String sql = "INSERT INTO Secouriste (id, nom, prenom, dateNaissance, email, tel, adresse) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Secouriste (id, nom, prenom, dateNaissance, email, telephone, adresse) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, secouriste.getId());
             stmt.setString(2, secouriste.getNom());
