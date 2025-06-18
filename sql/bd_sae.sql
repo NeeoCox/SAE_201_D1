@@ -39,7 +39,7 @@ CREATE TABLE sessions (
 
 /*###################Création des tables de base##########################*/
 
-CREATE TABLE Secoursite (
+CREATE TABLE Secouriste (
     id INT,
     nom VARCHAR(100),
     prenom VARCHAR(100),
@@ -105,22 +105,25 @@ CREATE TABLE Besoin (
 );
 
 CREATE TABLE Necessite (
-    laCompetence VARCHAR(50),
-    laCompetenceNecessaire VARCHAR(50),
+    intituleCompetence VARCHAR(50),
+    intituleCompetenceNecessaire VARCHAR(50),
         
-    CONSTRAINT pk_Necessite PRIMARY KEY (laCompetence, laCompetenceNecessaire),
-    CONSTRAINT fk_Necessite_Competence FOREIGN KEY (laCompetence) REFERENCES Competence(intitule),
-    CONSTRAINT fk_Necessite_CompetenceNecessaire FOREIGN KEY (laCompetenceNecessaire) REFERENCES Competence(intitule)
+    CONSTRAINT pk_Necessite PRIMARY KEY (intituleCompetence, intituleCompetenceNecessaire),
+    CONSTRAINT fk_Necessite_Competence FOREIGN KEY (intituleCompetence) REFERENCES Competence(intitule),
+    CONSTRAINT fk_Necessite_CompetenceNecessaire FOREIGN KEY (intituleCompetenceNecessaire) REFERENCES Competence(intitule)
 );
+
+DROP TABLE IF EXISTS Possede;
 
 CREATE TABLE Possede (
     leSecouriste INT,
     laCompetence VARCHAR(50),
     
     CONSTRAINT pk_Possede PRIMARY KEY (leSecouriste, laCompetence),
-    CONSTRAINT fk_Possede_Secouriste FOREIGN KEY (leSecouriste) REFERENCES Secoursite(id),
+    CONSTRAINT fk_Possede_Secouriste FOREIGN KEY (leSecouriste) REFERENCES Secouriste(id),
     CONSTRAINT fk_Possede_Competence FOREIGN KEY (laCompetence) REFERENCES Competence(intitule)
 );
+
 
 CREATE TABLE EstDisponible (
     leSecouriste INT,
@@ -129,7 +132,7 @@ CREATE TABLE EstDisponible (
     anneeJournee INT,
     
 	CONSTRAINT pk_EstDisponible PRIMARY KEY (leSecouriste, jourJournee, moisJournee, anneeJournee),
-	CONSTRAINT fk_EstDisponible_Secouriste FOREIGN KEY (leSecouriste) REFERENCES Secoursite(id),
+	CONSTRAINT fk_EstDisponible_Secouriste FOREIGN KEY (leSecouriste) REFERENCES Secouriste(id),
     
     CONSTRAINT fk_EstDisponible_Journee 
         FOREIGN KEY (jourJournee, moisJournee, anneeJournee)
@@ -143,7 +146,7 @@ CREATE TABLE EstAffecteA (
     
     CONSTRAINT pk_EstAffecteA PRIMARY KEY (leSecouriste, leDPS, laCompetence),
     
-    CONSTRAINT fk_EstAffecteA_Secouriste FOREIGN KEY (leSecouriste) REFERENCES Secoursite(id),
+    CONSTRAINT fk_EstAffecteA_Secouriste FOREIGN KEY (leSecouriste) REFERENCES Secouriste(id),
     CONSTRAINT fk_EstAffecteA_DPS FOREIGN KEY (leDPS) REFERENCES DPS(id),
     CONSTRAINT fk_EstAffecteA_Competence FOREIGN KEY (laCompetence) REFERENCES Competence(intitule)
 );
@@ -162,7 +165,7 @@ INSERT INTO Competence (intitule) VALUES
 ('PBC'),
 ('PBF');
 
-INSERT INTO Necessite (laCompetence, laCompetenceNecessaire) VALUES
+INSERT INTO Necessite (intituleCompetence, intituleCompetenceNecessaire) VALUES
 ('PSE1', 'PSE2'),
 ('PSE2', 'CE'),
 ('CE', 'CP'),
@@ -171,13 +174,118 @@ INSERT INTO Necessite (laCompetence, laCompetenceNecessaire) VALUES
 ('PSE2', 'VPSP'),
 ('PBC', 'PBF');
 
-INSERT INTO Secoursite (id, nom, prenom, dateNaissance, email, telephone, adresse)
+INSERT INTO Secouriste (id, nom, prenom, dateNaissance, email, telephone, adresse)
 VALUES
 (1, 'Dupont', 'Jean', '1990-05-12', 'jean.dupont@example.com', '0601020304', '12 rue de Paris, Lyon'),
 (2, 'Martin', 'Claire', '1985-11-23', 'claire.martin@example.com', '0605060708', '8 avenue Victor Hugo, Marseille'),
 (3, 'Nguyen', 'Linh', '1993-07-01', 'linh.nguyen@example.com', '0708091011', '5 boulevard Haussmann, Paris'),
 (4, 'Moreau', 'Julien', '1992-03-17', 'julien.moreau@example.com', '0611223344', '15 chemin des Oliviers, Toulouse'),
-(5, 'Lemoine', 'Sophie', '1988-09-30', 'sophie.lemoine@example.com', '0622334455', '33 rue des Lilas, Nantes');
+(5, 'Lemoine', 'Sophie', '1988-09-30', 'sophie.lemoine@example.com', '0622334455', '33 rue des Lilas, Nantes'),
+(6, 'Bernard', 'Lucie', '1991-01-20', 'lucie.bernard@example.com', '0633445566', '10 rue de la République, Nice'),
+(7, 'Garcia', 'Thomas', '1995-08-14', 'thomas.garcia@example.com', '0644556677', '2 rue Lafayette, Bordeaux'),
+(8, 'Roux', 'Camille', '1987-06-08', 'camille.roux@example.com', '0655667788', '48 avenue Jean Jaurès, Strasbourg'),
+(9, 'Fournier', 'Alexandre', '1990-12-05', 'alex.fournier@example.com', '0666778899', '17 rue Nationale, Lille'),
+(10, 'Faure', 'Julie', '1994-04-25', 'julie.faure@example.com', '0677889900', '3 impasse des Peupliers, Rennes'),
+(11, 'Lopez', 'Hugo', '1992-10-19', 'hugo.lopez@example.com', '0688990011', '29 place Bellecour, Lyon'),
+(12, 'Girard', 'Manon', '1986-03-09', 'manon.girard@example.com', '0699001122', '64 allée des Marronniers, Montpellier'),
+(13, 'Andre', 'Nicolas', '1991-07-13', 'nicolas.andre@example.com', '0600112233', '11 rue de Bretagne, Dijon'),
+(14, 'Mercier', 'Chloé', '1993-11-02', 'chloe.mercier@example.com', '0601223344', '20 chemin du Château, Clermont-Ferrand'),
+(15, 'Blanc', 'Lucas', '1989-02-26', 'lucas.blanc@example.com', '0602334455', '35 avenue Foch, Grenoble'),
+(16, 'Guerin', 'Emma', '1996-06-15', 'emma.guerin@example.com', '0603445566', '9 rue du Vercors, Reims'),
+(17, 'Perrin', 'Matthieu', '1985-01-05', 'matthieu.perrin@example.com', '0604556677', '7 rue du Moulin, Le Havre'),
+(18, 'Dupuis', 'Laura', '1992-09-18', 'laura.dupuis@example.com', '0605667788', '13 avenue de l’Europe, Saint-Étienne'),
+(19, 'Meyer', 'Antoine', '1990-10-30', 'antoine.meyer@example.com', '0606778899', '4 rue des Acacias, Metz'),
+(20, 'Leroy', 'Sarah', '1988-12-12', 'sarah.leroy@example.com', '0607889900', '23 boulevard Carnot, Amiens');
 
+INSERT INTO Possede (leSecouriste, laCompetence)
+VALUES
+(1, 'PSE1'),
+(1, 'SSA'),
+(2, 'PSE2'),
+(2, 'CE'),
+(3, 'PSE1'),
+(3, 'VPSP'),
+(4, 'CE'),
+(4, 'CP'),
+(5, 'CO'),
+(6, 'PBC'),
+(7, 'PBF'),
+(8, 'PSE1'),
+(9, 'CP'),
+(10, 'CO'),
+(11, 'PSE2'),
+(12, 'VPSP'),
+(13, 'SSA'),
+(14, 'PSE1'),
+(15, 'PSE2'),
+(16, 'CE'),
+(17, 'CP'),
+(18, 'CO'),
+(19, 'PBC'),
+(20, 'PBF');
+
+-- Insertion des sports
+INSERT INTO Sport (code, nom) VALUES 
+('ATHL', 'Athlétisme'),
+('NATA', 'Natation'),
+('FOOT', 'Football'),
+('BASK', 'Basketball'),
+('CYCL', 'Cyclisme');
+
+-- Insertion des sites
+INSERT INTO Site (code, nom, longitude, latitude) VALUES
+('ST1', 'Stade Olympique', 2.352222, 48.856614),
+('ST2', 'Piscine Municipale', 2.295, 48.8738),
+('ST3', 'Parc des Sports', 2.33, 48.85),
+('ST4', 'Gymnase Central', 2.35, 48.86),
+('ST5', 'Vélodrome', 2.34, 48.87);
+
+-- Insertion des journées
+INSERT INTO Journee (jour, mois, annee) VALUES
+(15, 6, 2025),
+(16, 6, 2025),
+(17, 6, 2025),
+(18, 6, 2025),
+(19, 6, 2025);
+
+-- Insertion des compétences
+INSERT INTO Competence (intitule) VALUES
+('Secouriste'),
+('Infirmier'),
+('Médecin'),
+('Chef de poste'),
+('Ambulancier');
+
+-- Insertion des DPS
+INSERT INTO DPS (id, horaire_depart, horaire_fin, concerneSport, aLieuDansSite, estProgrammeJour, estProgrammeMois, estProgrammeAnnee) VALUES
+(1, 900, 1200, 'ATHL', 'ST1', 15, 6, 2025),
+(2, 1300, 1600, 'NATA', 'ST2', 16, 6, 2025),
+(3, 1000, 1300, 'FOOT', 'ST3', 17, 6, 2025),
+(4, 1400, 1700, 'BASK', 'ST4', 18, 6, 2025),
+(5, 900, 1100, 'CYCL', 'ST5', 19, 6, 2025);
+
+-- Insertion des besoins de compétences pour chaque DPS
+INSERT INTO Besoin (laCompetence, leDPS) VALUES
+('Secouriste', 1),
+('Infirmier', 1),
+('Chef de poste', 1),
+
+('Secouriste', 2),
+('Médecin', 2),
+
+('Ambulancier', 3),
+('Chef de poste', 3),
+
+('Secouriste', 4),
+('Infirmier', 4),
+
+('Médecin', 5),
+('Ambulancier', 5);
+
+SHOW TABLES;
+
+SELECT * FROM Necessite;
+
+DESCRIBE Necessite;
 
 
