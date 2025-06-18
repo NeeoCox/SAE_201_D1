@@ -36,13 +36,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-//Import de nos class
-import model.data.Secouriste;
-import model.data.Site;
-import model.data.Besoin;
-import model.data.Competence;
-import model.data.Sport;
-import model.data.DPS;
+//Import de nos classes
 import model.dao.DAO;
 import model.dao.DAOBesoin;
 import model.dao.DAOCompetence;
@@ -53,30 +47,8 @@ import model.dao.DAOPossede;
 import model.dao.DAOSecouriste;
 import model.dao.DAOSite;
 import model.dao.DAOSport;
-import model.data.Besoin;
-import model.data.Competence;
-import model.data.DPS;
-import model.data.Journee;
-import model.data.Necessite;
-import model.data.Possede;
-import model.data.Secouriste;
-import model.data.Site;
-import model.data.Sport;
-import model.graph.algorithm.Affectation;
-import model.graph.algorithm.exhaustive.AffectationExhaustive;
-import model.graph.algorithm.greedy.AffectationGloutonne;
-import model.graph.algorithm.ResultatAffectation;
-import model.graph.algorithm.dag.VerificationDAG;
-import model.graph.algorithm.BesoinUnitaire;
-import model.graph.algorithm.GrapheCompetences;
-import model.persistence.Besoin;
-import model.persistence.Competence;
-import model.persistence.DPS;
-import model.persistence.Journee;
-import model.persistence.Necessite;
-import model.persistence.Secouriste;
-import model.persistence.Site;
-import model.persistence.Sport;
+import model.persistence.*;
+import model.graph.algorithm.*;
 
 
 
