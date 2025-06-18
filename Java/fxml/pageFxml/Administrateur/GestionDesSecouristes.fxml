@@ -58,13 +58,13 @@
                    maxWidth="Infinity">
 
             <columns>
-                <TableColumn prefWidth="103.0" text="id" />
-                <TableColumn prefWidth="82.0" text="nom" />
-                <TableColumn prefWidth="111.0" text="prenom" />
-                <TableColumn prefWidth="110.0" text="date de naissance" />
-                <TableColumn prefWidth="118.0" text="email" />
-                <TableColumn prefWidth="121.0" text="tel" />
-                <TableColumn prefWidth="179.0" text="adresse" />
+                <TableColumn fx:id="idSecTable" prefWidth="103.0" text="id" />
+                <TableColumn fx:id="nomSecTable" prefWidth="82.0" text="nom" />
+                <TableColumn fx:id="prenomSecTable" prefWidth="111.0" text="prenom" />
+                <TableColumn fx:id="dateNaisSecTable" prefWidth="110.0" text="dateNaissance" />
+                <TableColumn fx:id="emailSecTable" prefWidth="118.0" text="email" />
+                <TableColumn fx:id="telSecTable" prefWidth="121.0" text="telephone" />
+                <TableColumn fx:id="adresseSecTable" prefWidth="179.0" text="adresse" />
             </columns>
         </TableView>
     </center>

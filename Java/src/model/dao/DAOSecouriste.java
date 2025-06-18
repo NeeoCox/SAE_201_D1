@@ -63,7 +63,7 @@ public class DAOSecouriste extends DAO<Secouriste> {
                 s.setPrenom(rs.getString("prenom"));
                 s.setDateNaissance(rs.getString("dateNaissance"));
                 s.setEmail(rs.getString("email"));
-                s.setTel(rs.getString("tel"));
+                s.setTel(rs.getString("telephone"));
                 s.setAdresse(rs.getString("adresse"));
                 secouristes.add(s);
             }

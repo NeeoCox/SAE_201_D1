@@ -9,13 +9,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.Action;
+import java.util.ResourceBundle;
+import java.net.URL;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -76,7 +77,7 @@ import model.graph.algorithm.GrapheCompetences;
  * La classe Controller de l'application
  * @author M.COIGNARD, L.VIMART, A.COUDIERE
  */
-public class Controller {
+public class Controller  {
 
 	/**
 	 ***********************************
@@ -349,7 +350,7 @@ public class Controller {
 	 */
 
 	@FXML
-    private TableView<Secouriste> tableViewSec;
+    private TableView<Secouriste> tableSecouristes;
     @FXML
     private TableColumn<Secouriste, Long> idSecTable;
     @FXML
@@ -445,11 +446,17 @@ public class Controller {
 	 * Connection BDD
 	 ***********************************
 	 */
-	public void connect(ActionEvent event){
+	public void connectAdmin(ActionEvent event){
 		String username = usernameFieldAmin.getText();
 		String password = passwordFieldAdmin.getText();
 
-		DAO.setCredentials(username, password);		
+		DAO.setCredentials(username, password);	
+		
+		goToPageAdminAcceuil(event);
+	}
+
+	private void setPerm(String username, String password){
+		
 	}
 
 
@@ -1230,27 +1237,37 @@ public class Controller {
 	 ***********************************
 	 */
 
-	public void viewAllSecouristes(){
-		try{
+	public void viewAllSecouristes() {
+		System.out.println("viewAllSecouristes");
+
+		try {
+			// Toujours vider avant d’ajouter
+			dataSec.clear();
+
+			// Récupération des secouristes depuis la base
 			List<Secouriste> listSec = daoSecouriste.readAll();
 
-			for(Secouriste s : listSec){
-				dataSec.add(s);
-			}
-		}
-		catch(Exception e){
+			// Ajout dans l’observable list
+			dataSec.addAll(listSec);
+
+			// Lier la table à la liste
+			tableSecouristes.setItems(dataSec);
+
+			// Définir les mappings colonnes -> attributs de l'objet
+			idSecTable.setCellValueFactory(new PropertyValueFactory<>("id"));
+			nomSecTable.setCellValueFactory(new PropertyValueFactory<>("nom"));
+			prenomSecTable.setCellValueFactory(new PropertyValueFactory<>("prenom"));
+			dateNaisSecTable.setCellValueFactory(new PropertyValueFactory<>("dateNaissance"));
+			emailSecTable.setCellValueFactory(new PropertyValueFactory<>("email"));
+			telSecTable.setCellValueFactory(new PropertyValueFactory<>("tel"));
+			adresseSecTable.setCellValueFactory(new PropertyValueFactory<>("adresse"));
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Erreur lors de l'affichage des secouristes : " + e.getMessage());
 		}
-
-		idSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, Long>("id"));
-		nomSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("nom"));
-		prenomSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("prenom"));
-		dateNaisSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("date de naissance"));
-		emailSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("email"));
-		telSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("tel"));
-		adresseSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("adresse"));
 	}
+
 
 	public void viewAllDPS(){
 		try{
@@ -1266,6 +1283,8 @@ public class Controller {
 		}
 	}
 
+	
+
 	/**
 	 ***********************************
 	 * GESTION DU PLANNING
@@ -1273,33 +1292,32 @@ public class Controller {
 	 */
 
 	@FXML
-    public void initialize() {
-		if (gridWeek == null) {
-			System.err.println("Le FXML n'a pas encore injecté gridWeek. Initialisation différée.");
-			return;
+	public void initialize() {
+		System.out.println("hola");
+		// Si on est sur la page du planning
+		if (gridWeek != null) {
+			LocalDate today = LocalDate.now();
+			currentMonday = today.with(DayOfWeek.MONDAY);
+			generateHourLabelsAndTaskBoxes();
+			afficherSemaine(currentMonday);
+			btnPrevWeek.setOnAction(e -> afficherSemaine(currentMonday.minusWeeks(1)));
+			btnNextWeek.setOnAction(e -> afficherSemaine(currentMonday.plusWeeks(1)));
+
+			vboxMon.setFillWidth(true);
+			vboxTue.setFillWidth(true);
+			vboxWed.setFillWidth(true);
+			vboxThu.setFillWidth(true);
+			vboxFri.setFillWidth(true);
+			vboxSat.setFillWidth(true);
+			vboxSun.setFillWidth(true);
 		}
-        LocalDate today = LocalDate.now();
-        currentMonday = today.with(DayOfWeek.MONDAY);
 
-        generateHourLabelsAndTaskBoxes();
-        afficherSemaine(currentMonday);
-
-        btnPrevWeek.setOnAction(e -> {
-            afficherSemaine(currentMonday.minusWeeks(1));
-        });
-
-        btnNextWeek.setOnAction(e -> {
-            afficherSemaine(currentMonday.plusWeeks(1));
-        });
-
-        vboxMon.setFillWidth(true);
-        vboxTue.setFillWidth(true);
-        vboxWed.setFillWidth(true);
-        vboxThu.setFillWidth(true);
-        vboxFri.setFillWidth(true);
-        vboxSat.setFillWidth(true);
-        vboxSun.setFillWidth(true);
-    }
+		// Si on est sur la page secouristes
+		if (tableSecouristes != null) {
+			System.out.println("hola deux");
+			viewAllSecouristes();
+		}
+	}
 
     public void addTask(LocalDate date, String taskDescription) {
         tasksByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(taskDescription);

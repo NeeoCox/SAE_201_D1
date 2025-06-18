@@ -57,7 +57,7 @@
                     </children>
                 </GridPane>
 
-                <Button fx:id="buttonConncetionAdmin" onAction="#goToPageAdminAcceuil" prefWidth="150" text="Se connecter" />
+                <Button fx:id="buttonConncetionAdmin" onAction="#connectAdmin" prefWidth="150" text="Se connecter" />
             </children>
         </VBox>
     </center>
