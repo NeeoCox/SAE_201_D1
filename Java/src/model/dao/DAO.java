@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public abstract class DAO<T> {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static String URL = "jdbc:mysql://172.20.10.11:3306/Secouristes";
-    private static String USERNAME = "client";
-    private static String PASSWORD = "password";
+    private static String URL = "jdbc:mysql://localhost:3306/bd_sae";
+    private static String USERNAME = "root";
+    private static String PASSWORD = "root";
 
     // Méthode pour établir une connexion
     public static Connection createConnection() throws SQLException {
