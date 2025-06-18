@@ -9,11 +9,15 @@ import model.persistence.Journee;
 import model.persistence.Site;
 import model.persistence.Sport;
 
-public class DAODPS {
+public class DAODPS extends DAO<DPS>{
     private final Connection connection;
 
-    public DAODPS(Connection connection) {
-        this.connection = connection;
+    public DAODPS() {
+        try {
+            this.connection = createConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create database connection", e);
+        }
     }
 
     public void create(DPS dps) throws SQLException {

@@ -6,11 +6,15 @@ import java.util.List;
 
 import model.persistence.Besoin;
 
-public class DAOBesoin {
+public class DAOBesoin extends DAO<Besoin>{
     private final Connection connection;
 
-    public DAOBesoin(Connection connection) {
-        this.connection = connection;
+    public DAOBesoin() {
+        try {
+            this.connection = createConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create database connection", e);
+        }
     }
 
     public void create(Besoin besoin) throws SQLException {

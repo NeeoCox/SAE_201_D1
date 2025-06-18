@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="568.0" prefWidth="825.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.Controller">
+
+    <!-- Bande du haut avec bouton Retour à gauche, titre centré, logo à droite -->
+    <top>
+        <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
+
+            <!-- Bouton Retour -->
+            <Button fx:id="buttonRetGestSec"
+                    text="Retour"
+                    onAction="#goToPageAdminAcceuil"
+                    prefHeight="30" prefWidth="80"
+                    style="-fx-background-color: white; -fx-text-fill: #156082;" />
+
+            <!-- Espace flexible avant titre -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Titre centré -->
+            <Label text="Gestion des secouristes"
+                   style="-fx-text-fill: white; -fx-font-size: 24px;"
+                   alignment="CENTER" />
+
+            <!-- Espace flexible avant logo -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Logo à droite -->
+            <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../../img/logo.png" />
+                </image>
+            </ImageView>
+
+        </HBox>
+    </top>
+
+    <!-- Tableau au centre -->
+    <center>
+        <TableView fx:id="tableSecouristes"
+                   prefHeight="400.0"
+                   prefWidth="700.0"
+                   BorderPane.alignment="CENTER"
+                   maxWidth="Infinity">
+
+            <columns>
+                <TableColumn fx:id="idSecTable" prefWidth="103.0" text="id" />
+                <TableColumn fx:id="nomSecTable" prefWidth="82.0" text="nom" />
+                <TableColumn fx:id="prenomSecTable" prefWidth="111.0" text="prenom" />
+                <TableColumn fx:id="dateNaisSecTable" prefWidth="110.0" text="dateNaissance" />
+                <TableColumn fx:id="emailSecTable" prefWidth="118.0" text="email" />
+                <TableColumn fx:id="telSecTable" prefWidth="121.0" text="telephone" />
+                <TableColumn fx:id="adresseSecTable" prefWidth="179.0" text="adresse" />
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- Boutons en bas, centrés avec espacement -->
+    <bottom>
+        <HBox spacing="30" alignment="CENTER" style="-fx-padding: 10 20 10 20;">
+            <Button fx:id="buttonCreategestSec"
+                    mnemonicParsing="false"
+                    onAction="#goToCreationDeSouriste"
+                    prefHeight="38.0"
+                    prefWidth="163.0"
+                    text="Créer"
+                    style="-fx-background-color: #156082; -fx-text-fill: white;" />
+            <Button fx:id="buttonUpdategestSec"
+                    mnemonicParsing="false"
+                    onAction="#goToModifSecouriste"
+                    prefHeight="38.0"
+                    prefWidth="163.0"
+                    text="Modifier"
+                    style="-fx-background-color: #156082; -fx-text-fill: white;" />
+            <Button fx:id="buttonDeletegestSec"
+                    mnemonicParsing="false"
+                    onAction="#goToDeleteSec"
+                    prefHeight="38.0"
+                    prefWidth="163.0"
+                    text="Supprimer"
+                    style="-fx-background-color: #156082; -fx-text-fill: white;" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

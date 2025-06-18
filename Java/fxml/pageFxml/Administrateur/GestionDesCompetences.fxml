@@ -1,36 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<BorderPane fx:controller="controller.Controller"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="400.0" prefWidth="600.0">
+
+   <!-- Bande supérieure -->
    <top>
-      <AnchorPane prefHeight="62.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+   <BorderPane prefHeight="60.0" style="-fx-background-color: #156082;" BorderPane.alignment="CENTER">
+
+      <left>
+         <HBox alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 15;">
          <children>
-            <Button fx:id="buttonRetourAcGestSec" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#goToPageAdminAcceuil" text="Retour" />
-            <Label alignment="CENTER" layoutX="143.0" layoutY="14.0" prefHeight="35.0" prefWidth="315.0" text="Gestion des Compétences">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
+            <Button fx:id="buttonRetourAcGestComp"
+                     text="Retour"
+                     onAction="#goToPageAdminAcceuil"
+                     style="-fx-background-color: white; -fx-text-fill: #156082;"
+                     prefHeight="30" prefWidth="80" />
          </children>
-      </AnchorPane>
-   </top>
-   <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         </HBox>
+      </left>
+
+      <center>
+         <Label text="Gestion des Compétences"
+               textFill="WHITE"
+               alignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+         </Label>
+      </center>
+
+      <right>
+         <HBox alignment="CENTER_RIGHT" style="-fx-padding: 0 15 0 0;">
          <children>
-            <HBox layoutX="19.0" layoutY="273.0" prefHeight="41.0" prefWidth="563.0">
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+               <Image url="@../../img/logo.png" />
+               </image>
+            </ImageView>
+         </children>
+         </HBox>
+      </right>
+
+   </BorderPane>
+   </top>
+
+
+   <!-- Contenu principal -->
+   <center>
+      <AnchorPane>
+         <children>
+            <!-- TableView -->
+            <TableView fx:id="tableCompetences"
+                       AnchorPane.topAnchor="20.0"
+                       AnchorPane.leftAnchor="40.0"
+                       AnchorPane.rightAnchor="40.0"
+                       prefHeight="220.0">
+               <columns>
+                  <TableColumn fx:id="colSecouriste" prefWidth="180.0" text="Secouriste"/>
+                  <TableColumn fx:id="colSigle" prefWidth="180.0" text="Sigle"/>
+                  <TableColumn fx:id="colIntitule" prefWidth="180.0" text="Intitulé"/>
+               </columns>
+            </TableView>
+
+            <!-- Boutons centrés -->
+            <HBox spacing="20.0"
+                  AnchorPane.bottomAnchor="20.0"
+                  AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0"
+                  alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Créer" />
-                  <Pane prefHeight="40.0" prefWidth="70.0" />
-                  <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Modifier" />
-                  <Pane layoutX="173.0" layoutY="10.0" prefHeight="40.0" prefWidth="70.0" />
-                  <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="163.0" text="Supprimer" />
+                  <Button fx:id="buttonCreateComp"
+                          text="Créer"
+                          onAction="#goToCreateComp"
+                          prefWidth="160.0" prefHeight="40.0"
+                          style="-fx-background-color: #156082; -fx-text-fill: white;" />
+                  <Button fx:id="buttonUpdateComp"
+                          text="Modifier"
+                          onAction="#goToModifComp"
+                          prefWidth="160.0" prefHeight="40.0"
+                          style="-fx-background-color: #156082; -fx-text-fill: white;" />
+                  <Button fx:id="buttonDeleteComp"
+                          text="Supprimer"
+                          onAction="#goToDeleteComp"
+                          prefWidth="160.0" prefHeight="40.0"
+                          style="-fx-background-color: #156082; -fx-text-fill: white;" />
                </children>
             </HBox>
          </children>

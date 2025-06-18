@@ -9,11 +9,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+import java.net.URL;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -33,14 +36,38 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-//Import des classes du modèle
+//Import de nos class
+import model.data.Secouriste;
+import model.data.Site;
+import model.data.Besoin;
+import model.data.Competence;
+import model.data.Sport;
+import model.data.DPS;
+import model.dao.DAO;
 import model.dao.DAOBesoin;
 import model.dao.DAOCompetence;
 import model.dao.DAODPS;
+import model.dao.DAOJournee;
 import model.dao.DAONecessite;
+import model.dao.DAOPossede;
 import model.dao.DAOSecouriste;
 import model.dao.DAOSite;
 import model.dao.DAOSport;
+import model.data.Besoin;
+import model.data.Competence;
+import model.data.DPS;
+import model.data.Journee;
+import model.data.Necessite;
+import model.data.Possede;
+import model.data.Secouriste;
+import model.data.Site;
+import model.data.Sport;
+import model.graph.algorithm.Affectation;
+import model.graph.algorithm.exhaustive.AffectationExhaustive;
+import model.graph.algorithm.greedy.AffectationGloutonne;
+import model.graph.algorithm.ResultatAffectation;
+import model.graph.algorithm.dag.VerificationDAG;
+import model.graph.algorithm.BesoinUnitaire;
 import model.graph.algorithm.GrapheCompetences;
 import model.persistence.Besoin;
 import model.persistence.Competence;
@@ -58,7 +85,7 @@ import model.persistence.Sport;
  * La classe Controller de l'application
  * @author M.COIGNARD, L.VIMART, A.COUDIERE
  */
-public class Controller {
+public class Controller  {
 
 	/**
 	 ***********************************
@@ -67,6 +94,15 @@ public class Controller {
 	 */
 	
 	// Mettre les DAOSecouriste et autre la
+	DAOSecouriste daoSecouriste = new DAOSecouriste();
+	DAOBesoin daoBesoin = new DAOBesoin();
+	DAOSite daoSite = new DAOSite();
+	DAODPS daoDPS = new DAODPS();
+	DAOSport daoSport = new DAOSport();
+	DAOCompetence daoCompetence = new DAOCompetence();
+	DAONecessite daoNecessite = new DAONecessite();
+	DAOPossede DAOPossede = new DAOPossede();
+	DAOJournee daoJournee = new DAOJournee();
 
 
 	/**
@@ -81,13 +117,33 @@ public class Controller {
 
 	/**
 	 ***********************************
-	 * Bouton pour la page de connection Admin
+	 * Bouton et TextField pour la page de connection Admin
 	 ***********************************
 	 */
 	@FXML
 	private Button buttonConncetionAdmin;
 	@FXML 
 	private Button buttonRetourConnectAdmin;
+	@FXML 
+	private TextField usernameFieldAmin;
+	@FXML 
+	private TextField passwordFieldAdmin;
+
+
+	/**
+	 ***********************************
+	 * Bouton pour la page connection Secouriste
+	 ***********************************
+	 */
+	@FXML 
+	private Button buttonRetourAcceuilSec;
+	@FXML 
+	private Button buttonConnectSec;
+	@FXML 
+	private TextField usernameFieldSec;
+	@FXML 
+	private TextField passwordFieldSec;
+
 
 	/**
 	 ***********************************
@@ -104,18 +160,59 @@ public class Controller {
 	private Button buttonDPS;
 	@FXML 
 	private Button buttonGestComp;
-	@FXML 
-	private Button buttonCreationSec;
 
 	/**
 	 ***********************************
-	 * Bouton pour la page connction Secouriste
+	 * Bouton pour la page gestion des secouriste
 	 ***********************************
 	 */
-	@FXML 
-	private Button buttonRetourAcceuilSec;
-	@FXML 
-	private Button buttonConnectSec;
+	@FXML
+	private Button buttonRetGestSec;
+	@FXML
+	private Button buttonCreategestSec;
+	@FXML
+	private Button buttonUpdategestSec;
+	@FXML
+	private Button buttonDeletegestSec;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page gestion des compétences
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonRetourAcGestComp;
+	@FXML
+	private Button buttonCreateComp;
+	@FXML
+	private Button buttonUpdateComp;
+	@FXML
+	private Button buttonDeleteComp;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page DPS
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonRetourAcDPS;
+	@FXML
+	private Button buttonCreationDPS;
+	@FXML
+	private Button buttonModifierDPS;
+	@FXML
+	private Button buttonSupprimerDPS;
+
+	/**
+	 ***********************************
+	 * Bouton pour la page Affectation des secouriste
+	 ***********************************
+	 */
+	@FXML
+	private Button buttonRetAcAffectSec;
+	
+
+
 
 	/**
 	 ***********************************
@@ -261,7 +358,7 @@ public class Controller {
 	 */
 
 	@FXML
-    private TableView<Secouriste> tableViewSec;
+    private TableView<Secouriste> tableSecouristes;
     @FXML
     private TableColumn<Secouriste, Long> idSecTable;
     @FXML
@@ -310,6 +407,8 @@ public class Controller {
     @FXML
     private Text month;
 
+	@FXML 
+	private TextField compSecCreate;
 	/**
 	 ***********************************
 	 * Variable pour le PLANNING
@@ -350,11 +449,34 @@ public class Controller {
 		System.out.println("controller");
 
 	}
+	/**
+	 ***********************************
+	 * Connection BDD
+	 ***********************************
+	 */
+	public void connectAdmin(ActionEvent event){
+		String username = usernameFieldAmin.getText();
+		String password = passwordFieldAdmin.getText();
+
+		DAO.setCredentials(username, password);	
+		
+		goToPageAdminAcceuil(event);
+	}
+
+	private void setPerm(String username, String password){
+		
+	}
 
 
 	/**
 	 ***********************************
-	 * TOUTES LES METHODE DES BOUTON DES PAGES DE CONNEXION 
+	 * Les methode pour changer de page 
+	 ***********************************
+	 */
+
+	/**
+	 ***********************************
+	 * Les methode PageConnection 
 	 ***********************************
 	 */
 
@@ -385,24 +507,7 @@ public class Controller {
 		goTo("/pageFxml/PageConnection/ConnectionSecouriste.fxml", event);
 	}
 
-	/**
-	 * Methode pour aller a la page ResetPassWord
-	 * @param event l'evenement de l'action
-	 */
-	public void goToResetPassWord(ActionEvent event){
-		System.out.println("goToResetPassWord");
-		goTo("/pageFxml/PageConnection/ResetPassWord.fxml", event);
-	}
-
-	/**
-	 * Methode pour aller a la page ChangePassWord
-	 * @param event l'evenement de l'action
-	 */
-	public void goToChangePassWord(ActionEvent event){
-		System.out.println("goToChangePassWord");
-		goTo("/pageFxml/PageConnection/ChangePassWord.fxml", event);
-	}
-
+	
     /**
 	 * Methode pour aller a la page acceuil admin
 	 * @param event l'evenement de l'action
@@ -423,20 +528,11 @@ public class Controller {
 
 	/**
 	 ***********************************
-	 * METHODE POUR LES BOUTON DE LA PAGE ADMIN
+	 * Les methode PageAdmin Acceuil
 	 ***********************************
 	 */
 
-	/**
-	 * 
-	 * @param event
-	 */
-	public void goToCreationDeSouriste(ActionEvent event){
-		System.out.println("goToCreationDeSouriste");
-		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
-	}
-
-
+	
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
 		goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
@@ -456,6 +552,70 @@ public class Controller {
 		System.out.println("goToDispositifsDeSecours");
 		goTo("/pageFxml/Administrateur/DispositifsDeSecours.fxml", event);
 	}
+
+	/**
+	 ***********************************
+	 * Les methode PageAdmin Gestion des secouristes
+	 ***********************************
+	 */
+
+	public void goToCreationDeSouriste(ActionEvent event){
+		System.out.println("goToCreationDeSouriste");
+		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
+	}
+
+	public void goToModifSecouriste(ActionEvent event){
+		System.out.println("goToModifSecouriste");
+		goTo("/pageFxml/Administrateur/ModifSecouriste.fxml", event);
+	}
+
+	public void goToDeleteSec(ActionEvent event){
+		System.out.println("goToDeleteSec");
+		goTo("/pageFxml/Administrateur/DeleteSec.fxml", event);
+	}
+
+	/**
+	 ***********************************
+	 * Les methode PageAdmin Gestion des DPS
+	 ***********************************
+	 */
+
+	public void goToCreationDPS(ActionEvent event){
+		System.out.println("goToCreationDPS");
+		goTo("/pageFxml/Administrateur/CreationDPS.fxml", event);
+	}
+
+	public void goToModifDPS(ActionEvent event){
+		System.out.println("goToModifDPS");
+		goTo("/pageFxml/Administrateur/ModifDPS.fxml", event);
+	}
+
+	public void goToDeleteDPS(ActionEvent event){
+		System.out.println("goToDeleteDPS");
+		goTo("/pageFxml/Administrateur/DeleteDPS.fxml", event);
+	}
+
+	/**
+	 ***********************************
+	 * Les methode PageAdmin Gestion des Compétences
+	 ***********************************
+	 */
+
+	public void goToCreateComp(ActionEvent event){
+		System.out.println("goToCreateComp");
+		goTo("/pageFxml/Administrateur/CreateComp.fxml", event);
+	}
+
+	public void goToModifComp(ActionEvent event){
+		System.out.println("goToModifComp");
+		goTo("/pageFxml/Administrateur/ModifComp.fxml", event);
+	}
+
+	public void goToDeleteComp(ActionEvent event){
+		System.out.println("goToDeleteComp");
+		goTo("/pageFxml/Administrateur/DeleteComp.fxml", event);
+	}
+	
 
 	/**
 	 ***********************************
@@ -522,10 +682,17 @@ public class Controller {
 			String id = idSec.getText();
 			long idLong = Long.parseLong(id); 
 			String passWord = passWordSec.getText();
+			String[] compPossede = compSecCreate.getText().split(";");
+			List<Possede> listCompPos = new ArrayList<Possede>();
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, null);
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de données
-			
+			for(int i = 0; i<compPossede.length; i++){
+				Possede compPos = new Possede();
+				compPos.setIdSecouriste(idLong);
+				compPos.setIntituleCompetence(compPossede[i]);
+			}
+
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, listCompPos);
+						
 			try{
 				daoSecouriste.create(secouriste);
 			}
@@ -554,10 +721,17 @@ public class Controller {
 			String id = idSecModif.getText();
 			long idLong = Long.parseLong(id); 
 			String passWord = passWordSecModif.getText();
+			String[] compPossede = compSecCreate.getText().split(";");
+			List<Possede> listCompPos = new ArrayList<Possede>();
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, null);
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de donné 
-			
+			for(int i = 0; i<compPossede.length; i++){
+				Possede compPos = new Possede();
+				compPos.setIdSecouriste(idLong);
+				compPos.setIntituleCompetence(compPossede[i]);
+			}
+
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, listCompPos);
+						
 			try{
 				daoSecouriste.update(secouriste);
 			}
@@ -576,8 +750,6 @@ public class Controller {
 		else{
 			String id = idSecDelete.getText();
 			long idLong = Long.parseLong(id); 
-
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);// La connexion a la base de données
 
 			try{
 				daoSecouriste.delete(idLong);
@@ -628,24 +800,23 @@ public class Controller {
 			String nombreStr = nbSecDPSCreate.getText();
 			int nombre = Integer.parseInt(nombreStr);
 			try{
-				DAOBesoin daoBesoin = new DAOBesoin(null);
+				
 				Besoin besoin;
 				for(int i = 0; i<nbCompReq; i++){
 					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
 					daoBesoin.create(besoin);
 				}
-				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
+				 
 				
 				String lieuRenc = lieuRencDPSCreate.getText();
 				Site site = daoSite.read(lieuRenc);
 
 				// Sport
-				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné
-
+				
 				String sport = sportDPSCreate.getText();
 				Sport sportObj = daoSport.read(sport);
 
-				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné
+				
 				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
 				daoDPS.create(dps);
 			}
@@ -689,25 +860,20 @@ public class Controller {
 			String nombreStr = nbSecDPSModif.getText();
 			int nombre = Integer.parseInt(nombreStr);
 			try{
-				DAOBesoin daoBesoin = new DAOBesoin(null);
 				Besoin besoin;
 				for(int i = 0; i<nbCompReq; i++){
 					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
 					daoBesoin.update(besoin);
 				}
 
-				DAOSite daoSite = new DAOSite(null);// La connexion a la base de donné 
-				
 				String lieuRenc = lieuRencDPSModif.getText();
 				Site site = daoSite.read(lieuRenc);
 
 				// Sport
-				DAOSport daoSport = new DAOSport(null); // La connexion a la base de donné
 
 				String sport = sportDPSModif.getText();
 				Sport sportObj = daoSport.read(sport);
 
-				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné
 				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
 				daoDPS.update(dps);
 			}
@@ -728,7 +894,6 @@ public class Controller {
 			long idDPSLong = Long.parseLong(idDPS);
 
 			try{
-				DAOBesoin daoBesoin = new DAOBesoin(null);
 				List<Besoin> besoin = daoBesoin.readAll();
 
 				for (Besoin b : besoin) {
@@ -737,7 +902,6 @@ public class Controller {
 						daoBesoin.delete(idDPSLong, idDPS);
 					}
 				}
-				DAODPS daoDPS = new DAODPS(null);// La connexion a la base de donné 
 				daoDPS.delete(idDPSLong);
 			}
 			catch (Exception e) {
@@ -754,8 +918,6 @@ public class Controller {
 	 */
 	public void initGrapheCompetences() {
 		try {
-			DAOCompetence daoCompetence = new DAOCompetence(null);
-			DAONecessite daoNecessite = new DAONecessite(null);
 
 			List<Competence> competences = daoCompetence.readAll();
 			List<Necessite> necessites = daoNecessite.readAll();
@@ -788,8 +950,7 @@ public class Controller {
 		comp.setIntitule(intituleStr);
 
 		try {
-			DAOCompetence daoCompetence = new DAOCompetence(null);
-			DAONecessite daoNecessite = new DAONecessite(null);
+			
 
 			// Vérifier existence des compétences nécessaires
 			List<Competence> dependances = new ArrayList<>();
@@ -861,9 +1022,10 @@ public class Controller {
 		return null;
 	}
 
-
-	public void updateCompetence() {
-		if (intituleUpdateComp.getText().isEmpty()) {
+	//A REFAIRE QUAND MEIUX COMPRIS DAO COMP ET NEC 
+	/*public void updateCompetences(){
+		System.out.println();
+		if(intitulerCreateComp.getText().isEmpty()){
 			System.out.println("Veuillez remplir tous les champs.");
 			return;
 		}
@@ -971,7 +1133,6 @@ public class Controller {
 				return;
 			}
 
-			DAONecessite daoNecessite = new DAONecessite(null);
 			daoNecessite.create(n);
 			grapheCompetences.ajouterNecessite(n);
 
@@ -1021,7 +1182,6 @@ public class Controller {
 			}
 
 			// Mise à jour en base
-			DAONecessite daoNecessite = new DAONecessite(null);
 			daoNecessite.delete(intituleComp, ancienNec);
 			daoNecessite.create(nouvelleNecessite);
 
@@ -1056,7 +1216,6 @@ public class Controller {
 		String intituleNec = necessiteCreateComp.getText();
 
 		try {
-			DAONecessite daoNecessite = new DAONecessite(null);
 			daoNecessite.delete(intituleComp, intituleNec);
 
 			// Suppression dans le graphe
@@ -1086,32 +1245,40 @@ public class Controller {
 	 ***********************************
 	 */
 
-	public void viewAllSecouristes(){
-		try{
-			DAOSecouriste daoSecouriste = new DAOSecouriste(null);
+	public void viewAllSecouristes() {
+		System.out.println("viewAllSecouristes");
+
+		try {
+			// Toujours vider avant d’ajouter
+			dataSec.clear();
+
+			// Récupération des secouristes depuis la base
 			List<Secouriste> listSec = daoSecouriste.readAll();
 
-			for(Secouriste s : listSec){
-				dataSec.add(s);
-			}
-		}
-		catch(Exception e){
+			// Ajout dans l’observable list
+			dataSec.addAll(listSec);
+
+			// Lier la table à la liste
+			tableSecouristes.setItems(dataSec);
+
+			// Définir les mappings colonnes -> attributs de l'objet
+			idSecTable.setCellValueFactory(new PropertyValueFactory<>("id"));
+			nomSecTable.setCellValueFactory(new PropertyValueFactory<>("nom"));
+			prenomSecTable.setCellValueFactory(new PropertyValueFactory<>("prenom"));
+			dateNaisSecTable.setCellValueFactory(new PropertyValueFactory<>("dateNaissance"));
+			emailSecTable.setCellValueFactory(new PropertyValueFactory<>("email"));
+			telSecTable.setCellValueFactory(new PropertyValueFactory<>("tel"));
+			adresseSecTable.setCellValueFactory(new PropertyValueFactory<>("adresse"));
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Erreur lors de l'affichage des secouristes : " + e.getMessage());
 		}
-
-		idSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, Long>("id"));
-		nomSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("nom"));
-		prenomSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("prenom"));
-		dateNaisSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("date de naissance"));
-		emailSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("email"));
-		telSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("tel"));
-		adresseSecTable.setCellValueFactory(new PropertyValueFactory<Secouriste, String>("adresse"));
 	}
+
 
 	public void viewAllDPS(){
 		try{
-			DAODPS daoDPS = new DAODPS(null);
 			List<DPS> listDPS = daoDPS.readAll();
 
 			for(DPS dps : listDPS){
@@ -1124,6 +1291,8 @@ public class Controller {
 		}
 	}
 
+	
+
 	/**
 	 ***********************************
 	 * GESTION DU PLANNING
@@ -1131,33 +1300,32 @@ public class Controller {
 	 */
 
 	@FXML
-    public void initialize() {
-		if (gridWeek == null) {
-			System.err.println("Le FXML n'a pas encore injecté gridWeek. Initialisation différée.");
-			return;
+	public void initialize() {
+		System.out.println("hola");
+		// Si on est sur la page du planning
+		if (gridWeek != null) {
+			LocalDate today = LocalDate.now();
+			currentMonday = today.with(DayOfWeek.MONDAY);
+			generateHourLabelsAndTaskBoxes();
+			afficherSemaine(currentMonday);
+			btnPrevWeek.setOnAction(e -> afficherSemaine(currentMonday.minusWeeks(1)));
+			btnNextWeek.setOnAction(e -> afficherSemaine(currentMonday.plusWeeks(1)));
+
+			vboxMon.setFillWidth(true);
+			vboxTue.setFillWidth(true);
+			vboxWed.setFillWidth(true);
+			vboxThu.setFillWidth(true);
+			vboxFri.setFillWidth(true);
+			vboxSat.setFillWidth(true);
+			vboxSun.setFillWidth(true);
 		}
-        LocalDate today = LocalDate.now();
-        currentMonday = today.with(DayOfWeek.MONDAY);
 
-        generateHourLabelsAndTaskBoxes();
-        afficherSemaine(currentMonday);
-
-        btnPrevWeek.setOnAction(e -> {
-            afficherSemaine(currentMonday.minusWeeks(1));
-        });
-
-        btnNextWeek.setOnAction(e -> {
-            afficherSemaine(currentMonday.plusWeeks(1));
-        });
-
-        vboxMon.setFillWidth(true);
-        vboxTue.setFillWidth(true);
-        vboxWed.setFillWidth(true);
-        vboxThu.setFillWidth(true);
-        vboxFri.setFillWidth(true);
-        vboxSat.setFillWidth(true);
-        vboxSun.setFillWidth(true);
-    }
+		// Si on est sur la page secouristes
+		if (tableSecouristes != null) {
+			System.out.println("hola deux");
+			viewAllSecouristes();
+		}
+	}
 
     public void addTask(LocalDate date, String taskDescription) {
         tasksByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(taskDescription);
@@ -1257,7 +1425,7 @@ public class Controller {
 
     private void generateHourLabelsAndTaskBoxes() {
 		if (gridWeek == null) {
-			System.err.println("gridWeek n'est pas encore initialisé. Ignoré.");
+			System.err.println("gridWeek n'est pas encore initialisé");
 			return;
 		}
 

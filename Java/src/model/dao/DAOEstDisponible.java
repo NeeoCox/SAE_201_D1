@@ -8,15 +8,19 @@ import model.persistence.EstDisponible;
 import model.persistence.Journee;
 import model.persistence.Secouriste;
 
-public class DAOEstDisponible {
+public class DAOEstDisponible extends DAO<EstDisponible>{
     private final Connection connection;
     private final DAOSecouriste daoSecouriste;
     private final DAOJournee daoJournee;
 
     public DAOEstDisponible(Connection connection, DAOSecouriste daoSecouriste, DAOJournee daoJournee) {
-        this.connection = connection;
-        this.daoSecouriste = daoSecouriste;
-        this.daoJournee = daoJournee;
+        try {
+            this.connection = createConnection();
+            this.daoSecouriste = daoSecouriste;
+            this.daoJournee = daoJournee;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create database connection", e);
+        }
     }
 
     public void create(EstDisponible dispo) throws SQLException {

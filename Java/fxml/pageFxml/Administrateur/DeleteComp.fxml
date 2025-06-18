@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
 
 <BorderPane fx:controller="controller.Controller"
             xmlns="http://javafx.com/javafx/23.0.1"
@@ -29,7 +30,7 @@
             <Region HBox.hgrow="ALWAYS" />
             
             <!-- Titre centré -->
-            <Label text="Supprimer DPS"
+            <Label text="Supprimer Compétence"
                    style="-fx-text-fill: white; -fx-font-size: 24px;"
                    maxWidth="300" alignment="CENTER" />
             

@@ -6,11 +6,15 @@ import java.util.List;
 
 import model.persistence.Secouriste;
 
-public class DAOSecouriste {
+public class DAOSecouriste extends DAO<Secouriste> {
     private final Connection connection;
 
-    public DAOSecouriste(Connection connection) {
-        this.connection = connection;
+    public DAOSecouriste() {
+        try {
+            this.connection = createConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create database connection", e);
+        }
     }
 
     public void create(Secouriste secouriste) throws SQLException {
@@ -60,7 +64,7 @@ public class DAOSecouriste {
                 s.setPrenom(rs.getString("prenom"));
                 s.setDateNaissance(rs.getString("dateNaissance"));
                 s.setEmail(rs.getString("email"));
-                s.setTel(rs.getString("tel"));
+                s.setTel(rs.getString("telephone"));
                 s.setAdresse(rs.getString("adresse"));
                 secouristes.add(s);
             }

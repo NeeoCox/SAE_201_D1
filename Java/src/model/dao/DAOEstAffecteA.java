@@ -6,11 +6,15 @@ import java.util.List;
 
 import model.persistence.EstAffecteA;
 
-public class DAOEstAffecteA {
+public class DAOEstAffecteA extends DAO<EstAffecteA>{
     private final Connection connection;
 
-    public DAOEstAffecteA(Connection connection) {
-        this.connection = connection;
+    public DAOEstAffecteA() {
+        try {
+            this.connection = createConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create database connection", e);
+        }
     }
 
     public void create(EstAffecteA affectation) throws SQLException {

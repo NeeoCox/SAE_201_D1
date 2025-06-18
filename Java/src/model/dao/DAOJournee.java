@@ -6,11 +6,15 @@ import java.util.List;
 
 import model.persistence.Journee;
 
-public class DAOJournee {
+public class DAOJournee extends DAO<Journee>{
     private final Connection connection;
 
-    public DAOJournee(Connection connection) {
-        this.connection = connection;
+    public DAOJournee() {
+        try {
+            this.connection = createConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create database connection", e);
+        }
     }
 
     public void create(Journee journee) throws SQLException {
