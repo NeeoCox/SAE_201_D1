@@ -9,14 +9,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
-import java.net.URL;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -58,7 +55,7 @@ import model.data.Competence;
 import model.data.DPS;
 import model.data.Journee;
 import model.data.Necessite;
-import model.data.Possede;
+import model.data.Possede;  
 import model.data.Secouriste;
 import model.data.Site;
 import model.data.Sport;
@@ -93,7 +90,7 @@ public class Controller  {
 	DAOSport daoSport = new DAOSport();
 	DAOCompetence daoCompetence = new DAOCompetence();
 	DAONecessite daoNecessite = new DAONecessite();
-	DAOPossede DAOPossede = new DAOPossede();
+	DAOPossede daoPossede = new DAOPossede();
 	DAOJournee daoJournee = new DAOJournee();
 
 
@@ -389,7 +386,39 @@ public class Controller  {
     private TableColumn<DPS, String> sportTableDPS;
 	private ObservableList<DPS> dataDPS = FXCollections.observableArrayList();
 
+	/**
+	 ***********************************
+	 * Variable pour affichage des Compétences
+	 ***********************************
+	 */
+	@FXML
+    private TableView<Possede> tableCompetencesSec;
+    @FXML
+    private TableColumn<Possede, Long> colSecouriste;
+    @FXML
+    private TableColumn<Possede, String> colIntituleCompSec;
 
+	private ObservableList<Possede> dataCompSec = FXCollections.observableArrayList();
+
+
+	@FXML
+    private TableView<Competence> tableCompetences;
+    @FXML
+    private TableColumn<Competence, String> colIntituleComp;
+
+	private ObservableList<Competence> dataComp = FXCollections.observableArrayList();
+
+
+	@FXML
+    private TableView<Necessite> tableCompetencesNec;
+    @FXML
+    private TableColumn<Necessite, String> colIntitule;
+	@FXML
+    private TableColumn<Necessite, String> colIntituleNec;
+	
+	private ObservableList<Necessite> dataCompNec = FXCollections.observableArrayList();
+
+	
 	@FXML
     private FlowPane calendar;
 
@@ -1014,77 +1043,6 @@ public class Controller  {
 		return null;
 	}
 
-	//A REFAIRE QUAND MEIUX COMPRIS DAO COMP ET NEC 
-	/*public void updateCompetences(){
-		System.out.println();
-		if(intitulerCreateComp.getText().isEmpty()){
-			System.out.println("Veuillez remplir tous les champs.");
-			return;
-		}
-
-		String ancienIntitule = intituleCreateComp.getText(); // ou un champ dédié à l'ancien intitulé
-		String nouvelIntitule = intituleUpdateComp.getText();
-
-		try {
-			DAOCompetence daoCompetence = new DAOCompetence(null);
-
-			Competence ancienneComp = trouverCompetenceParIntitule(ancienIntitule, grapheCompetences.getCompetences());
-			if (ancienneComp == null) {
-				System.out.println("Compétence à modifier inexistante.");
-				return;
-			}
-
-			// Mise à jour en base
-			Competence nouvelleComp = new Competence();
-			nouvelleComp.setIntitule(nouvelIntitule);
-			daoCompetence.update(nouvelleComp, ancienIntitule);
-
-			// Mise à jour dans le graphe
-			ancienneComp.setIntitule(nouvelIntitule);
-
-			System.out.println("Compétence modifiée avec succès.");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de la modification de la compétence : " + e.getMessage());
-		}
-	}
-
-	public void deleteCompetence() {
-		if (intituleCreateComp.getText().isEmpty()) {
-			System.out.println("Veuillez indiquer l'intitulé de la compétence à supprimer.");
-			return;
-		}
-
-		String intitule = intituleCreateComp.getText();
-
-		try {
-			DAOCompetence daoCompetence = new DAOCompetence(null);
-			DAONecessite daoNecessite = new DAONecessite(null);
-
-			// Suppression en base
-			daoCompetence.delete(intitule);
-
-			// Suppression des dépendances associées en base
-			List<Necessite> necessites = new ArrayList<>(grapheCompetences.getNecessites());
-			for (Necessite n : necessites) {
-				if (n.getIntituleCompetence().equals(intitule) || n.getIntituleCompetenceNecessaire().equals(intitule)) {
-					daoNecessite.delete(n.getIntituleCompetence(), n.getIntituleCompetenceNecessaire());
-					grapheCompetences.supprimerNecessite(n);
-				}
-			}
-
-			// Suppression dans le graphe
-			Competence comp = trouverCompetenceParIntitule(intitule, grapheCompetences.getCompetences());
-			if (comp != null) {
-				grapheCompetences.supprimerCompetence(comp);
-			}
-
-			System.out.println("Compétence supprimée avec succès.");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de la suppression de la compétence : " + e.getMessage());
-		}
-	}
 	/*
 	 * ***********************************
 	 * GESTION DES DÉPENDANCES DES COMPÉTENCES
@@ -1268,6 +1226,50 @@ public class Controller  {
 		}
 	}
 
+	public void viewAllComp(){
+		System.out.println("viewAllComp");
+
+		try {
+			dataCompSec.clear();
+
+			List<Possede> listPos = daoPossede.readAll();
+
+			dataCompSec.addAll(listPos);
+
+			tableCompetencesSec.setItems(dataCompSec);
+
+			colSecouriste.setCellValueFactory(new PropertyValueFactory<>("idSecouriste"));
+			colIntituleCompSec.setCellValueFactory(new PropertyValueFactory<>("intituleCompetence"));
+
+
+			dataComp.clear();
+
+			List<Competence> listComp = daoCompetence.readAll();
+
+			dataComp.addAll(listComp);
+
+			tableCompetences.setItems(dataComp);
+
+			colIntituleComp.setCellValueFactory(new PropertyValueFactory<>("intitule"));
+
+
+			dataCompNec.clear();
+
+			List<Necessite> listNec = daoNecessite.readAll();
+
+			dataCompNec.addAll(listNec);
+
+			tableCompetencesNec.setItems(dataCompNec);
+
+			colIntitule.setCellValueFactory(new PropertyValueFactory<>("intituleCompetence"));
+			colIntituleNec.setCellValueFactory(new PropertyValueFactory<>("intituleCompetenceNecessaire"));
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'affichage des secouristes : " + e.getMessage());
+		}
+	}
 
 	public void viewAllDPS(){
 		try{
@@ -1293,7 +1295,7 @@ public class Controller  {
 
 	@FXML
 	public void initialize() {
-		System.out.println("hola");
+		System.out.println("initialize");
 		// Si on est sur la page du planning
 		if (gridWeek != null) {
 			LocalDate today = LocalDate.now();
@@ -1314,8 +1316,12 @@ public class Controller  {
 
 		// Si on est sur la page secouristes
 		if (tableSecouristes != null) {
-			System.out.println("hola deux");
+			
 			viewAllSecouristes();
+		}
+
+		if(tableCompetencesSec != null){
+			viewAllComp();
 		}
 	}
 
@@ -1442,4 +1448,7 @@ public class Controller  {
 			}
 		}
 	}
+
+
+
 }
