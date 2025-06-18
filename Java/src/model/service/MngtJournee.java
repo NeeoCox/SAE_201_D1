@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAOJournee;
-import model.data.Journee;
+import model.persistence.Journee;
 
 /**
  * Classe de gestion des journées (Journee) avec persistance en base.

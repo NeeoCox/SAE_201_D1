@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAOBesoin;
-import model.data.Besoin;
+import model.persistence.Besoin;
 
 /**
  * Classe de gestion des besoins (Besoin) avec persistance en base.

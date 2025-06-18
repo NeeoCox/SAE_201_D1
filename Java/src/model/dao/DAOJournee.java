@@ -3,7 +3,8 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.data.Journee;
+
+import model.persistence.Journee;
 
 public class DAOJournee {
     private final Connection connection;

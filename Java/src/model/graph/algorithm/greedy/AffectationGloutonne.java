@@ -2,8 +2,8 @@ package model.graph.algorithm.greedy;
 
 import java.util.*;
 
-import model.data.*;
 import model.graph.algorithm.*;
+import model.persistence.*;
 
 /**
  * Implémente l'affectation gloutonne des secouristes aux besoins des DPS.

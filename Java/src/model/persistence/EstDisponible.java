@@ -1,4 +1,4 @@
-package model.data;
+package model.persistence;
 
 /**
  * Représente la disponibilité d'un secouriste pour une journée donnée.

@@ -1,4 +1,4 @@
-package model.data;
+package model.persistence;
 
 /**
  * Représente un sport associé à un DPS.

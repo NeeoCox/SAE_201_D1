@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAODPS;
-import model.data.*;
+import model.persistence.*;
 
 /**
  * Classe de gestion des dispositifs de secours avec persistance en base.

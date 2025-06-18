@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAOCompetence;
-import model.data.Competence;
+import model.persistence.Competence;
 
 /**
  * Classe de gestion des compétences (Competence) avec persistance en base.

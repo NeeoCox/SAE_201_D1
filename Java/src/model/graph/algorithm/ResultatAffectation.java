@@ -2,8 +2,9 @@ package model.graph.algorithm;
 
 import java.util.List;
 import java.util.Map;
-import model.data.DPS;
-import model.data.Secouriste;
+
+import model.persistence.DPS;
+import model.persistence.Secouriste;
 
 public class ResultatAffectation {
     private final Map<DPS, List<Secouriste>> affectations;

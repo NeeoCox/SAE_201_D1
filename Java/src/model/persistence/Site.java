@@ -1,4 +1,4 @@
-package model.data;
+package model.persistence;
 
 /**
  * Représente un site où un DPS peut avoir lieu.

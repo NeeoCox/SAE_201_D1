@@ -1,4 +1,4 @@
-package model.data;
+package model.persistence;
 
 import java.util.ArrayList;
 import java.util.List;

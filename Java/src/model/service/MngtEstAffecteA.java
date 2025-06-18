@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAOEstAffecteA;
-import model.data.*;
+import model.persistence.*;
 
 /**
  * Classe de gestion des affectations (EstAffecteA) avec persistance en base.
