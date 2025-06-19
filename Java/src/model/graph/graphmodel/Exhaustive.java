@@ -3,26 +3,33 @@ package model.graph.graphmodel;
 import java.util.Arrays;
 
 /**
- * La classe Exhaustive implémente un algorithme de recherche exhaustive pour trouver la meilleure affectation
- * de secouristes aux compétences, en maximisant la couverture des compétences.
+ * La classe Exhaustive résout un problème d'affectation de type "assignment problem"
+ * en utilisant une recherche exhaustive de toutes les permutations possibles.
  * 
+ * Chaque secouriste (ligne) doit être affecté à une compétence (colonne) de sorte à maximiser
+ * le score total, où le score est défini par la matrice de coûts fournie.
  * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class Exhaustive {
     /**
-     * Matrice d'adjacence où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
+     * Matrice des coûts où couts[i][j] représente le coût d'affecter le secouriste i à la compétence j.
+     */
+    private final int[][] couts;
+
+    /**
+     * Matrice de compatibilité où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
      */
     private final int[][] M;
     /**
-     * Nombre de secouristes et de compétences (la matrice est carrée).
+     * Nombre de secouristes (ou compétences) dans la matrice.
      */
     private final int n;
     /**
-     * Meilleure affectation trouvée (index de la compétence -> index du secouriste).
+     * Meilleure affectation trouvée, où meilleureAffectation[j] = i signifie que le secouriste i est affecté à la compétence j.
      */
     private int[] meilleureAffectation;
     /**
-     * Nombre maximum de compétences couvertes par la meilleure affectation trouvée.
+     * Meilleure couverture trouvée, c'est-à-dire le nombre de compétences couvertes par l'affectation.
      */
     private int meilleureCouverture;
     /**
@@ -32,10 +39,11 @@ public class Exhaustive {
 
     /**
      * Constructeur de la classe Exhaustive.
-     * @param M Matrice d'adjacence représentant les compétences des secouristes.
+     * @param M Matrice de compatibilité où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
      */
     public Exhaustive(int[][] M) {
         this.M = M;
+        this.couts = M;
         this.n = M.length;
         this.meilleureAffectation = new int[n];
         this.meilleureCouverture = -1;
@@ -90,10 +98,10 @@ public class Exhaustive {
     }
 
     /**
-     * Échange deux éléments dans un tableau d'entiers.
-     * @param tab Le tableau d'entiers dans lequel on souhaite échanger les éléments.
-     * @param i L'index du premier élément à échanger.
-     * @param j L'index du second élément à échanger.
+     * Échange les éléments à deux indices donnés dans le tableau.
+     * @param tab Tableau dans lequel les éléments seront échangés.
+     * @param i Indice du premier élément à échanger.
+     * @param j Indice du second élément à échanger.
      */
     private void echanger(int[] tab, int i, int j) {
         int tmp = tab[i];
@@ -102,7 +110,20 @@ public class Exhaustive {
     }
 
     /**
-     * Affiche le résultat de la recherche exhaustive, y compris la meilleure affectation,
+     * Évalue le score total d'une permutation donnée en fonction de la matrice des coûts.
+     * @param permutation Tableau représentant une permutation des secouristes.
+     * @return Le score total de la permutation.
+     */
+    private int evaluer(int[] permutation) {
+        int total = 0;
+        for (int i = 0; i < n; i++) {
+            total += couts[i][permutation[i]];
+        }
+        return total;
+    }
+
+    /**
+     * Affiche le résultat de la meilleure affectation trouvée.
      */
     public void afficherResultat() {
         System.out.println("[Exhaustif] Meilleure affectation (compétence -> secouriste) : " + Arrays.toString(meilleureAffectation));
@@ -120,5 +141,23 @@ public class Exhaustive {
         long t1 = System.currentTimeMillis();
         System.out.println("[Exhaustif] Temps : " + (t1 - t0) + " ms");
         ex.afficherResultat();
+    }
+
+    /**
+     * Exemple d'utilisation
+     */
+    public static void main(String[] args) {
+        int[][] M = {
+            {0, 1, 1, 0, 0},
+            {0, 1, 1, 1, 0},
+            {1, 1, 1, 0, 1},
+            {0, 0, 1, 0, 0},
+            {0, 0, 1, 1, 1}
+        };
+        System.out.println("\n\n\nTest Exhaustif sur matrice M :");
+        for (int[] ligne : M) {
+            System.out.println(Arrays.toString(ligne));
+        }
+        test(M, true);
     }
 }

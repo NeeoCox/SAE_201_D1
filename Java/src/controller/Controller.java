@@ -1,12 +1,6 @@
 package controller;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 // Import des librairies Java
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.temporal.ChronoUnit;
@@ -18,9 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
@@ -82,7 +73,6 @@ import model.dao.DAOEstAffecteA;
 import model.service.MngtSession;
 import model.persistence.User;
 import model.dao.DAOUser;
-import model.utils.Session;
 
 
 /**
@@ -106,7 +96,6 @@ public class Controller  {
 	DAOPossede daoPossede = new DAOPossede();
 	DAOJournee daoJournee = new DAOJournee();
 	DAOEstDisponible daoEstDisponible = new DAOEstDisponible();
-	DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA(); //ajout lea
 
 
 	/**
@@ -164,8 +153,6 @@ public class Controller  {
 	private Button buttonDPS;
 	@FXML 
 	private Button buttonGestComp;
-	@FXML 
-	private Button buttonExport;
 
 	/**
 	 ***********************************
@@ -283,6 +270,8 @@ public class Controller  {
 	@FXML 
 	private Button ModifButtonSec;
 
+
+
 	//Pour la suppression d'un secouriste
 	@FXML
 	private TextField idSecDelete;
@@ -335,8 +324,6 @@ public class Controller  {
 	private Button ModifButtonDPS;
 
 	//Pour la suppression d'un DPS
-	@FXML
-	private TextField idDPSDelete;
 	@FXML
 	private Button deleteButtonDPS;
 
@@ -491,20 +478,12 @@ public class Controller  {
 	@FXML private ToggleGroup algoGroup;
 	@FXML private DatePicker datePickerSuppression;
 
-	//Pour ajouter une disponibilité -- ajout lea
-	@FXML
-	private DatePicker datePicker;
-	@FXML
-	private TextField heureDebutField;
-	@FXML
-	private TextField heureFinField;
-
-
     private LocalDate currentMonday;
 
     private Map<LocalDate, List<String>> tasksByDate = new HashMap<>();
 
-    @FXML private GridPane gridWeek;
+    @FXML
+	private GridPane gridWeek;
 
     private VBox[][] taskBoxes = new VBox[7][24]; // 7 jours * 24h
 
@@ -538,10 +517,6 @@ public class Controller  {
 	 * Connection BDD
 	 ***********************************
 	 */
-	/**
-	 * Methode pour gerer la connection a l'application et a la BDD
-	 * @param event l'evenement de l'action
-	 */
 	@FXML
 	public void connectUser(ActionEvent event) {
 		System.out.println("connectUser");
@@ -559,8 +534,7 @@ public class Controller  {
 						Secouriste secouriste = daoSec.readByNom(username); // Recherche par nom (username = nom)
 						if (secouriste != null) {
 							System.out.println("Secouriste trouvé : " + secouriste);
-							Session.utilisateurConnecte = secouriste; // Ici on stocke l'objet Secouriste
-							//MngtSession.setUtilisateurConnecte(secouriste);
+							MngtSession.setUtilisateurConnecte(secouriste);
 							goToPageSecouristeAcceuil(event);
 						} else {
 							System.out.println("Aucun secouriste trouvé avec ce nom.");
@@ -653,37 +627,21 @@ public class Controller  {
 	 ***********************************
 	 */
 
-	 /**
-	  * Methode pour aller a la page Gestion des secouristes
-	  * @param event l'evenement de l'action
-	  */
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
-		goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
+    	goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la page Gestion des compétences
-	  * @param event l'evenement de l'action
-	  */
 	public void goToGestionDesCompetences(ActionEvent event){
 		System.out.println("goToGestionDesCompetences");
 		goTo("/pageFxml/Administrateur/GestionDesCompetences.fxml", event);
 	}
 	
-	/**
-	  * Methode pour aller a la page Affectation des secouristes
-	  * @param event l'evenement de l'action
-	  */
 	public void goToPageAffectationSecouristes(ActionEvent event){
 		System.out.println("goToPageAffectationSecouristes");
 		goTo("/pageFxml/Administrateur/PageAffectationSecouristes.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la page Dispositif de secours
-	  * @param event l'evenement de l'action
-	  */
 	public void goToDispositifsDeSecours(ActionEvent event){
 		System.out.println("goToDispositifsDeSecours");
 		goTo("/pageFxml/Administrateur/DispositifsDeSecours.fxml", event);
@@ -695,29 +653,24 @@ public class Controller  {
 	 ***********************************
 	 */
 
-	 /**
-	  * Methode pour aller a la page Création de secouristes
-	  * @param event l'evenement de l'action
-	  */
 	public void goToCreationDeSouriste(ActionEvent event){
 		System.out.println("goToCreationDeSouriste");
 		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la page modification des secouriste
-	  * @param event l'evenement de l'action
-	  */
 	@FXML
 	public void goToModifSecouriste(ActionEvent event) {
 		System.out.println("goToModifSecouriste");
+		Secouriste sec = tableSecouristes.getSelectionModel().getSelectedItem();
+		if (sec == null) {
+			// Affiche un message d'erreur ou une alerte
+			System.out.println("Veuillez sélectionner un secouriste à modifier.");
+			return;
+		}
+		MngtSession.setIdSecouristeAModifier(sec.getId());
 		goTo("/pageFxml/Administrateur/ModifSecouriste.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la page delete secouriste 
-	  * @param event l'evenement de l'action
-	  */
 	public void goToDeleteSec(ActionEvent event){
 		System.out.println("goToDeleteSec");
 		goTo("/pageFxml/Administrateur/DeleteSec.fxml", event);
@@ -729,28 +682,22 @@ public class Controller  {
 	 ***********************************
 	 */
 
-	 /**
-	  * Methode pour aller a la page création de DPS
-	  * @param event l'evenement de l'action
-	  */
 	public void goToCreationDPS(ActionEvent event){
 		System.out.println("goToCreationDPS");
 		goTo("/pageFxml/Administrateur/CreationDPS.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la page modification de DPS
-	  * @param event l'evenement de l'action
-	  */
 	public void goToModifDPS(ActionEvent event) {
 		System.out.println("goToModifDPS");
+		DPS dps = tableDPS.getSelectionModel().getSelectedItem();
+		if (dps == null) {
+			System.out.println("Veuillez sélectionner un DPS à modifier.");
+			return;
+		}
+		MngtSession.setIdDPSAModifier(dps.getId());
 		goTo("/pageFxml/Administrateur/ModifDPS.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la page suppression de DPS
-	  * @param event l'evenement de l'action
-	  */
 	public void goToDeleteDPS(ActionEvent event){
 		System.out.println("goToDeleteDPS");
 		goTo("/pageFxml/Administrateur/DeleteDPS.fxml", event);
@@ -762,28 +709,22 @@ public class Controller  {
 	 ***********************************
 	 */
 
-	 /**
-	  * Methode pour aller a la page création de compétences
-	  * @param event l'evenement de l'action
-	  */
 	public void goToCreateComp(ActionEvent event){
 		System.out.println("goToCreateComp");
 		goTo("/pageFxml/Administrateur/CreateComp.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la modification compétences
-	  * @param event l'evenement de l'action
-	  */
 	public void goToModifComp(ActionEvent event){
 		System.out.println("goToModifComp");
+		Competence comp = tableCompetences.getSelectionModel().getSelectedItem();
+		if (comp == null) {
+			System.out.println("Veuillez sélectionner une compétence à modifier.");
+			return;
+		}
+		MngtSession.setIntituleCompetenceAModifier(comp.getIntitule());
 		goTo("/pageFxml/Administrateur/ModifComp.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la page suppréssion de compétences 
-	  * @param event l'evenement de l'action
-	  */
 	public void goToDeleteComp(ActionEvent event){
 		System.out.println("goToDeleteComp");
 		goTo("/pageFxml/Administrateur/DeleteComp.fxml", event);
@@ -795,28 +736,16 @@ public class Controller  {
 	 ***********************************
 	 */
 
-	 /**
-	  * Methode pour aller a la page mes compétences
-	  * @param event l'evenement de l'action
-	  */
 	public void goToMesCompetences(ActionEvent event){
 		System.out.println("goToMesCompetences");
 		goTo("/pageFxml/Secouriste/MesCompetences.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la page mes disponibilité
-	  * @param event l'evenement de l'action
-	  */
 	public void goToMesDisponibilite(ActionEvent event){
 		System.out.println("goToMesDisponibilite");
 		goTo("/pageFxml/Secouriste/MesDisponibilite.fxml", event);
 	}
 
-	/**
-	  * Methode pour aller a la page monplanning et affectations
-	  * @param event l'evenement de l'action
-	  */
 	public void goToMonPlanningEtAffectations(ActionEvent event){
 		System.out.println("goToMonPlanningEtAffectations");
 		goTo("/pageFxml/Secouriste/MonPlanningEtAffectations.fxml", event);
@@ -829,14 +758,7 @@ public class Controller  {
 	 */
 	private void goTo(String fichier, ActionEvent event) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(fichier));
-			Parent root = loader.load();
-
-			// Récupère le contrôleur de la nouvelle page
-			Controller nouveauController = loader.getController();
-			// Passe le secouriste connecté
-			nouveauController.setUtilisateurConnecte(this.utilisateurConnecte);
-
+			Parent root = FXMLLoader.load(getClass().getResource(fichier));
 			Scene scene = new Scene(root);
 			Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 			stage.setScene(scene);
@@ -847,7 +769,6 @@ public class Controller  {
 		}
 	}
 
-	
 	/**
 	 ***********************************
 	 * GESTION DES SECOURISTES
@@ -916,9 +837,6 @@ public class Controller  {
 		}
 	}
 
-	/**
-	 * Permet de update un secouriste
-	 */
 	public void updateSecouriste() {
 		System.out.println("updateSecouriste");
 
@@ -986,26 +904,26 @@ public class Controller  {
 		}
 	}
 
-	/**
-	 * permet de supprimer un secouriste
-	 */
 	public void deleteSecouriste() {
 		System.out.println("deleteSecouriste");
 
-		if (idSecDelete.getText().isEmpty()) {
-			System.out.println("Veuillez remplir le champ id.");
+		// Récupère le secouriste sélectionné dans la TableView
+		Secouriste sec = tableSecouristes.getSelectionModel().getSelectedItem();
+		if (sec == null) {
+			System.out.println("Veuillez sélectionner un secouriste à supprimer.");
 			return;
 		}
 
 		try {
-			long idLong = Long.parseLong(idSecDelete.getText().trim());
-
 			// Supprimer les compétences associées d'abord
 			DAOPossede daoPossede = new DAOPossede();
-			daoPossede.deleteBySecouristeId(idLong);
+			daoPossede.deleteBySecouristeId(sec.getId());
 
 			// Puis supprimer le secouriste
-			daoSecouriste.delete(idLong);
+			daoSecouriste.delete(sec.getId());
+
+			// Rafraîchir la table
+			viewAllSecouristes();
 
 			System.out.println("Secouriste supprimé avec succès.");
 		} catch (Exception e) {
@@ -1178,25 +1096,25 @@ public class Controller  {
 		}
 	}
 
-
-
-	
 	public void deleteDispositifDeSecours() {
 		System.out.println("deleteDispositifDeSecours");
 
-		if (idDPSDelete.getText().isEmpty()) {
-			System.out.println("Veuillez remplir le champ identifiant.");
+		// On récupère le DPS sélectionné dans la TableView
+		DPS dps = tableDPS.getSelectionModel().getSelectedItem();
+		if (dps == null) {
+			System.out.println("Veuillez sélectionner un DPS à supprimer.");
 			return;
 		}
 
 		try {
-			long idDPSLong = Long.parseLong(idDPSDelete.getText().trim());
-
 			// Supprimer tous les besoins associés
-			daoBesoin.deleteByDpsId(idDPSLong);
+			daoBesoin.deleteByDpsId(dps.getId());
 
 			// Supprimer le DPS
-			daoDPS.delete(idDPSLong);
+			daoDPS.delete(dps.getId());
+
+			// Rafraîchir la table
+			viewAllDPS();
 
 			System.out.println("DPS et ses besoins supprimés avec succès.");
 
@@ -1285,11 +1203,11 @@ public class Controller  {
 				return;
 			}
 
-			// Étape 3 : insérer la compétence
+			// insérer la compétence
 			daoCompetence.create(comp);
 			grapheCompetences.ajouterCompetence(comp);
 
-			// Étape 4 : insérer les dépendances dans la base + graphe actuel
+			// insérer les dépendances dans la base + graphe actuel
 			for (Competence nec : dependances) {
 				Necessite besoin = new Necessite();
 				besoin.setLaCompetence(comp);
@@ -1512,14 +1430,9 @@ public class Controller  {
 	}
 
 
-
-
-
-	/*
-	 * ***********************************
-	 * GESTION DES DÉPENDANCES DES COMPÉTENCES
-	 ***********************************
-	 */
+	/*******************************************
+	 * GESTION DES DÉPENDANCES DES COMPÉTENCES *
+	 *******************************************/
 
 	public void createNecessite() {
 		if (intitulerCreateComp.getText().isEmpty() || necessiteCreateComp.getText().isEmpty()) {
@@ -1812,8 +1725,82 @@ public class Controller  {
 		return false;
 	}
 
+	public List<EstAffecteA> getAffectationsPourSecouriste(long idSecouriste) {
+		DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
+		try {
+			return daoEstAffecteA.readBySecouristeId(idSecouriste);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
 
+	public void afficherAffectationsSecouriste() {
+		// Récupérer le secouriste connecté
+		Secouriste secouriste = (Secouriste) MngtSession.getUtilisateurConnecte();
+		if (secouriste == null) {
+			System.out.println("Aucun secouriste connecté !");
+			return;
+		}
 
+		// Récupérer ses affectations
+		List<EstAffecteA> affectations = getAffectationsPourSecouriste(secouriste.getId());
+
+		// Pour chaque affectation, ajouter une tâche dans le planning
+		for (EstAffecteA aff : affectations) {
+			DPS dps = aff.getLeDPS(); // ou récupère via DAO si besoin
+			Journee journee = dps.getEstProgramme();
+			LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
+
+			// Crée une description à afficher
+			String desc = "DPS " + dps.getId() + " (" + dps.getConcerneSport() + ") "
+						+ aff.getLaCompetence().getIntitule();
+
+			// Ajoute la tâche au planning
+			addTask(date, desc);
+		}
+	}
+
+	public void afficherAffectationsSecouristeDansGridPane() {
+		clearAllTaskBoxes();
+		// Récupérer le secouriste connecté
+		Secouriste secouriste = (Secouriste) MngtSession.getUtilisateurConnecte();
+		if (secouriste == null) {
+			System.out.println("Aucun secouriste connecté !");
+			return;
+		}
+
+		// Récupérer ses affectations
+		List<EstAffecteA> affectations = getAffectationsPourSecouriste(secouriste.getId());
+
+		// Pour chaque affectation, placer un label dans le GridPane
+		for (EstAffecteA aff : affectations) {
+			DPS dps = aff.getLeDPS();
+			Journee journee = dps.getEstProgramme();
+			LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
+
+			// Calcul du jour de la semaine (0 = lundi, 6 = dimanche)
+			int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
+			if (dayIndex < 0 || dayIndex > 6) continue; // hors de la semaine affichée
+
+			// Heures de début et de fin
+			int heureDebut = dps.getHoraireDepart();
+			int heureFin = dps.getHoraireFin();
+
+			// Description à afficher
+			String desc = "DPS " + dps.getId() + " (" + dps.getConcerneSport() + ") " + aff.getLaCompetence().getIntitule();
+
+			// Pour chaque heure de la plage, ajoute un label dans la bonne VBox
+			for (int h = heureDebut; h < heureFin; h++) {
+				if (h >= 0 && h < 24) {
+					VBox box = taskBoxes[dayIndex][h];
+					Label label = new Label(desc);
+					label.setStyle("-fx-background-color: #D3EAFD; -fx-padding: 2 5 2 5; -fx-border-radius: 3; -fx-background-radius: 3;");
+					box.getChildren().add(label);
+				}
+			}
+		}
+	}
 
 	@FXML
 	public void onAffecterSecouristes(ActionEvent event) {
@@ -2085,11 +2072,6 @@ public class Controller  {
 		return btnRetourPlanningSecouriste != null;
 	}
 
-	/**
-	 * Initialise les champs de modification du secouriste avec les données du secouriste à modifier.
-	 * Récupère l'identifiant stocké dans la session, puis charge les informations du secouriste correspondant depuis la base de données.
-	 * Préremplit les champs de saisie (nom, prénom, date de naissance, email, adresse, téléphone, compétences).
-	 */
 	private void initModifSecouriste() {
 		Long id = MngtSession.getIdSecouristeAModifier();
 		if (id != null) {
@@ -2121,11 +2103,6 @@ public class Controller  {
 		}
 	}
 
-	/**
-	 * Initialise les champs de modification d'un DPS avec les données du DPS à modifier.
-	 * Récupère l'identifiant du DPS depuis la session, puis charge les informations correspondantes (heure, date, lieu, sport)
-	 * et les affiche dans les champs de modification.
-	 */
 	public void initModifDPS() {
 		Long id = MngtSession.getIdDPSAModifier();
 		if (id != null) {
@@ -2172,11 +2149,6 @@ public class Controller  {
 		}
 	}
 
-	/**
-	 * Initialise les champs de modification d'une compétence avec les données de la compétence à modifier.
-	 * Récupère l'intitulé de la compétence depuis la session, puis lit les données correspondantes depuis la base
-	 * pour les préremplir dans le formulaire.
-	 */
 	public void initModifComp() {
 		String intitule = MngtSession.getIntituleCompetenceAModifier();
 		if (intitule != null) {
@@ -2193,20 +2165,10 @@ public class Controller  {
 		}
 	}
 
-	/**
-	 * Ajoute une tâche à la date spécifiée.
-	 * Si aucune tâche n'existe encore pour cette date, une nouvelle liste est créée.
-	 * @param date La date à laquelle la tâche doit être ajoutée.
-	 * @param taskDescription La description de la tâche à ajouter.
-	 */
     public void addTask(LocalDate date, String taskDescription) {
         tasksByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(taskDescription);
     }
 
-	/**
-	 * Vide toutes les boîtes de tâches de la semaine affichée.
-	 * Supprime toutes les tâches visuellement du tableau horaire (GridPane).
-	 */
 	private void clearAllTaskBoxes() {
 		for (int day = 0; day < 7; day++) {
 			for (int hour = 0; hour < 24; hour++) {
@@ -2217,21 +2179,10 @@ public class Controller  {
 		}
 	}
 
-	/**
-	 * Vérifie si une date donnée se trouve dans la semaine actuellement affichée.
-	 * @param date La date à vérifier.
-	 * @return {@code true} si la date est comprise entre le lundi courant et le dimanche suivant, {@code false} sinon.
-	 */
     private boolean isDateInCurrentWeek(LocalDate date) {
         return !date.isBefore(currentMonday) && !date.isAfter(currentMonday.plusDays(6));
     }
-	
-	/**
-	 * Affiche les affectations de la semaine à partir du lundi donné.
-	 * Met à jour les étiquettes des jours, puis selon la page affichée
-	 * (admin ou utilisateur), affiche les affectations correspondantes dans le GridPane.
-	 * @param monday La date correspondant au lundi de la semaine à afficher.
-	 */
+
     public void afficherSemaine(LocalDate monday) {
 		currentMonday = monday;
 		updateDayLabels();
@@ -2243,61 +2194,7 @@ public class Controller  {
 		}
 	}
 
-	public void afficherAffectationsSecouristeDansGridPane() {
-        clearAllTaskBoxes();
-        // Récupérer le secouriste connecté
-        Secouriste secouriste = (Secouriste) MngtSession.getUtilisateurConnecte();
-        if (secouriste == null) {
-            System.out.println("Aucun secouriste connecté !");
-            return;
-        }
 
-        // Récupérer ses affectations
-        List<EstAffecteA> affectations = getAffectationsPourSecouriste(secouriste.getId());
-
-        // Pour chaque affectation, placer un label dans le GridPane
-        for (EstAffecteA aff : affectations) {
-            DPS dps = aff.getLeDPS();
-            Journee journee = dps.getEstProgramme();
-            LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
-
-            // Calcul du jour de la semaine (0 = lundi, 6 = dimanche)
-            int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
-            if (dayIndex < 0 || dayIndex > 6) continue; // hors de la semaine affichée
-
-            // Heures de début et de fin
-            int heureDebut = dps.getHoraireDepart();
-            int heureFin = dps.getHoraireFin();
-
-            // Description à afficher
-            String desc = "DPS " + dps.getId() + " (" + dps.getConcerneSport() + ") " + aff.getLaCompetence().getIntitule();
-
-            // Pour chaque heure de la plage, ajoute un label dans la bonne VBox
-            for (int h = heureDebut; h < heureFin; h++) {
-                if (h >= 0 && h < 24) {
-                    VBox box = taskBoxes[dayIndex][h];
-                    Label label = new Label(desc);
-                    label.setStyle("-fx-background-color: #D3EAFD; -fx-padding: 2 5 2 5; -fx-border-radius: 3; -fx-background-radius: 3;");
-                    box.getChildren().add(label);
-                }
-            }
-        }
-    }
-
-	public List<EstAffecteA> getAffectationsPourSecouriste(long idSecouriste) {
-        DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
-        try {
-            return daoEstAffecteA.readBySecouristeId(idSecouriste);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-	/**
-	 * Met à jour les libellés des jours de la semaine affichée
-	 * en les associant à leur date respective à partir du lundi courant.
-	 */	
     private void updateDayLabels() {
         lblMon.setText(" Lundi\n " + currentMonday);
         lblTue.setText(" Mardi\n " + currentMonday.plusDays(1));
@@ -2309,10 +2206,9 @@ public class Controller  {
     }
 
     /**
-	 * Gère l'événement de clic sur le bouton "Ajouter une tâche".
-	 * Ajoute une tâche prédéfinie au mercredi de la semaine actuellement affichée.
-	 * @param event L'événement déclenché par le clic.
-	 */
+     * 
+     * @param event
+     */
     @FXML
     public void onAddTaskClicked(ActionEvent event) {
         // Exemple : on ajoute une tâche fixe au mercredi de la semaine affichée
@@ -2322,12 +2218,6 @@ public class Controller  {
         addTask(taskDate, taskDesc);
     }
 
-	/**
-	 * Génère dynamiquement les étiquettes horaires (00h à 23h)
-	 * et initialise les boîtes de tâches (VBox) pour chaque heure et chaque jour de la semaine.
-	 * Ces boîtes sont ajoutées au GridPane principal représentant la semaine.
-	 * Si le GridPane n’est pas encore initialisé, un message d’erreur est affiché.
-	 */
     private void generateHourLabelsAndTaskBoxes() {
 		if (gridWeek == null) {
 			System.err.println("gridWeek n'est pas encore initialisé");
@@ -2357,116 +2247,7 @@ public class Controller  {
 	}
 
 
-// ajout lea
-	public void afficherAffectationsSecouriste() {
-		if (utilisateurConnecte == null) return;
 
-		// Nettoie la grille des anciens blocs (sauf la première ligne et colonne)
-		gridWeek.getChildren().removeIf(node -> 
-			GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0 &&
-			GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) > 0
-		);
-
-		try {
-			// Récupère toutes les affectations puis filtre celles du secouriste connecté
-			List<EstAffecteA> affectations = daoEstAffecteA.readAll()
-				.stream()
-				.filter(a -> a.getSecouriste().getId() == utilisateurConnecte.getId())
-				.collect(Collectors.toList());
-
-			for (EstAffecteA aff : affectations) {
-				DPS dps = aff.getLeDPS();
-				if (dps == null) continue;
-
-				Journee journee = dps.getEstProgramme();
-				LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
-				int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
-				if (dayIndex < 0 || dayIndex > 6) continue;
-
-				int heureDebut = dps.getHoraireDepart();
-				int heureFin = dps.getHoraireFin();
-
-				String nomDPS = dps.getId() + " - " + dps.getConcerneSport();
-				Label bloc = new Label(nomDPS + "\n" + String.format("%02dh-%02dh", heureDebut, heureFin));
-				bloc.setStyle("-fx-background-color: #90caf9; -fx-border-color: #1976d2; -fx-padding: 5; -fx-background-radius: 6; -fx-font-weight: bold;");
-
-				VBox box = new VBox(bloc);
-				box.setStyle("-fx-background-color: transparent;");
-				GridPane.setRowIndex(box, heureDebut + 1);
-				GridPane.setColumnIndex(box, dayIndex + 1);
-				GridPane.setRowSpan(box, heureFin - heureDebut);
-
-				gridWeek.getChildren().add(box);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	private void validerDisponibilite() {
-		if (datePicker == null || heureDebutField == null || heureFinField == null) {
-			System.err.println("Champs non initialisés !");
-			return;
-		}
-
-		if (datePicker.getValue() == null || heureDebutField.getText().isEmpty() || heureFinField.getText().isEmpty()) {
-			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Veuillez remplir tous les champs.");
-			alert.showAndWait();
-			return;
-		}
-
-		try {
-			int heureDebut = Integer.parseInt(heureDebutField.getText());
-			int heureFin = Integer.parseInt(heureFinField.getText());
-
-			if (heureDebut < 0 || heureDebut > 23 || heureFin < 1 || heureFin > 24 || heureDebut >= heureFin) {
-				javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Heures invalides.");
-				alert.showAndWait();
-				return;
-			}
-
-			LocalDate date = datePicker.getValue();
-			Journee journee = new Journee(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-
-			// Vérifie que utilisateurConnecte n'est pas null
-			if (Session.utilisateurConnecte == null) {
-				javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Utilisateur non connecté.");
-				alert.showAndWait();
-				return;
-			}
-
-			EstDisponible dispo = new EstDisponible(
-				Session.utilisateurConnecte,
-				journee,
-				date.getDayOfMonth(),
-				date.getMonthValue(),
-				date.getYear()
-			);
-
-			DAOEstDisponible daoEstDisponible = new DAOEstDisponible();
-			daoEstDisponible.create(dispo);
-
-			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION, "Disponibilité ajoutée !");
-			alert.showAndWait();
-
-			//goToMesDisponibilite(new ActionEvent());
-
-		} catch (NumberFormatException e) {
-			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Veuillez entrer des heures valides (ex : 08, 17).");
-			alert.showAndWait();
-		} catch (Exception e) {
-			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Erreur lors de l'ajout : " + e.getMessage());
-			alert.showAndWait();
-		}
-	}
-
-
-	/**
-	 * Gère l'action du bouton pour afficher la semaine précédente.
-	 * Décrémente l'offset de la semaine, met à jour le lundi courant,
-	 * réaffiche la semaine correspondante et met à jour le label de la semaine.
-	 */
     @FXML
 	private void onPrevWeek() {
 		currentWeekOffset--;
@@ -2475,11 +2256,6 @@ public class Controller  {
 		updateWeekLabel();
 	}
 
-	/**
-	 * Gère l'action du bouton pour afficher la semaine suivante.
-	 * Incrémente l'offset de la semaine, met à jour le lundi courant,
-	 * réaffiche la semaine correspondante et met à jour le label de la semaine.
-	 */
 	@FXML
 	private void onNextWeek() {
 		currentWeekOffset++;
@@ -2488,353 +2264,14 @@ public class Controller  {
 		updateWeekLabel();
 	}
 
-	/**
-	 * Met à jour le label indiquant le numéro de la semaine affichée,
-	 * en tenant compte de l'offset actuel appliqué à la semaine courante.
-	 */
 	private void updateWeekLabel() {
 		lblWeek.setText("Semaine " + (getCurrentWeekNumber() + currentWeekOffset));
 	}
 
-	/**
-	 * Calcule et retourne le numéro de la semaine courante selon le calendrier ISO.
-	 * @return le numéro de la semaine de l'année en cours (de 1 à 52 ou 53 selon l'année).
-	 */
     private int getCurrentWeekNumber() {
         // Retourne la semaine courante (exemple basique)
         java.time.LocalDate now = java.time.LocalDate.now();
         return now.get(java.time.temporal.WeekFields.ISO.weekOfWeekBasedYear());
     }
 
-	/**
-	 * Permet d'exporter les données de toutes la base de donnée et met les csv dans un .zip
-	 */
-	public void exportAllTables() {
-        exportSecouriste();
-        exportJournee();
-        exportCompetence();
-        exportSport();
-        exportSite();
-        exportDPS();
-        exportBesoin();
-        exportNecessite();
-        exportPossede();
-        exportEstDisponible();
-        exportEstAffecteA();
-        // Ajoute ici d'autres tables si besoin
-
-		String[] csvFiles = {
-        "Secouriste.csv", "Journee.csv", "Competence.csv", "Sport.csv", "Site.csv",
-        "DPS.csv", "Besoin.csv", "Necessite.csv", "Possede.csv", "EstDisponible.csv", "EstAffecteA.csv"
-		};
-		String zipFileName = "export_sae.zip";
-		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFileName))) {
-			for (String csv : csvFiles) {
-				File file = new File(csv);
-				if (file.exists()) {
-					try (FileInputStream fis = new FileInputStream(file)) {
-						ZipEntry zipEntry = new ZipEntry(csv);
-						zos.putNextEntry(zipEntry);
-						byte[] buffer = new byte[1024];
-						int len;
-						while ((len = fis.read(buffer)) > 0) {
-							zos.write(buffer, 0, len);
-						}
-						zos.closeEntry();
-					}
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de la création du zip : " + e.getMessage());
-		}
-		// Suppression des fichiers CSV après création du zip
-		for (String csv : csvFiles) {
-			File file = new File(csv);
-			if (file.exists()) {
-				if (!file.delete()) {
-					System.out.println("Impossible de supprimer le fichier : " + csv);
-				}
-			}
-		}
-
-		System.out.println("Export ZIP terminé : " + zipFileName);
-	}
-
-	/**
-	 * Permet d'exporter les données de Secouriste
-	 */
-    private void exportSecouriste() {
-		String file = "Secouriste.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("id;nom;prenom;dateNaissance;email;telephone;adresse");
-			List<Secouriste> list;
-			try {
-				list = daoSecouriste.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des secouristes : " + e.getMessage());
-				return;
-			}
-			for (Secouriste s : list) {
-				out.println(s.getId() + ";" + s.getNom() + ";" + s.getPrenom() + ";" + s.getDateNaissance() + ";" +
-						s.getEmail() + ";" + s.getTel() + ";" + s.getAdresse());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier Secouriste.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de journee
-	 */
-	private void exportJournee() {
-		String file = "Journee.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("jour;mois;annee");
-			List<Journee> list;
-			try {
-				list = daoJournee.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des journées : " + e.getMessage());
-				return;
-			}
-			for (Journee j : list) {
-				out.println(j.getJour() + ";" + j.getMois() + ";" + j.getAnnee());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier Journee.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de Competence
-	 */
-    private void exportCompetence() {
-		String file = "Competence.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("intitule");
-			List<Competence> list;
-			try {
-				list = daoCompetence.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des compétences : " + e.getMessage());
-				return;
-			}
-			for (Competence c : list) {
-				out.println(c.getIntitule());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier Competence.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de Sport
-	 */
-    private void exportSport() {
-		String file = "Sport.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("code;nom");
-			List<Sport> list;
-			try {
-				list = daoSport.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des sports : " + e.getMessage());
-				return;
-			}
-			for (Sport s : list) {
-				out.println(s.getCode() + ";" + s.getNom());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier Sport.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de Site
-	 */
-    private void exportSite() {
-		String file = "Site.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("code;nom;longitude;latitude");
-			List<Site> list;
-			try {
-				list = daoSite.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des sites : " + e.getMessage());
-				return;
-			}
-			for (Site s : list) {
-				out.println(s.getCode() + ";" + s.getNom() + ";" + s.getLongitude() + ";" + s.getLatitude());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier Site.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de DPS
-	 */
-    private void exportDPS() {
-		String file = "DPS.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("id;horaireDepart;horaireFin;concerneSport;aLieuDansSite;estProgrammeJour;estProgrammeMois;estProgrammeAnnee");
-			List<DPS> list;
-			try {
-				list = daoDPS.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des DPS : " + e.getMessage());
-				return;
-			}
-			for (DPS d : list) {
-				out.println(
-					d.getId() + ";" +
-					d.getHoraireDepart() + ";" +
-					d.getHoraireFin() + ";" +
-					(d.getConcerne() != null ? d.getConcerne().getCode() : "") + ";" +
-					(d.getALieuDans() != null ? d.getALieuDans().getCode() : "") + ";" +
-					(d.getEstProgramme() != null ? d.getEstProgramme().getJour() : "") + ";" +
-					(d.getEstProgramme() != null ? d.getEstProgramme().getMois() : "") + ";" +
-					(d.getEstProgramme() != null ? d.getEstProgramme().getAnnee() : "")
-				);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier DPS.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de Besoin
-	 */
-    private void exportBesoin() {
-		String file = "Besoin.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("laCompetence;leDPS;nombre");
-			List<Besoin> list;
-			try {
-				list = daoBesoin.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des besoins : " + e.getMessage());
-				return;
-			}
-			for (Besoin b : list) {
-				out.println(b.getIntituleCompetence() + ";" + b.getIdDPS() + ";" + b.getNombre());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier Besoin.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de Necessite
-	 */
-    private void exportNecessite() {
-		String file = "Necessite.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("intituleCompetence;intituleCompetenceNecessaire");
-			List<Necessite> list;
-			try {
-				list = daoNecessite.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des nécessités : " + e.getMessage());
-				return;
-			}
-			for (Necessite n : list) {
-				out.println(n.getIntituleCompetence() + ";" + n.getIntituleCompetenceNecessaire());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier Necessite.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de Possede
-	 */
-    private void exportPossede() {
-		String file = "Possede.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("leSecouriste;laCompetence");
-			List<Possede> list;
-			try {
-				list = daoPossede.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des compétences possédées : " + e.getMessage());
-				return;
-			}
-			for (Possede p : list) {
-				out.println(p.getIdSecouriste() + ";" + p.getIntituleCompetence());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier Possede.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de EstDisponible
-	 */
-    private void exportEstDisponible() {
-		String file = "EstDisponible.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("leSecouriste;jourJournee;moisJournee;anneeJournee");
-			List<EstDisponible> list;
-			try {
-				list = daoEstDisponible.readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des disponibilités : " + e.getMessage());
-				return;
-			}
-			for (EstDisponible ed : list) {
-				out.println(ed.getIdSecouriste() + ";" +
-							ed.getJourJournee() + ";" +
-							ed.getMoisJournee() + ";" +
-							ed.getAnneeJournee());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier EstDisponible.csv : " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Permet d'exporter les données de EstAffecteA
-	 */
-    private void exportEstAffecteA() {
-		String file = "EstAffecteA.csv";
-		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
-			out.println("leSecouriste;leDPS;laCompetence");
-			List<EstAffecteA> list;
-			try {
-				list = new model.dao.DAOEstAffecteA().readAll();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la lecture des affectations : " + e.getMessage());
-				return;
-			}
-			for (EstAffecteA ea : list) {
-				out.println(ea.getIdSecouriste() + ";" + ea.getIdDPS() + ";" + ea.getIntituleCompetence());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Erreur lors de l'écriture du fichier EstAffecteA.csv : " + e.getMessage());
-		}
-	}
 }

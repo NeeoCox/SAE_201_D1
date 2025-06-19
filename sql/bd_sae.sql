@@ -149,13 +149,18 @@ CREATE TABLE EstAffecteA (
 INSERT INTO Secouriste (id, nom, prenom, dateNaissance, email, telephone, adresse) VALUES
 (1, 'Dupont', 'Jean', '1985-04-12', 'jean.dupont@example.com', '0601020304', '10 rue de Paris'),
 (2, 'Martin', 'Claire', '1990-08-25', 'claire.martin@example.com', '0605060708', '5 avenue Victor Hugo'),
-(3, 'Durand', 'Pierre', '1982-01-30', 'pierre.durand@example.com', '0611223344', '12 boulevard Saint-Michel');
+(3, 'Durand', 'Pierre', '1982-01-30', 'pierre.durand@example.com', '0611223344', '12 boulevard Saint-Michel'),
+(4, 'Nguyen', 'Linh', '1995-11-15', 'linh.nguyen@example.com', '0622334455', '20 rue de la République'),
+(5, 'Moreau', 'Julien', '1988-03-22', 'julien.moreau@example.com', '0633445566', '15 place de la Concorde');
+
 
 -- Insertion des Users avec username = nom des secouristes
 INSERT INTO users (username, password_hash, role) VALUES
 ('Dupont', 'hashedpassword1', 'secouriste'),
 ('Martin', 'hashedpassword2', 'secouriste'),
 ('Durand', 'hashedpassword3', 'secouriste'),
+('Nguyen', 'hashedpassword4', 'secouriste'),
+('Moreau', 'hashedpassword5', 'secouriste'),
 ('admin', 'admin', 'admin');
 
 -- Exemple sessions
@@ -174,9 +179,6 @@ INSERT INTO Journee (jour, mois, annee) VALUES
 (24, 6, 2025),
 (25, 6, 2025),
 (26, 6, 2025);
-
--- Insertion des compétences (tu as demandé de ne pas changer, je ne touche pas)
--- Supposons que Competence déjà inséré : PSE1, PSE2, SSA, VPSP, CE, CP, CO, PBC, PBF
 
 -- Insertion des compétences
 INSERT INTO Competence (intitule) VALUES
@@ -200,38 +202,6 @@ INSERT INTO Necessite (intituleCompetence, intituleCompetenceNecessaire) VALUES
 ('PBC', 'PBF');
 
 -- Insertion des sports
-INSERT INTO Sport (code, nom) VALUES
-('SP01', 'Football'),
-('SP02', 'Basketball'),
-('SP03', 'Natation');
-
--- Insertion des sites
-INSERT INTO Site (code, nom, longitude, latitude) VALUES
-('S01', 'Stade de France', 2.3600, 48.9245),
-('S02', 'Parc des Princes', 2.2520, 48.8414);
-
--- Insertion des DPS (Dispositif de Premiers Secours)
-INSERT INTO DPS (id, horaire_depart, horaire_fin, concerneSport, aLieuDansSite, estProgrammeJour, estProgrammeMois, estProgrammeAnnee) VALUES
-(1, 800, 1200, 'SP01', 'S01', 19, 6, 2025),
-(2, 1300, 1700, 'SP02', 'S02', 20, 6, 2025);
-
--- Insertion des besoins (Besoin)
--- Les compétences doivent exister, donc je mets des compétences valides selon Competence déjà inséré
-INSERT INTO Besoin (laCompetence, leDPS, nombre) VALUES
-('PSE1', 1, 3),
-('PSE2', 1, 1),
-('SSA', 2, 2);
-
--- Insertion des Possede (Compétences possédées par les secouristes)
-INSERT INTO Possede (leSecouriste, laCompetence) VALUES
-(1, 'PSE1'),
-(1, 'SSA'),
-(2, 'PSE2'),
-(2, 'CE'),
-(3, 'PSE1'),
-(3, 'VPSP');
-
--- Insertion des sports
 INSERT INTO Sport (code, nom) VALUES 
 ('ATHL', 'Athlétisme'),
 ('NATA', 'Natation'),
@@ -247,43 +217,37 @@ INSERT INTO Site (code, nom, longitude, latitude) VALUES
 ('ST4', 'Gymnase Central', 2.35, 48.86),
 ('ST5', 'Vélodrome', 2.34, 48.87);
 
--- Insertion des journées
-INSERT INTO Journee (jour, mois, annee) VALUES
-(15, 6, 2025),
-(16, 6, 2025),
-(17, 6, 2025),
-(18, 6, 2025),
-(19, 6, 2025);
-
--- Insertion des compétences
-INSERT INTO Competence (intitule) VALUES
-('Secouriste'),
-('Infirmier'),
-('Médecin'),
-('Chef de poste'),
-('Ambulancier');
-
--- Insertion des DPS
+-- Insertion des DPS (Dispositif de Premiers Secours)
 INSERT INTO DPS (id, horaire_depart, horaire_fin, concerneSport, aLieuDansSite, estProgrammeJour, estProgrammeMois, estProgrammeAnnee) VALUES
-(1, 900, 1200, 'ATHL', 'ST1', 15, 6, 2025),
-(2, 1300, 1600, 'NATA', 'ST2', 16, 6, 2025),
-(3, 1000, 1300, 'FOOT', 'ST3', 17, 6, 2025),
-(4, 1400, 1700, 'BASK', 'ST4', 18, 6, 2025),
-(5, 900, 1100, 'CYCL', 'ST5', 19, 6, 2025);
+(1, 800, 1200, 'ATHL', 'ST1', 19, 6, 2025),
+(2, 1300, 1700, 'FOOT', 'ST2', 19, 6, 2025);
 
--- Insertion des besoins de compétences pour chaque DPS
+-- Insertion des besoins (Besoin)
+-- Les compétences doivent exister, donc je mets des compétences valides selon Competence déjà inséré
 INSERT INTO Besoin (laCompetence, leDPS, nombre) VALUES
-('Secouriste', 1, 2),
-('Infirmier', 1, 1),
-('Chef de poste', 1, 1),
-('Secouriste', 2, 2),
-('Médecin', 2, 1),
-('Ambulancier', 3, 1),
-('Chef de poste', 3, 1),
-('Secouriste', 4, 2),
-('Infirmier', 4, 1),
-('Médecin', 5, 1),
-('Ambulancier', 5, 1);
+('CE', 1, 1),
+('PSE2', 1, 1),
+('PSE1', 1, 1),
+('SSA', 1, 1),
+('PBC', 2, 1);
+
+
+-- Insertion des Possede (Compétences possédées par les secouristes)
+INSERT INTO Possede (leSecouriste, laCompetence) VALUES
+(1, 'PSE2'),
+(1, 'PSE1'),
+(2, 'PSE2'),
+(2, 'PSE1'),
+(2, 'SSA'),
+(3, 'CE'),
+(3, 'PSE2'),
+(3, 'PSE1'),
+(3, 'PBC'),
+(4, 'PSE1'),
+(5, 'PSE1'),
+(5, 'SSA'),
+(5, 'PBC');
+
 
 SHOW TABLES;
 
@@ -319,22 +283,14 @@ VALUES (5, 'Lemoine', '$2a$10$exampleHashedPassword5', 'secouriste');
 
 -- Admin
 INSERT INTO users (id, username, password_hash, role)
-VALUES (110, 'admin2', '$2a$10$exampleHashedPassword110', 'admin');
+VALUES (110, 'admin', 'admin', 'admin');
 
-INSERT INTO sessions (user_id, session_took, expires_at) VALUES
-(1, 'sessiontoken123abc', NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR)),
-(2, 'sessiontoken456def', NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR));
 -- Insertion des disponibilités (EstDisponible)
 INSERT INTO EstDisponible (leSecouriste, jourJournee, moisJournee, anneeJournee) VALUES
 (1, 19, 6, 2025),
-(1, 20, 6, 2025),
 (2, 19, 6, 2025),
-(3, 21, 6, 2025);
-
--- Insertion des affectations (EstAffecteA)
-INSERT INTO EstAffecteA (leSecouriste, leDPS, laCompetence) VALUES
-(1, 1, 'PSE1'),
-(2, 1, 'PSE2'),
-(3, 2, 'VPSP');
+(3, 19, 6, 2025),
+(4, 19, 6, 2025),
+(5, 19, 6, 2025);
 
 
