@@ -27,7 +27,9 @@ public class Competence {
         this.intitule = unIntitule;
     }
 
-    
+    /**
+     * Methode toString pour afficher les informations de la compétence.
+     */
     @Override
     public String toString() {
         return "Compétence{" +

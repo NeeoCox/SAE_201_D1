@@ -169,6 +169,9 @@ public class EstDisponible {
     }
 
 
+    /**
+     * Méthode toString pour afficher les informations de la disponibilité.
+     */
     @Override
     public String toString() {
         return "EstDisponible{" +

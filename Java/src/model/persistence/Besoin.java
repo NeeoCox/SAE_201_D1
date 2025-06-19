@@ -143,6 +143,9 @@ public class Besoin {
         this.idDPS = unIdDPS;
     }
 
+    /**
+     * Retourne une représentation sous forme de chaîne de caractères de l'objet Besoin.
+     */
     @Override
     public String toString() {
         return "Besoin{" +

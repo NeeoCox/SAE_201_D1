@@ -8,11 +8,19 @@ import model.persistence.*;
 /**
  * Classe de gestion des affectations (EstAffecteA) avec persistance en base.
  * Utilise DAOEstAffecteA pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtEstAffecteA {
 
+    /**
+     * DAO pour les opérations sur les affectations.
+     */
     private final DAOEstAffecteA daoAffectation;
 
+    /**
+     * Constructeur de la classe MngtEstAffecteA.
+     * @param daoAffectation DAO pour les opérations sur les affectations
+     */
     public MngtEstAffecteA(DAOEstAffecteA daoAffectation) {
         this.daoAffectation = daoAffectation;
     }

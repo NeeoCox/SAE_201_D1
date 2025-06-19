@@ -8,11 +8,19 @@ import model.persistence.Possede;
 /**
  * Classe de gestion des relations Possede (compétences des secouristes).
  * Utilise DAOPossede pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtPossede {
 
+    /**
+     * DAO pour les opérations sur les relations Possede.
+     */
     private final DAOPossede daoPossede;
 
+    /**
+     * Constructeur de la classe MngtPossede.
+     * @param daoPossede DAO pour les opérations sur les relations Possede
+     */
     public MngtPossede(DAOPossede daoPossede) {
         this.daoPossede = daoPossede;
     }

@@ -152,20 +152,33 @@ public class DPS {
         this.concerne = unSport;
     }
 
+    /**
+     * Accesseur de la date du DPS au format JJ/MM/AAAA.
+     * @return La date du DPS au format JJ/MM/AAAA.
+     */
     public String getEstProgrammeJournee() {
         if (estProgramme == null) return "";
         return String.format("%02d/%02d/%04d", estProgramme.getJour(), estProgramme.getMois(), estProgramme.getAnnee());
     }
 
+    /**
+     * Accesseur du nom du site où a lieu le DPS.
+     * @return Le nom du site où a lieu le DPS, ou une chaîne vide si le site est null.
+     */
     public String getALieuDansSite() {
         return aLieuDans != null ? aLieuDans.getNom() : "";
     }
 
+    /**
+     * Accesseur du nom du sport concerné par le DPS.
+     * @return Le nom du sport concerné par le DPS, ou une chaîne vide si le sport est null.
+     */
     public String getConcerneSport() {
         return concerne != null ? concerne.getNom() : "";
     }
-
-
+    /**
+     * Méthode toString pour afficher les informations du DPS.
+     */
     @Override
     public String toString() {
         return "DPS{" +

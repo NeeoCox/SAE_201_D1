@@ -17,29 +17,29 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controller.Controller">
 
-    <!-- Bande du haut avec bouton Retour à gauche, titre centré, logo à droite -->
+    
     <top>
         <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
 
-            <!-- Bouton Retour -->
+            
             <Button fx:id="buttonRetGestSec"
                     text="Retour"
                     onAction="#goToPageAdminAcceuil"
                     prefHeight="30" prefWidth="80"
                     style="-fx-background-color: white; -fx-text-fill: #156082;" />
 
-            <!-- Espace flexible avant titre -->
+            
             <Region HBox.hgrow="ALWAYS"/>
 
-            <!-- Titre centré -->
+            
             <Label text="Gestion des secouristes"
                    style="-fx-text-fill: white; -fx-font-size: 24px;"
                    alignment="CENTER" />
 
-            <!-- Espace flexible avant logo -->
+            
             <Region HBox.hgrow="ALWAYS"/>
 
-            <!-- Logo à droite -->
+           
             <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../../img/logo.png" />
@@ -49,7 +49,7 @@
         </HBox>
     </top>
 
-    <!-- Tableau au centre -->
+    
     <center>
         <TableView fx:id="tableSecouristes"
                    prefHeight="400.0"
@@ -69,7 +69,7 @@
         </TableView>
     </center>
 
-    <!-- Boutons en bas, centrés avec espacement -->
+    
     <bottom>
         <HBox spacing="30" alignment="CENTER" style="-fx-padding: 10 20 10 20;">
             <Button fx:id="buttonCreategestSec"

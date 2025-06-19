@@ -15,21 +15,21 @@
 
 <BorderPane prefHeight="435.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
-    <!-- Bande bleue en haut -->
+    
     <top>
         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;">
 
-            <!-- Bouton Retour -->
+            
             <Button fx:id="buttonRetourAcSec" onAction="#goToDispositifsDeSecours" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
             <Region HBox.hgrow="ALWAYS" />
 
-            <!-- Titre centré -->
+            
             <Label alignment="CENTER" maxWidth="300" style="-fx-text-fill: white; -fx-font-size: 24px;" text="Création de DPS" />
 
             <Region HBox.hgrow="ALWAYS" />
 
-            <!-- Logo -->
+            
             <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../../img/logo.png" />
@@ -38,11 +38,11 @@
         </HBox>
     </top>
 
-    <!-- Centre avec 2 colonnes alignées dans un seul GridPane -->
+    
     <center>
         <GridPane alignment="CENTER" hgap="20" style="-fx-padding: 40 20 40 20;" vgap="15">
 
-            <!-- Colonne gauche -->
+            
             <Label text="Identifiant" GridPane.columnIndex="0" GridPane.rowIndex="0" />
             <TextField fx:id="idDPSCreate" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
@@ -55,7 +55,7 @@
             <Label text="Compétences requises" GridPane.columnIndex="0" GridPane.rowIndex="3" />
             <TextField fx:id="CompReqDPSCreate" prefHeight="30" prefWidth="250" promptText="Comp1;Comp2;Comp3" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-            <!-- Colonne droite -->
+            
             <Label text="Heure fin" GridPane.columnIndex="2" GridPane.rowIndex="0" />
             <TextField fx:id="heureFinDPSCreate" prefHeight="30" prefWidth="250" promptText="ex : 1150" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
@@ -68,7 +68,7 @@
             <Label text="Nombre de Secouriste" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <TextField fx:id="nbSecDPSCreate" prefHeight="30" prefWidth="250" promptText="nbSecComp1;nbSecComp2;nbSecComp3" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
-            <!-- Bouton créer -->
+            
             <Button fx:id="createButtonDPS" onAction="#createDispositifDeSecours" prefHeight="40" prefWidth="160" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Créer" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
          <columnConstraints>
             <ColumnConstraints />

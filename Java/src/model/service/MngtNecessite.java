@@ -8,11 +8,19 @@ import model.persistence.Necessite;
 /**
  * Classe de gestion des relations de nécessité entre compétences.
  * Utilise DAONecessite pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtNecessite {
 
+    /**
+     * DAO pour les opérations sur les relations de nécessité.
+     */
     private final DAONecessite daoNecessite;
 
+    /**
+     * Constructeur de la classe MngtNecessite.
+     * @param daoNecessite DAO pour les opérations sur les relations de nécessité
+     */
     public MngtNecessite(DAONecessite daoNecessite) {
         this.daoNecessite = daoNecessite;
     }

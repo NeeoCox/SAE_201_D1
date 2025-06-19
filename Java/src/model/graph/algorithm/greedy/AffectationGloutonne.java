@@ -94,6 +94,84 @@ public class AffectationGloutonne implements Affectation {
     }
 
     /**
+     * Initialise un tableau d'entiers représentant l'ordre des lignes ou des colonnes.
+     * @param n Nombre de lignes ou de colonnes.
+     * @return Un tableau d'entiers de taille n, initialisé avec les indices de 0 à n-1.
+     */
+    private static int[] initialiserOrdre(int n) {
+        int[] ordre = new int[n];
+        for (int i = 0; i < n; i++) {
+            ordre[i] = i;
+        }
+        return ordre;
+    }
+
+    /**
+     * Trie les lignes de la matrice par degré (somme des éléments de chaque ligne).
+     * Met à jour l'ordre des lignes dans le tableau ordreLignes.
+     * @param M La matrice à trier.
+     * @param ordreLignes Tableau qui stocke l'ordre des lignes après tri.
+     */
+    private static void trierLignesParDegre(int[][] M, int[] ordreLignes) {
+        int n = M.length;
+        int[] L = new int[n];
+        for (int i = 0; i < n; i++) {
+            L[i] = 0;
+            for (int j = 0; j < n; j++) {
+                L[i] += M[i][j];
+            }
+        }
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (L[i] > L[j]) {
+                    int tempL = L[i];
+                    L[i] = L[j];
+                    L[j] = tempL;
+
+                    int[] tempM = M[i];
+                    M[i] = M[j];
+                    M[j] = tempM;
+
+                    int tempOrdre = ordreLignes[i];
+                    ordreLignes[i] = ordreLignes[j];
+                    ordreLignes[j] = tempOrdre;
+                }
+            }
+        }
+    }
+
+    /**
+     * Trie les colonnes de la matrice en fonction des valeurs des lignes.
+     * @param M La matrice à trier.
+     * @param ordreColonnes Tableau qui stocke l'ordre des colonnes après tri.
+     */
+    private static void trierColonnes(int[][] M, int[] ordreColonnes) {
+        int n = M.length;
+        for (int j = 0; j < n - 1; j++) {
+            int minCol = j;
+            for (int k = j + 1; k < n; k++) {
+                int i = 0;
+                while (i < n && M[i][k] == M[i][minCol]) {
+                    i++;
+                }
+                if (i < n && M[i][k] < M[i][minCol]) {
+                    minCol = k;
+                }
+            }
+            if (minCol != j) {
+                for (int i = 0; i < n; i++) {
+                    int temp = M[i][j];
+                    M[i][j] = M[i][minCol];
+                    M[i][minCol] = temp;
+                }
+                int tempOrdre = ordreColonnes[j];
+                ordreColonnes[j] = ordreColonnes[minCol];
+                ordreColonnes[minCol] = tempOrdre;
+            }
+        }
+    }
+
+    /**
      * Génère la liste des besoins unitaires à partir des besoins globaux.
      * @param besoins Liste des besoins globaux.
      * @return Liste des besoins unitaires.

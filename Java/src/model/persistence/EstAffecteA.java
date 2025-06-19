@@ -134,6 +134,9 @@ public class EstAffecteA {
     }
 
 
+    /**
+     * Méthode toString pour afficher les informations de l'affectation.
+     */
     @Override
     public String toString() {
         return "EstAffecteA{" +

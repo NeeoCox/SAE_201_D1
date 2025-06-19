@@ -8,11 +8,19 @@ import model.persistence.Journee;
 /**
  * Classe de gestion des journées (Journee) avec persistance en base.
  * Utilise DAOJournee pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtJournee {
 
+    /**
+     * DAO pour les opérations sur les journées.
+     */
     private final DAOJournee daoJournee;
 
+    /**
+     * Constructeur de la classe MngtJournee.
+     * @param daoJournee DAO pour les opérations sur les journées
+     */
     public MngtJournee(DAOJournee daoJournee) {
         this.daoJournee = daoJournee;
     }

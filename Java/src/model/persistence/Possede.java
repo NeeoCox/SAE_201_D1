@@ -92,6 +92,9 @@ public class Possede {
     }
 
 
+    /**
+     * Retourne une représentation sous forme de chaîne de caractères de l'objet Possede.
+     */
     @Override
     public String toString() {
         return "Possede{" +

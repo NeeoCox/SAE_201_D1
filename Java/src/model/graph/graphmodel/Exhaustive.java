@@ -2,7 +2,19 @@ package model.graph.graphmodel;
 
 import java.util.Arrays;
 
+/**
+ * La classe Exhaustive résout un problème d'affectation de type "assignment problem"
+ * en utilisant une recherche exhaustive de toutes les permutations possibles.
+ * 
+ * Chaque secouriste (ligne) doit être affecté à une compétence (colonne) de sorte à maximiser
+ * le score total, où le score est défini par la matrice de coûts fournie.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
+ */
 public class Exhaustive {
+    /**
+     * Matrice des coûts où couts[i][j] représente le coût d'affecter le secouriste i à la compétence j.
+     */
+    private final int[][] couts;
 
     private final int[][] M;
     private final int n;
@@ -12,6 +24,7 @@ public class Exhaustive {
 
     public Exhaustive(int[][] M) {
         this.M = M;
+        this.couts = M;
         this.n = M.length;
         this.meilleureAffectation = new int[n];
         this.meilleureCouverture = -1;
@@ -65,12 +78,34 @@ public class Exhaustive {
         }
     }
 
+    /**
+     * Échange les éléments à deux indices donnés dans le tableau.
+     * @param tab Tableau dans lequel les éléments seront échangés.
+     * @param i Indice du premier élément à échanger.
+     * @param j Indice du second élément à échanger.
+     */
     private void echanger(int[] tab, int i, int j) {
         int tmp = tab[i];
         tab[i] = tab[j];
         tab[j] = tmp;
     }
 
+    /**
+     * Évalue le score total d'une permutation donnée en fonction de la matrice des coûts.
+     * @param permutation Tableau représentant une permutation des secouristes.
+     * @return Le score total de la permutation.
+     */
+    private int evaluer(int[] permutation) {
+        int total = 0;
+        for (int i = 0; i < n; i++) {
+            total += couts[i][permutation[i]];
+        }
+        return total;
+    }
+
+    /**
+     * Affiche le résultat de la meilleure affectation trouvée.
+     */
     public void afficherResultat() {
         System.out.println("[Exhaustif] Meilleure affectation (compétence -> secouriste) : " + Arrays.toString(meilleureAffectation));
         System.out.println("[Exhaustif] Compétences couvertes : " + meilleureCouverture + "/" + n);

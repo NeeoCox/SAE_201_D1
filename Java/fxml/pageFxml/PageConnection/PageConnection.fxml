@@ -22,14 +22,14 @@
          <children>
             <BorderPane style="-fx-padding: 10;">
                
-               <!-- Centre : titre centré -->
+               
                <center>
                   <Label text="Se connecter en tant que"
                          style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 22px;"
                          alignment="CENTER" />
                </center>
                
-               <!-- Droite : logo -->
+               
                <right>
                   <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -38,7 +38,7 @@
                   </ImageView>
                </right>
 
-               <!-- Gauche vide pour équilibrer -->
+               
                <left>
                   <Region/>
                </left>

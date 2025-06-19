@@ -73,8 +73,6 @@ import model.persistence.User;
 import model.dao.DAOUser;
 
 
-
-
 /**
  * La classe Controller de l'application
  * @author M.COIGNARD, L.VIMART, A.COUDIERE
@@ -205,7 +203,12 @@ public class Controller  {
 	 */
 	@FXML
 	private Button buttonRetAcAffectSec;
-	
+	@FXML
+	private Button btnPrevWeek;
+	@FXML
+	private Button btnNextWeek;
+
+	private int currentWeekOffset = 0;
 
 
 
@@ -509,7 +512,11 @@ public class Controller  {
 		System.out.println("controller");
 
 	}
-
+	/**
+	 ***********************************
+	 * Connection BDD
+	 ***********************************
+	 */
 	@FXML
 	public void connectUser(ActionEvent event) {
 		System.out.println("connectUser");
@@ -548,20 +555,14 @@ public class Controller  {
 			System.out.println("Erreur lors de la connexion");
 		}
 	}
-
-
-
-
+	
 	/**
 	 * Méthode utilitaire locale pour vérifier le mot de passe.
 	 * À remplacer par une vraie vérification de hash si besoin.
 	 */
-	private boolean verifyPassword(String password, String passwordHash) {
-		
+	private boolean verifyPassword(String password, String passwordHash) {	
 		return password.equals(passwordHash);
 	}
-
-
 
 	/**
 	 ***********************************
@@ -602,7 +603,6 @@ public class Controller  {
 		goTo("/pageFxml/PageConnection/ConnectionSecouriste.fxml", event);
 	}
 
-	
     /**
 	 * Methode pour aller a la page acceuil admin
 	 * @param event l'evenement de l'action
@@ -627,7 +627,6 @@ public class Controller  {
 	 ***********************************
 	 */
 
-	
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
     	goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
@@ -731,7 +730,6 @@ public class Controller  {
 		goTo("/pageFxml/Administrateur/DeleteComp.fxml", event);
 	}
 	
-
 	/**
 	 ***********************************
 	 * METHODE POUR LES BOUTON DE LA PAGE SECOURISTE
@@ -753,7 +751,6 @@ public class Controller  {
 		goTo("/pageFxml/Secouriste/MonPlanningEtAffectations.fxml", event);
 	}
 	
-
 	/**
 	 * Methode pour charger la page a afficher
 	 * @param fichier acces au fichier fxml
@@ -781,7 +778,6 @@ public class Controller  {
 	 /**
 	  * Permet de créer un secouriste
 	  */
-	@FXML
 	public void createSecouriste() {
 		System.out.println("createSecouriste");
 
@@ -840,7 +836,6 @@ public class Controller  {
 			System.out.println("Erreur lors de la création du secouriste : " + e.getMessage());
 		}
 	}
-
 
 	public void updateSecouriste() {
 		System.out.println("updateSecouriste");
@@ -909,10 +904,7 @@ public class Controller  {
 		}
 	}
 
-
-
-	@FXML
-	public void deleteSecouriste(ActionEvent event) {
+	public void deleteSecouriste() {
 		System.out.println("deleteSecouriste");
 
 		// Récupère le secouriste sélectionné dans la TableView
@@ -939,7 +931,6 @@ public class Controller  {
 			System.out.println("Erreur lors de la suppression du secouriste : " + e.getMessage());
 		}
 	}
-
 
 	/**
 	 ***********************************
@@ -1105,11 +1096,7 @@ public class Controller  {
 		}
 	}
 
-
-
-	
-	@FXML
-	public void deleteDispositifDeSecours(ActionEvent event) {
+	public void deleteDispositifDeSecours() {
 		System.out.println("deleteDispositifDeSecours");
 
 		// On récupère le DPS sélectionné dans la TableView
@@ -1138,7 +1125,6 @@ public class Controller  {
 			System.out.println("Erreur lors de la suppression du DPS : " + e.getMessage());
 		}
 	}
-
 
 	/**
 	 ***********************************
@@ -1587,7 +1573,6 @@ public class Controller  {
 		}
 	}
 
-
 	/*
 	 ***************************************
 	 * AFFECTATION DES SECOURISTES AUX DPS *
@@ -2004,9 +1989,6 @@ public class Controller  {
 		}
 	}
 
-
-	
-
 	/**
 	 ***********************************
 	 * GESTION DU PLANNING
@@ -2217,7 +2199,6 @@ public class Controller  {
         lblSun.setText(" Dimanche\n " + currentMonday.plusDays(6));
     }
 
-
     /**
      * 
      * @param event
@@ -2260,5 +2241,31 @@ public class Controller  {
 	}
 
 
+
+    @FXML
+	private void onPrevWeek() {
+		currentWeekOffset--;
+		currentMonday = currentMonday.minusWeeks(1);
+		afficherSemaine(currentMonday);
+		updateWeekLabel();
+	}
+
+	@FXML
+	private void onNextWeek() {
+		currentWeekOffset++;
+		currentMonday = currentMonday.plusWeeks(1);
+		afficherSemaine(currentMonday);
+		updateWeekLabel();
+	}
+
+	private void updateWeekLabel() {
+		lblWeek.setText("Semaine " + (getCurrentWeekNumber() + currentWeekOffset));
+	}
+
+    private int getCurrentWeekNumber() {
+        // Retourne la semaine courante (exemple basique)
+        java.time.LocalDate now = java.time.LocalDate.now();
+        return now.get(java.time.temporal.WeekFields.ISO.weekOfWeekBasedYear());
+    }
 
 }

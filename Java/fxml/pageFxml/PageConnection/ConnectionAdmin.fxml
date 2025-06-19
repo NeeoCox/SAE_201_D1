@@ -23,7 +23,7 @@
             <children>
                 <BorderPane style="-fx-background-color: #125f7d; -fx-padding: 10;">
                     
-                    <!-- Bouton retour à gauche -->
+                    
                     <left>
                         <Button fx:id="buttonRetourAcSec"
                                 text="Retour"
@@ -32,14 +32,14 @@
                                 style="-fx-background-color: white; -fx-text-fill: #156082;" />
                     </left>
                     
-                    <!-- Titre centré -->
+                    
                     <center>
                         <Label text="Se connecter en tant qu'Administrateur"
                             style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"
                             alignment="CENTER" />
                     </center>
                     
-                    <!-- Logo à droite -->
+                    
                     <right>
                         <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -75,7 +75,7 @@
                     </rowConstraints>
                 </GridPane>
 
-                <!-- Bouton de connexion stylé -->
+                
                 <Button fx:id="buttonConnectionAdmin" 
                         onAction="#connectUser" 
                         prefWidth="150" 
