@@ -68,4 +68,14 @@ public class Sport {
                 ", nom='" + nom + '\'' +
                 '}';
     }
+
+
+    /**
+     * Vérifie si le sport correspond à un nom donné.
+     * @param nom Le nom à tester.
+     * @return true si le nom correspond, false sinon.
+     */
+    public boolean estCeSport(String nom) {
+        return this.nom != null && this.nom.equals(nom);
+    }
 }

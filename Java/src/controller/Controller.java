@@ -32,6 +32,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+//Import nos class
 import model.dao.DAO;
 import model.dao.DAOBesoin;
 import model.dao.DAOCompetence;
@@ -58,6 +60,11 @@ import model.graph.algorithm.ResultatAffectation;
 import model.graph.algorithm.dag.VerificationDAG;
 import model.graph.algorithm.BesoinUnitaire;
 import model.graph.algorithm.GrapheCompetences;
+import model.persistence.EstDisponible;
+import model.dao.DAOEstDisponible;
+import model.persistence.EstAffecteA;
+import model.service.MngtEstAffecteA;
+import model.dao.DAOEstAffecteA;
 
 
 
@@ -84,6 +91,7 @@ public class Controller  {
 	DAONecessite daoNecessite = new DAONecessite();
 	DAOPossede daoPossede = new DAOPossede();
 	DAOJournee daoJournee = new DAOJournee();
+	DAOEstDisponible daoEstDisponible = new DAOEstDisponible();
 
 
 	/**
@@ -463,6 +471,7 @@ public class Controller  {
 
 
 	GrapheCompetences grapheCompetences;
+	private ResultatAffectation resultatAffectation;
 
 	public Controller(){
 		System.out.println("controller");
@@ -1065,6 +1074,82 @@ public class Controller  {
 		return null;
 	}
 
+	public void updateCompetence(String ancienIntitule, String nouvelIntitule) {
+		if (ancienIntitule == null || nouvelIntitule == null || ancienIntitule.isEmpty() || nouvelIntitule.isEmpty()) {
+			System.out.println("Veuillez remplir tous les champs.");
+			return;
+		}
+
+		try {
+			DAOCompetence daoCompetence = new DAOCompetence();
+
+			Competence comp = trouverCompetenceParIntitule(ancienIntitule, grapheCompetences.getCompetences());
+			if (comp == null) {
+				System.out.println("Compétence à modifier inexistante.");
+				return;
+			}
+
+			// Mise à jour en base
+			Competence nouvelleComp = new Competence();
+			nouvelleComp.setIntitule(nouvelIntitule);
+			daoCompetence.update(nouvelleComp, ancienIntitule);
+
+			// Mise à jour dans le graphe
+			comp.setIntitule(nouvelIntitule);
+
+			// Mettre à jour les intitulés dans les dépendances (Necessite)
+			for (Necessite n : grapheCompetences.getNecessites()) {
+				if (n.getIntituleCompetence().equals(ancienIntitule)) {
+					n.setIntituleCompetence(nouvelIntitule);
+				}
+				if (n.getIntituleCompetenceNecessaire().equals(ancienIntitule)) {
+					n.setIntituleCompetenceNecessaire(nouvelIntitule);
+				}
+			}
+
+			System.out.println("Compétence modifiée avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la modification de la compétence : " + e.getMessage());
+		}
+	}
+
+	public void deleteCompetence(String intitule) {
+		if (intitule == null || intitule.isEmpty()) {
+			System.out.println("Veuillez indiquer l'intitulé de la compétence à supprimer.");
+			return;
+		}
+
+		try {
+			DAOCompetence daoCompetence = new DAOCompetence();
+			DAONecessite daoNecessite = new DAONecessite();
+
+			// Suppression en base
+			daoCompetence.delete(intitule);
+
+			// Suppression des dépendances associées en base et dans le graphe
+			List<Necessite> necessites = new ArrayList<>(grapheCompetences.getNecessites());
+			for (Necessite n : necessites) {
+				if (n.getIntituleCompetence().equals(intitule) || n.getIntituleCompetenceNecessaire().equals(intitule)) {
+					daoNecessite.delete(n.getIntituleCompetence(), n.getIntituleCompetenceNecessaire());
+					grapheCompetences.supprimerNecessite(n);
+				}
+			}
+
+			// Suppression dans le graphe
+			Competence comp = trouverCompetenceParIntitule(intitule, grapheCompetences.getCompetences());
+			if (comp != null) {
+				grapheCompetences.supprimerCompetence(comp);
+			}
+
+			System.out.println("Compétence supprimée avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression de la compétence : " + e.getMessage());
+		}
+	}
+
+
 	/*
 	 * ***********************************
 	 * GESTION DES DÉPENDANCES DES COMPÉTENCES
@@ -1209,6 +1294,124 @@ public class Controller  {
 			System.out.println("Erreur lors de la suppression de la dépendance : " + e.getMessage());
 		}
 	}
+
+
+	/*
+	 ***************************************
+	 * AFFECTATION DES SECOURISTES AUX DPS *
+	 ***************************************
+	 */
+
+	/**
+	 * Affecte les secouristes disponibles à la journée donnée, selon l'algo choisi.
+	 * @param jour Jour à traiter (objet Journee)
+	 * @param algo "glouton" ou "exhaustif"
+	 */
+	public void affecterSecouristesPourJournee(Journee jour, String algo) {
+		try {
+			// Récupérer les secouristes disponibles ce jour-là
+			List<Secouriste> tousSecouristes = daoSecouriste.readAll();
+			List<EstDisponible> dispos = daoEstDisponible.readAll();
+			List<Secouriste> secouristesDispos = new ArrayList<>();
+			for (EstDisponible dispo : dispos) {
+				if (dispo.getJourJournee() == jour.getJour() &&
+					dispo.getMoisJournee() == jour.getMois() &&
+					dispo.getAnneeJournee() == jour.getAnnee()) {
+					Secouriste s = dispo.getSecouriste();
+					if (s == null) {
+						s = trouverSecouristeParId(dispo.getIdSecouriste(), tousSecouristes);
+					}
+					if (s != null && !secouristesDispos.contains(s)) {
+						secouristesDispos.add(s);
+					}
+				}
+			}
+
+			// Récupérer les DPS de la journée
+			List<DPS> tousDPS = daoDPS.readAll();
+			List<DPS> dpsJour = new ArrayList<>();
+			for (DPS dps : tousDPS) {
+				Journee j = dps.getEstProgramme();
+				if (j.getJour() == jour.getJour() &&
+					j.getMois() == jour.getMois() &&
+					j.getAnnee() == jour.getAnnee()) {
+					dpsJour.add(dps);
+				}
+			}
+
+			// Récupérer les besoins pour ces DPS
+			List<Besoin> besoins = daoBesoin.readAll();
+			List<Besoin> besoinsJour = new ArrayList<>();
+			for (Besoin b : besoins) {
+				if (contientDPS(b.getLeDPS(), dpsJour)) {
+					besoinsJour.add(b);
+				}
+			}
+
+			// Choix de l'algo
+			Affectation algoAffect;
+			if ("exhaustif".equalsIgnoreCase(algo)) {
+				algoAffect = new model.graph.algorithm.exhaustive.AffectationExhaustive();
+			} else {
+				algoAffect = new model.graph.algorithm.greedy.AffectationGloutonne();
+			}
+
+			// Exécution de l'affectation
+			resultatAffectation = algoAffect.affecter(secouristesDispos, dpsJour, besoinsJour);
+
+			// Stockage en base via le service
+			DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
+			MngtEstAffecteA mngtAffect = new MngtEstAffecteA(daoEstAffecteA);
+
+			for (DPS dps : dpsJour) {
+				for (Secouriste s : tousSecouristes) {
+					try { mngtAffect.supprimerAffectation(s.getId(), dps.getId()); } catch (Exception ignore) {}
+				}
+			}
+
+			// On insère les nouvelles affectations
+			for (Map.Entry<DPS, List<Secouriste>> entry : resultatAffectation.getAffectations().entrySet()) {
+				DPS dps = entry.getKey();
+				for (Secouriste s : entry.getValue()) {
+					for (Besoin b : besoinsJour) {
+						if (b.getLeDPS().equals(dps)) {
+							mngtAffect.creerAffectation(s.getId(), b.getLaCompetence().getIntitule(), dps.getId());
+						}
+					}
+				}
+			}
+
+			System.out.println("Affectation réalisée pour le " + jour + " avec l'algo " + algo);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'affectation : " + e.getMessage());
+		}
+	}
+
+	/** Recherche un secouriste par son id dans une liste. */
+	private Secouriste trouverSecouristeParId(long id, List<Secouriste> secouristes) {
+		for (Secouriste s : secouristes) {
+			if (s.getId() == id) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	/** Vérifie si un DPS est contenu dans une liste (par equals). */
+	private boolean contientDPS(DPS dps, List<DPS> liste) {
+		for (DPS d : liste) {
+			if (d.equals(dps)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+
 
 
 	/**

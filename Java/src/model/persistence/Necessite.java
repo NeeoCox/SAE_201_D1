@@ -101,4 +101,15 @@ public class Necessite {
                 ", intituleCompetenceNecessaire='" + intituleCompetenceNecessaire + '\'' +
                 '}';
     }
+
+
+    /**
+     * Vérifie si la nécessité concerne une compétence donnée.
+     * @param intitule L'intitulé de la compétence recherchée.
+     * @return true si la nécessité concerne cette compétence, false sinon.
+     */
+    public boolean concerneCompetence(String intitule) {
+        return (laCompetence != null && laCompetence.getIntitule().equals(intitule))
+            || (intituleCompetence != null && intituleCompetence.equals(intitule));
+    }
 }

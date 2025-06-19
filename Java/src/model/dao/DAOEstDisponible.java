@@ -3,21 +3,20 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.persistence.EstDisponible;
 import model.persistence.Journee;
 import model.persistence.Secouriste;
 
-public class DAOEstDisponible extends DAO<EstDisponible>{
+public class DAOEstDisponible extends DAO<EstDisponible> {
     private final Connection connection;
     private final DAOSecouriste daoSecouriste;
     private final DAOJournee daoJournee;
 
-    public DAOEstDisponible(Connection connection, DAOSecouriste daoSecouriste, DAOJournee daoJournee) {
+    public DAOEstDisponible() {
         try {
             this.connection = createConnection();
-            this.daoSecouriste = daoSecouriste;
-            this.daoJournee = daoJournee;
+            this.daoSecouriste = new DAOSecouriste();
+            this.daoJournee = new DAOJournee();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to create database connection", e);
         }

@@ -5,7 +5,7 @@ javac --module-path ../lib/javafx --add-modules javafx.controls,javafx.graphics,
 
 javac -d ../class -sourcepath ../src ../src/model/dao/*.java
 
-javac -d ../class -sourcepath ../src ../src/model/data/*.java
+javac -d ../class -sourcepath ../src ../src/model/persistence/*.java
 
 javac -d ../class -sourcepath ../src ../src/model/graph/algorithm/*.java
 javac -d ../class -sourcepath ../src ../src/model/graph/algorithm/dag/*.java

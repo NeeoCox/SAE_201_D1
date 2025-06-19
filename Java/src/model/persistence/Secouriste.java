@@ -207,4 +207,19 @@ public class Secouriste {
                 ", adresse='" + adresse + '\'' +
                 '}';
     }
+
+
+    /**
+     * Vérifie si le secouriste possède une compétence donnée.
+     * @param intitule L'intitulé de la compétence recherchée.
+     * @return true si le secouriste possède cette compétence, false sinon.
+     */
+    public boolean aLaCompetence(String intitule) {
+        for (Possede p : possessions) {
+            if (p.possedeCompetence(intitule)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

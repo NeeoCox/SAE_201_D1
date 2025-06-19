@@ -177,4 +177,14 @@ public class DPS {
                 ", concerne=" + concerne +
                 '}';
     }
+
+
+    /**
+     * Vérifie si une heure donnée est comprise dans l'intervalle du DPS.
+     * @param heure L'heure à tester.
+     * @return true si l'heure est comprise dans l'intervalle, false sinon.
+     */
+    public boolean estDansIntervalleHoraire(int heure) {
+        return heure >= horaireDepart && heure <= horaireFin;
+    }
 }

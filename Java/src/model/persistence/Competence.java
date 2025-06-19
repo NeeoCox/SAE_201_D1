@@ -34,4 +34,14 @@ public class Competence {
                 "intitule='" + intitule + '\'' +
                 '}';
     }
+
+
+    /**
+     * Vérifie si l'intitulé correspond à celui de la compétence.
+     * @param intitule L'intitulé à comparer.
+     * @return true si égal, false sinon.
+     */
+    public boolean equalsIntitule(String intitule) {
+        return this.intitule != null && this.intitule.equals(intitule);
+    }
 }

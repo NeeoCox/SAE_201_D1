@@ -180,4 +180,16 @@ public class EstDisponible {
                 ", anneeJournee=" + anneeJournee +
                 '}';
     }
+
+
+    /**
+     * Vérifie si la disponibilité correspond à une date donnée.
+     * @param jour Le jour.
+     * @param mois Le mois.
+     * @param annee L'année.
+     * @return true si la date correspond, false sinon.
+     */
+    public boolean estDisponibleLe(int jour, int mois, int annee) {
+        return this.jourJournee == jour && this.moisJournee == mois && this.anneeJournee == annee;
+    }
 }
