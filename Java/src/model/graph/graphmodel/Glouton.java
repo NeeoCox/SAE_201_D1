@@ -140,24 +140,4 @@ public class Glouton {
         System.out.println("[Glouton] Temps : " + (t1 - t0) + " ms | Compétences couvertes : " + couverture + "/" + M.length);
         System.out.println("[Glouton] Affectation (compétence -> secouriste) : " + Arrays.toString(affectation));
     }
-
-    /**
-     * Point d'entrée de l'application pour tester l'algorithme glouton.
-     * @param args Arguments de la ligne de commande (non utilisés).
-     */
-    public static void main(String[] args) {
-        int n = 5;
-        int[][] M = {
-            {0, 1, 1, 0, 0},
-            {0, 1, 1, 1, 0},
-            {1, 1, 1, 0, 1},
-            {0, 0, 1, 0, 0},
-            {0, 0, 1, 1, 1}
-        };
-        System.out.println("Test Glouton sur matrice M :");
-        for (int[] ligne : M) {
-            System.out.println(Arrays.toString(ligne));
-        }
-        test(M, true);
-    }
 }

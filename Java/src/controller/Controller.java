@@ -481,7 +481,6 @@ public class Controller  {
 	@FXML private Button btnAffecterSecouristes;
 	@FXML private ToggleGroup algoGroup;
 	@FXML private DatePicker datePickerSuppression;
-    @FXML private Button btnPrevWeek, btnNextWeek;
 
 	//Pour ajouter une disponibilité -- ajout lea
 	@FXML
@@ -2341,5 +2340,4 @@ public class Controller  {
         java.time.LocalDate now = java.time.LocalDate.now();
         return now.get(java.time.temporal.WeekFields.ISO.weekOfWeekBasedYear());
     }
-
 }

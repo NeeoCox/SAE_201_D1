@@ -3,33 +3,26 @@ package model.graph.graphmodel;
 import java.util.Arrays;
 
 /**
- * La classe Exhaustive résout un problème d'affectation de type "assignment problem"
- * en utilisant une recherche exhaustive de toutes les permutations possibles.
+ * La classe Exhaustive implémente un algorithme de recherche exhaustive pour trouver la meilleure affectation
+ * de secouristes aux compétences, en maximisant la couverture des compétences.
  * 
- * Chaque secouriste (ligne) doit être affecté à une compétence (colonne) de sorte à maximiser
- * le score total, où le score est défini par la matrice de coûts fournie.
  * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class Exhaustive {
     /**
-     * Matrice des coûts où couts[i][j] représente le coût d'affecter le secouriste i à la compétence j.
-     */
-    private final int[][] couts;
-
-    /**
-     * Matrice de compatibilité où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
+     * Matrice d'adjacence où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
      */
     private final int[][] M;
     /**
-     * Nombre de secouristes (ou compétences) dans la matrice.
+     * Nombre de secouristes et de compétences (la matrice est carrée).
      */
     private final int n;
     /**
-     * Meilleure affectation trouvée, où meilleureAffectation[j] = i signifie que le secouriste i est affecté à la compétence j.
+     * Meilleure affectation trouvée (index de la compétence -> index du secouriste).
      */
     private int[] meilleureAffectation;
     /**
-     * Meilleure couverture trouvée, c'est-à-dire le nombre de compétences couvertes par l'affectation.
+     * Nombre maximum de compétences couvertes par la meilleure affectation trouvée.
      */
     private int meilleureCouverture;
     /**
@@ -39,11 +32,10 @@ public class Exhaustive {
 
     /**
      * Constructeur de la classe Exhaustive.
-     * @param M Matrice de compatibilité où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
+     * @param M Matrice d'adjacence représentant les compétences des secouristes.
      */
     public Exhaustive(int[][] M) {
         this.M = M;
-        this.couts = M;
         this.n = M.length;
         this.meilleureAffectation = new int[n];
         this.meilleureCouverture = -1;
@@ -55,11 +47,9 @@ public class Exhaustive {
      */
     public void executer(boolean verbose) {
         int[] permutation = new int[n];
-        for (int i = 0; i < n; i++) {
-            permutation[i] = i;
-        }
-
-        permuter(permutation, 0);
+        for (int i = 0; i < n; i++) permutation[i] = i;
+        meilleureCouverture = -1;
+        permuter(permutation, 0, verbose);
     }
 
     /**
@@ -67,26 +57,43 @@ public class Exhaustive {
      */
     private void permuter(int[] perm, int index, boolean verbose) {
         if (index == n) {
-            int score = evaluer(permutation);
-            if (score > meilleurScore) {
-                meilleurScore = score;
-                meilleurePermutation = permutation.clone();
+            nbSolutionsTestees++;
+            int[] affectation = new int[n];
+            Arrays.fill(affectation, -1);
+            boolean[] secouristePris = new boolean[n];
+            int couverture = 0;
+            for (int j = 0; j < n; j++) {
+                int i = perm[j];
+                if (M[i][j] == 1 && !secouristePris[i]) {
+                    affectation[j] = i;
+                    secouristePris[i] = true;
+                    couverture++;
+                }
+            }
+            if (verbose) {
+                System.out.println("Solution testée : " + Arrays.toString(affectation) + " | Couverture : " + couverture);
+            }
+            if (couverture > meilleureCouverture) {
+                meilleureCouverture = couverture;
+                meilleureAffectation = affectation.clone();
+                if (verbose) {
+                    System.out.println("  -> Nouvelle meilleure solution !");
+                }
             }
             return;
         }
-
         for (int i = index; i < n; i++) {
-            echanger(permutation, i, index);
-            permuter(permutation, index + 1);
-            echanger(permutation, i, index); // backtrack
+            echanger(perm, i, index);
+            permuter(perm, index + 1, verbose);
+            echanger(perm, i, index);
         }
     }
 
     /**
-     * Échange les éléments à deux indices donnés dans le tableau.
-     * @param tab Tableau dans lequel les éléments seront échangés.
-     * @param i Indice du premier élément à échanger.
-     * @param j Indice du second élément à échanger.
+     * Échange deux éléments dans un tableau d'entiers.
+     * @param tab Le tableau d'entiers dans lequel on souhaite échanger les éléments.
+     * @param i L'index du premier élément à échanger.
+     * @param j L'index du second élément à échanger.
      */
     private void echanger(int[] tab, int i, int j) {
         int tmp = tab[i];
@@ -95,27 +102,12 @@ public class Exhaustive {
     }
 
     /**
-     * Évalue le score total d'une permutation donnée en fonction de la matrice des coûts.
-     * @param permutation Tableau représentant une permutation des secouristes.
-     * @return Le score total de la permutation.
-     */
-    private int evaluer(int[] permutation) {
-        int total = 0;
-        for (int i = 0; i < n; i++) {
-            total += couts[i][permutation[i]];
-        }
-        return total;
-    }
-
-    /**
-     * Affiche le résultat de la meilleure affectation trouvée.
+     * Affiche le résultat de la recherche exhaustive, y compris la meilleure affectation,
      */
     public void afficherResultat() {
-        System.out.println("Meilleure affectation (Secouriste -> Competence) :");
-        for (int i = 0; i < n; i++) {
-            System.out.println("Secouriste " + i + " -> Competence " + meilleurePermutation[i]);
-        }
-        System.out.println("Score total : " + meilleurScore);
+        System.out.println("[Exhaustif] Meilleure affectation (compétence -> secouriste) : " + Arrays.toString(meilleureAffectation));
+        System.out.println("[Exhaustif] Compétences couvertes : " + meilleureCouverture + "/" + n);
+        System.out.println("[Exhaustif] Nombre de solutions testées : " + nbSolutionsTestees);
     }
 
     /**
