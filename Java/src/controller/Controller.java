@@ -1,4 +1,5 @@
 package controller;
+
 // Import des librairies Java
 import java.io.IOException;
 import java.time.LocalDate;
@@ -464,6 +465,15 @@ public class Controller  {
     @FXML private Label lblMon, lblTue, lblWed, lblThu, lblFri, lblSat, lblSun;
     @FXML private Button btnPrevWeek, btnNextWeek;
 
+	//Pour ajouter une disponibilité -- ajout lea
+	@FXML
+	private DatePicker datePicker;
+	@FXML
+	private TextField heureDebutField;
+	@FXML
+	private TextField heureFinField;
+
+
     // VBox qui contiennent les labels des jours + les tâches
     @FXML
     private VBox vboxMon;
@@ -736,6 +746,11 @@ public class Controller  {
 		goTo("/pageFxml/Secouriste/MesDisponibilite.fxml", event);
 	}
 
+	public void goToAjouterUneDisponibilite(ActionEvent event){
+		System.out.println("goToAjouterUneDisponibilite");
+		goTo("/pageFxml/Secouriste/AjouterUneDisponibilite.fxml", event);
+	}
+
 	public void goToMonPlanningEtAffectations(ActionEvent event){
 		System.out.println("goToMonPlanningEtAffectations");
 		goTo("/pageFxml/Secouriste/MonPlanningEtAffectations.fxml", event);
@@ -749,7 +764,14 @@ public class Controller  {
 	 */
 	private void goTo(String fichier, ActionEvent event) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource(fichier));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(fichier));
+			Parent root = loader.load();
+
+			// Récupère le contrôleur de la nouvelle page
+			Controller nouveauController = loader.getController();
+			// Passe le secouriste connecté
+			nouveauController.setUtilisateurConnecte(this.utilisateurConnecte);
+
 			Scene scene = new Scene(root);
 			Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 			stage.setScene(scene);
@@ -760,6 +782,7 @@ public class Controller  {
 		}
 	}
 
+	
 	/**
 	 ***********************************
 	 * GESTION DES SECOURISTES
@@ -2004,6 +2027,66 @@ public class Controller  {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void validerDisponibilite() {
+		if (datePicker == null || heureDebutField == null || heureFinField == null) {
+			System.err.println("Champs non initialisés !");
+			return;
+		}
+
+		if (datePicker.getValue() == null || heureDebutField.getText().isEmpty() || heureFinField.getText().isEmpty()) {
+			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Veuillez remplir tous les champs.");
+			alert.showAndWait();
+			return;
+		}
+
+		try {
+			int heureDebut = Integer.parseInt(heureDebutField.getText());
+			int heureFin = Integer.parseInt(heureFinField.getText());
+
+			if (heureDebut < 0 || heureDebut > 23 || heureFin < 1 || heureFin > 24 || heureDebut >= heureFin) {
+				javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Heures invalides.");
+				alert.showAndWait();
+				return;
+			}
+
+			LocalDate date = datePicker.getValue();
+			Journee journee = new Journee(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+
+			// Vérifie que utilisateurConnecte n'est pas null
+			if (utilisateurConnecte == null) {
+				javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Utilisateur non connecté.");
+				alert.showAndWait();
+				return;
+			}
+
+			EstDisponible dispo = new EstDisponible(
+				utilisateurConnecte,
+				journee,
+				date.getDayOfMonth(),
+				date.getMonthValue(),
+				date.getYear()
+			);
+
+			DAOEstDisponible daoEstDisponible = new DAOEstDisponible();
+			daoEstDisponible.create(dispo);
+
+			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION, "Disponibilité ajoutée !");
+			alert.showAndWait();
+
+			// Ferme la fenêtre après validation
+			Stage stage = (Stage) datePicker.getScene().getWindow();
+			stage.close();
+
+		} catch (NumberFormatException e) {
+			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Veuillez entrer des heures valides (ex : 08, 17).");
+			alert.showAndWait();
+		} catch (Exception e) {
+			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Erreur lors de l'ajout : " + e.getMessage());
+			alert.showAndWait();
 		}
 	}
 

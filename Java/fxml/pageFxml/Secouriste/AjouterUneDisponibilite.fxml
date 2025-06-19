@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.Controller" prefHeight="600" prefWidth="800">
+
+    <!-- Bandeau supérieur -->
+    <top>
+        <VBox>
+            <StackPane prefHeight="60.0">
+                <children>
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #125f7d;">
+                        <children>
+                            <!-- Bouton Retour -->
+                            <Button fx:id="buttonRetourAcSec"
+                                    text="Retour"
+                                    onAction="#goToMesDisponibilite"
+                                    prefHeight="30" prefWidth="80"
+                                    style="-fx-background-color: white; -fx-text-fill: #156082;" />
+
+                            <Region HBox.hgrow="ALWAYS" />
+
+                            <!-- Logo -->
+                            <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../../img/logo.png"/>
+                                </image>
+                            </ImageView>
+                        </children>
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                    </HBox>
+
+                    <!-- Titre centré -->
+                    <Label alignment="CENTER"
+                           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"
+                           text="Ajouter une disponibilité">
+                        <font>
+                            <Font size="24.0"/>
+                        </font>
+                    </Label>
+                </children>
+            </StackPane>
+        </VBox>
+    </top>
+
+    <!-- Formulaire centré horizontalement ET verticalement -->
+    <center>
+        <StackPane>
+            <VBox spacing="15" alignment="CENTER">
+                <HBox spacing="10" alignment="CENTER">
+                    <Label text="Date :" />
+                    <DatePicker fx:id="datePicker" />
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER">
+                    <Label text="Heure début :" />
+                    <TextField fx:id="heureDebutField" promptText="ex: 08" />
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER">
+                    <Label text="Heure fin :" />
+                    <TextField fx:id="heureFinField" promptText="ex: 17" />
+                </HBox>
+
+                <Button text="Valider" onAction="#validerDisponibilite"
+                        style="-fx-background-color: #2196f3; -fx-text-fill: white;" />
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

@@ -21,14 +21,11 @@ public abstract class DAO<T> {
      * Nom d'utilisateur pour la connexion à la base de données.
      */
     private static String USERNAME = "root";
-<<<<<<< HEAD
-    private static String PASSWORD = "password";
-=======
+
     /**
      * Mot de passe pour la connexion à la base de données.
      */
-    private static String PASSWORD = "root";
->>>>>>> 1ec2ea827ded36880f361db3830f68ee96c4f09f
+    private static String PASSWORD = "password";
 
     /**
      * Crée une connexion à la base de données MySQL.
