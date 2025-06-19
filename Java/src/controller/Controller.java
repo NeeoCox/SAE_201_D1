@@ -1285,11 +1285,9 @@ public class Controller  {
 	}
 
 
-	/*
-	 * ***********************************
-	 * GESTION DES DÉPENDANCES DES COMPÉTENCES
-	 ***********************************
-	 */
+	/*******************************************
+	 * GESTION DES DÉPENDANCES DES COMPÉTENCES *
+	 *******************************************/
 
 	public void createNecessite() {
 		if (intituleCreateComp.getText().isEmpty() || necessiteCreateComp.getText().isEmpty()) {
