@@ -126,6 +126,11 @@ public class DAOCompetence extends DAO<Competence>{
         return false;
     }
 
+    /**
+     * Recherche une compétence par son intitulé dans la base de données.
+     * @param intitule L'intitulé de la compétence à rechercher.
+     * @return Un objet Competence si trouvé, sinon null.
+     */
     public Competence findByIntitule(String intitule) {
         try {
             for (Competence c : readAll()) {

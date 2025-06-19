@@ -47,6 +47,11 @@ public class Competence {
         return this.intitule != null && this.intitule.equals(intitule);
     }
 
+    /**
+     * Redéfinition de la méthode equals pour comparer les compétences.
+     * @param obj L'objet à comparer.
+     * @return true si les compétences sont égales, false sinon.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -54,7 +59,10 @@ public class Competence {
         Competence that = (Competence) obj;
         return intitule != null && intitule.equals(that.intitule);
     }
-
+    /**
+     * Redéfinition de la méthode hashCode pour générer un code de hachage basé sur l'intitulé.
+     * @return Le code de hachage de l'intitulé.
+     */
     @Override
     public int hashCode() {
         return intitule != null ? intitule.hashCode() : 0;

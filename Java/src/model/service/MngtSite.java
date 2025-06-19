@@ -11,9 +11,15 @@ import model.persistence.Site;
  * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtSite {
-
+    /**
+     * DAO pour la gestion des sites.
+     */
     private final DAOSite daoSite;
 
+    /**
+     * Constructeur de la classe MngtSite.
+     * @param daoSite DAO pour la gestion des sites.
+     */
     public MngtSite(DAOSite daoSite) {
         this.daoSite = daoSite;
     }

@@ -12,8 +12,15 @@ import model.persistence.Sport;
  */
 public class MngtSport {
 
+    /**
+     * DAO pour la gestion des sports.
+     */
     private final DAOSport daoSport;
 
+    /**
+     * Constructeur de la classe MngtSport.
+     * @param daoSport DAO pour la gestion des sports.
+     */
     public MngtSport(DAOSport daoSport) {
         this.daoSport = daoSport;
     }

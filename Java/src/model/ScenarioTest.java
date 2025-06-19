@@ -1,12 +1,15 @@
 package model;
-import model.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import model.persistence.*;
 /*
  * Scenario d'affectation des secouriste avec l'algo glouton
  */
 public class ScenarioTest {
+    /**
+     * Point d'entrée du scénario de test.
+     * @param args Arguments de la ligne de commande (non utilisés).
+     */
     public static void main(String[] args) {
         // Création des compétences
         Competence competence1 = new Competence();

@@ -117,7 +117,12 @@ public class DAOEstAffecteA extends DAO<EstAffecteA>{
         return affectations;
     }
 
-
+    /**
+     * Lit toutes les affectations d'un secouriste spécifique à partir de la base de données en fonction de son ID.
+     * @param idSecouriste ID du secouriste pour lequel on souhaite lire les affectations.
+     * @return Une liste d'objets EstAffecteA représentant les affectations du secouriste.
+     * @throws SQLException si une erreur se produit lors de la lecture dans la base de données.
+     */
     public List<EstAffecteA> readBySecouristeId(long idSecouriste) throws SQLException {
         List<EstAffecteA> affectations = new ArrayList<>();
         String sql = "SELECT leSecouriste, leDPS, laCompetence FROM EstAffecteA WHERE leSecouriste = ?";
@@ -150,6 +155,12 @@ public class DAOEstAffecteA extends DAO<EstAffecteA>{
         return affectations;
     }
 
+    /**
+     * Supprime toutes les affectations d'un secouriste pour une journée spécifique.
+     * @param journee La journée pour laquelle on souhaite supprimer les affectations.
+     * @return Le nombre d'affectations supprimées.
+     * @throws SQLException si une erreur se produit lors de la suppression dans la base de données.
+     */
     public int deleteByJournee(Journee journee) throws SQLException {
         String sqlDps = "SELECT id FROM DPS WHERE estProgrammeJour = ? AND estProgrammeMois = ? AND estProgrammeAnnee = ?";
         List<Long> dpsIds = new ArrayList<>();

@@ -1,7 +1,6 @@
 package model.graph.algorithm.dag;
 
 import java.util.*;
-
 import model.persistence.Competence;
 import model.persistence.Necessite;
 

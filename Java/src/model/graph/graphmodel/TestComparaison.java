@@ -2,6 +2,10 @@ package model.graph.graphmodel;
 
 import java.util.Random;
 
+/**
+ * La classe TestComparaison permet de tester et comparer les algorithmes Glouton et Exhaustif
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
+ */
 public class TestComparaison {
 
     /**
@@ -16,6 +20,10 @@ public class TestComparaison {
         return M;
     }
 
+    /**
+     * Point d'entrée principal pour exécuter les tests de comparaison
+     * @param args Arguments de la ligne de commande (non utilisés)
+     */
     public static void main(String[] args) {
         int[][][] casTests = {
             // Cas normal (main de Glouton)

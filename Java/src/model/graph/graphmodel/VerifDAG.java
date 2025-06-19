@@ -87,7 +87,7 @@ public class VerifDAG {
     }
 
     /**
-     * Réalise un parcour en profondeur pour détécter s'il y a un cycles
+     * Réalise un parcours en profondeur pour détécter s'il y a un cycle
      * @param noeud Le sommet actuel à explorer.
      * @return true si un cycle est trouvé, false sinon.
      */

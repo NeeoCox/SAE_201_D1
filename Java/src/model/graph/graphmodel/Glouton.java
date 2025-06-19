@@ -2,8 +2,18 @@ package model.graph.graphmodel;
 
 import java.util.Arrays;
 
+/**
+ * La classe Glouton implémente un algorithme glouton pour résoudre le problème d'affectation
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
+ */
 public class Glouton {
 
+    /**
+     * Algorithme glouton pour l'affectation de secouristes à des compétences.
+     * @param M Matrice d'adjacence où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
+     * @param verbose Si true, affiche les détails de l'algorithme (ordre des lignes et colonnes, affectations).
+     * @return Un tableau d'entiers où l'index représente la compétence et la valeur à cet index représente le secouriste affecté à cette compétence.
+     */
     public static int[] glouton(int[][] M, boolean verbose) {
         int n = M.length;
         int[][] matrice = new int[n][n];
@@ -106,12 +116,22 @@ public class Glouton {
         return affectation;
     }
 
+    /**
+     * Calculer la couverture des compétences à partir de l'affectation.
+     * @param affectation Tableau d'entiers où l'index représente la compétence et la valeur à cet index représente le secouriste affecté à cette compétence.
+     * @return Le nombre de compétences couvertes par l'affectation.
+     */
     public static int couverture(int[] affectation) {
         int c = 0;
         for (int a : affectation) if (a != -1) c++;
         return c;
     }
 
+    /**
+     * Méthode de test pour l'algorithme glouton.
+     * @param M Matrice d'adjacence où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
+     * @param verbose Si true, affiche les détails de l'algorithme.
+     */
     public static void test(int[][] M, boolean verbose) {
         long t0 = System.currentTimeMillis();
         int[] affectation = glouton(M, verbose);
@@ -121,6 +141,10 @@ public class Glouton {
         System.out.println("[Glouton] Affectation (compétence -> secouriste) : " + Arrays.toString(affectation));
     }
 
+    /**
+     * Point d'entrée de l'application pour tester l'algorithme glouton.
+     * @param args Arguments de la ligne de commande (non utilisés).
+     */
     public static void main(String[] args) {
         int[][] M = {
             {0, 1, 1, 0, 0},

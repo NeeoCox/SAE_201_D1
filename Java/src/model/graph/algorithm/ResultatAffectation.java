@@ -15,8 +15,16 @@ public class ResultatAffectation {
      * Map associant chaque DPS à une liste de Secouristes qui lui sont affectés.
      */
     private final Map<DPS, List<Secouriste>> affectations;
+    /**
+     * Map associant chaque BesoinUnitaire à un Secouriste qui lui est affecté.
+     */
     private final Map<BesoinUnitaire, Secouriste> affectationsUnitaires;
 
+    /**
+     * Constructeur de la classe ResultatAffectation.
+     * @param affectations Map associant chaque DPS à une liste de Secouristes
+     * @param affectationsUnitaires Map associant chaque BesoinUnitaire à un Secouriste
+     */
     public ResultatAffectation(Map<DPS, List<Secouriste>> affectations, Map<BesoinUnitaire, Secouriste> affectationsUnitaires) {
         this.affectations = affectations;
         this.affectationsUnitaires = affectationsUnitaires;
@@ -30,6 +38,10 @@ public class ResultatAffectation {
         return affectations;
     }
 
+    /**
+     * Retourne la map des affectations unitaires.
+     * @return la map associant chaque BesoinUnitaire à un Secouriste
+     */
     public Map<BesoinUnitaire, Secouriste> getAffectationsUnitaires() {
         return affectationsUnitaires;
     }

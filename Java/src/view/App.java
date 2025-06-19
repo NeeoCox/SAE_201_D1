@@ -8,11 +8,17 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+
 /**
  * Classe principale de l'application.
  * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class App extends Application {
+    
+    /**
+     * Méthode de démarrage de l'application JavaFX.
+     * @param stage La scène principale de l'application.
+     */
     @Override
     public void start(Stage stage) {
         try {
@@ -37,6 +43,10 @@ public class App extends Application {
         }
     }
     
+    /**
+     * Point d'entrée de l'application.
+     * @param args Arguments de la ligne de commande (non utilisés).
+     */
     public static void main(String[] args) {
         launch(args);
     }

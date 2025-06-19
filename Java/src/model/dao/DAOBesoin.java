@@ -130,6 +130,12 @@ public class DAOBesoin extends DAO<Besoin>{
         }
     }
 
+    /**
+     * Lit tous les besoins associés à un DPS spécifique de la base de données.
+     * @param dpsId ID du DPS pour lequel les besoins doivent être lus.
+     * @return Une liste de tous les besoins associés au DPS spécifié.
+     * @throws SQLException si une erreur se produit lors de la lecture dans la base de données.
+     */
     public List<Besoin> readByDpsId(long dpsId) throws SQLException {
         List<Besoin> besoins = new ArrayList<>();
         String sql = "SELECT * FROM Besoin WHERE leDPS = ?";

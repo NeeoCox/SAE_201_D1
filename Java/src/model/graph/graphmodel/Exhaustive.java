@@ -16,12 +16,31 @@ public class Exhaustive {
      */
     private final int[][] couts;
 
+    /**
+     * Matrice de compatibilité où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
+     */
     private final int[][] M;
+    /**
+     * Nombre de secouristes (ou compétences) dans la matrice.
+     */
     private final int n;
+    /**
+     * Meilleure affectation trouvée, où meilleureAffectation[j] = i signifie que le secouriste i est affecté à la compétence j.
+     */
     private int[] meilleureAffectation;
+    /**
+     * Meilleure couverture trouvée, c'est-à-dire le nombre de compétences couvertes par l'affectation.
+     */
     private int meilleureCouverture;
+    /**
+     * Nombre de solutions testées durant la recherche exhaustive.
+     */
     private int nbSolutionsTestees;
 
+    /**
+     * Constructeur de la classe Exhaustive.
+     * @param M Matrice de compatibilité où M[i][j] = 1 si le secouriste i possède la compétence j, sinon 0.
+     */
     public Exhaustive(int[][] M) {
         this.M = M;
         this.couts = M;
