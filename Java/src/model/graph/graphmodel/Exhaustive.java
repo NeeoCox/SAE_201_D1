@@ -11,6 +11,10 @@ import java.util.Arrays;
  * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class Exhaustive {
+    /**
+     * Matrice des coûts où couts[i][j] représente le coût d'affecter le secouriste i à la compétence j.
+     */
+    private final int[][] couts;
 
     private final int[][] M;
     private final int n;
@@ -20,6 +24,7 @@ public class Exhaustive {
 
     public Exhaustive(int[][] M) {
         this.M = M;
+        this.couts = M;
         this.n = M.length;
         this.meilleureAffectation = new int[n];
         this.meilleureCouverture = -1;
