@@ -7,41 +7,31 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:controller="controller.Controller"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            prefHeight="435.0" prefWidth="641.0">
+<BorderPane prefHeight="435.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
     <!-- Bande supérieure -->
     <top>
-        <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;">
 
             <!-- Bouton Retour à gauche -->
-            <Button fx:id="buttonRetourAcSec"
-                    text="Retour"
-                    onAction="#goToGestionDesCompetences"
-                    prefHeight="30" prefWidth="80"
-                    style="-fx-background-color: white; -fx-text-fill: #156082;" />
+            <Button fx:id="buttonRetourAcSec" onAction="#goToGestionDesCompetences" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
             <!-- Espace flexible -->
-            <Region HBox.hgrow="ALWAYS"/>
+            <Region HBox.hgrow="ALWAYS" />
 
             <!-- Titre centré -->
-            <Label text="Création de compétence"
-                   style="-fx-text-fill: white; -fx-font-size: 20px;"
-                   maxWidth="300" alignment="CENTER" />
+            <Label alignment="CENTER" maxWidth="300" style="-fx-text-fill: white; -fx-font-size: 20px;" text="Création de compétence" />
             
             <!-- Espace flexible -->
-            <Region HBox.hgrow="ALWAYS"/>
+            <Region HBox.hgrow="ALWAYS" />
 
             <!-- Logo à droite -->
             <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                 <image>
-                    <Image url="@../../img/logo.png"/>
+                    <Image url="@../../img/logo.png" />
                 </image>
             </ImageView>
 
@@ -50,18 +40,14 @@
 
     <!-- Centre -->
     <center>
-        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 40 20 40 20;" fillWidth="false">
+        <VBox alignment="CENTER" fillWidth="false" spacing="15" style="-fx-padding: 40 20 40 20;">
             <Label text="Intitulé" />
-            <TextField fx:id="intitulerCreateComp" prefWidth="300" maxWidth="300" minWidth="300" prefHeight="30" />
+            <TextField fx:id="intitulerCreateComp" maxWidth="300" minWidth="300" prefHeight="30" prefWidth="300" />
             <Label text="Nécessite" />
-            <TextField fx:id="necessiteCreateComp" prefWidth="300" maxWidth="300" minWidth="300" prefHeight="30"
-                       promptText="Rien si pas besoin d'autres compétences" />
+            <TextField fx:id="necessiteCreateComp" maxWidth="300" minWidth="300" prefHeight="30" prefWidth="300" promptText="Rien si pas besoin d'autres compétences" />
             <Label text="Si plus d'une compétence, séparez par" />
             <Label text="Comp1;Comp2" />
-            <Button fx:id="createButtonComp"
-                    text="Créer"
-                    prefWidth="160" prefHeight="40"
-                    style="-fx-background-color: #156082; -fx-text-fill: white;" />
+            <Button fx:id="createButtonComp" onAction="#createCompetences" prefHeight="40" prefWidth="160" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Créer" />
         </VBox>
     </center>
 

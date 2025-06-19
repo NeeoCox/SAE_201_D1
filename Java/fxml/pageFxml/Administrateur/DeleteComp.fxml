@@ -54,10 +54,11 @@
 
                 <Label text="Identifiant" />
 
-                <TextField fx:id="idDPSDelete" prefWidth="300" prefHeight="30" />
+                <TextField fx:id="intitulerDeleteComp" prefWidth="300" prefHeight="30" />
 
-                <Button fx:id="deleteButtonDPS"
+                <Button fx:id="deleteButtonComp"
                         text="Supprimer"
+                        onAction="#deleteCompetence"
                         prefWidth="160" prefHeight="40"
                         style="-fx-background-color: #156082; -fx-text-fill: white;" />
             </VBox>
