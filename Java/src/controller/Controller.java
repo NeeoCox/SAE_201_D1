@@ -65,6 +65,9 @@ import model.dao.DAOEstDisponible;
 import model.persistence.EstAffecteA;
 import model.service.MngtEstAffecteA;
 import model.dao.DAOEstAffecteA;
+import model.service.MngtSession;
+import model.persistence.User;
+import model.dao.DAOUser;
 
 
 
@@ -114,9 +117,9 @@ public class Controller  {
 	@FXML 
 	private Button buttonRetourConnectAdmin;
 	@FXML 
-	private TextField usernameFieldAmin;
+	private TextField usernameField;
 	@FXML 
-	private TextField passwordFieldAdmin;
+	private TextField passwordField;
 
 
 	/**
@@ -420,9 +423,15 @@ public class Controller  {
 
 	/**
 	 ***********************************
-	 * Variable pour affichage des Compétences
+	 * Variable pour affichage des Compétences secouriste
 	 ***********************************
 	 */
+	@FXML
+    private TableView<Possede> tableMesCompetencesSec;
+    @FXML
+    private TableColumn<Possede, String> colIntituleMesCompSec;
+	private ObservableList<Possede> dataMesComp = FXCollections.observableArrayList();
+
 
 	
 	@FXML
@@ -471,7 +480,24 @@ public class Controller  {
 
 
 	GrapheCompetences grapheCompetences;
+
+	
 	private ResultatAffectation resultatAffectation;
+
+	/**
+	 ***********************************
+	 * Gestion connection d'un secouriste
+	 ***********************************
+	 */
+	private Secouriste utilisateurConnecte;
+
+    public void setUtilisateurConnecte(Secouriste secouriste) {
+        this.utilisateurConnecte = secouriste;
+    }
+
+    public long getIdUtilisateurConnecte() {
+        return utilisateurConnecte != null ? utilisateurConnecte.getId() : -1;
+    }
 
 	public Controller(){
 		System.out.println("controller");
@@ -482,7 +508,7 @@ public class Controller  {
 	 * Connection BDD
 	 ***********************************
 	 */
-	public void connectAdmin(ActionEvent event){
+	/*public void connectAdmin(ActionEvent event){
 		String username = usernameFieldAmin.getText();
 		String password = passwordFieldAdmin.getText();
 
@@ -491,9 +517,75 @@ public class Controller  {
 		goToPageAdminAcceuil(event);
 	}
 
-	private void setPerm(String username, String password){
+	public void connectSecouriste(ActionEvent event){
+
+		String username = usernameFieldSec.getText();
+		String password = passwordFieldSec.getText();
+
+		DAO.setCredentials(username, password);	
+		Secouriste secouriste = null;
+		try{
+			secouriste = daoSecouriste.readByUsername(username);
+		}
+		catch(Exception e){
+			System.out.println("Erreur lors de la lecture du secouriste : " + e.getMessage());
+		}
 		
+		if (secouriste != null) {
+			MngtSession.setUtilisateurConnecte(secouriste);
+			goToPageAdminAcceuil(event);
+			// puis tu charges ta scène principale
+		}
+
+	}*/
+
+	public void connectUser(ActionEvent event) {
+		String username = usernameField.getText();
+		String password = passwordField.getText();
+
+		try {
+			DAOUser daoUser = new DAOUser();
+			User user = daoUser.readByUsername(username);
+
+			if (user != null) {
+				// Vérification du mot de passe (utilisez votre propre méthode ici)
+				if (verifyPassword(password, user.getPasswordHash())) {
+					if ("secouriste".equals(user.getRole())) {
+						DAOSecouriste daoSec = new DAOSecouriste();
+						Secouriste secouriste = daoSec.readByNom(username); // <- ici on cherche par nom
+						System.out.println("Secouriste trouvé : " + secouriste);
+						if (secouriste != null) {
+							MngtSession.setUtilisateurConnecte(secouriste);
+							goToPageSecouristeAcceuil(event);
+						} else {
+							System.out.println("Aucun secouriste trouvé avec ce nom.");
+						}
+					}
+				} else if ("admin".equals(user.getRole())) {
+					// Si besoin, chargez un objet Secouriste ou Admin ici
+					goToPageAdminAcceuil(event);        // redirection admin
+				}else {
+					System.out.print("Mot de passe incorrect");
+				}
+			} else {
+				System.out.print("Nom d'utilisateur non trouvé");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.print("Erreur lors de la connexion");
+		}
 	}
+
+
+	/**
+	 * Méthode utilitaire locale pour vérifier le mot de passe.
+	 * À remplacer par une vraie vérification de hash si besoin.
+	 */
+	private boolean verifyPassword(String password, String passwordHash) {
+		
+		return password.equals(passwordHash);
+	}
+
 
 
 	/**
@@ -720,7 +812,6 @@ public class Controller  {
 			List<Possede> listCompPos = new ArrayList<>();
 
 			// Création du secouriste
-			
 			
 			for (String comp : compPossede) {
 				Possede compPos = new Possede();
@@ -1522,7 +1613,27 @@ public class Controller  {
 		}
 	}
 
-	
+	public void viewCompForSecouriste(long idSecouriste) {
+		System.out.println("viewCompForSecouriste - ID: " + idSecouriste);
+
+		try {
+			dataMesComp.clear();
+
+			// Récupère uniquement les compétences du secouriste
+			List<Possede> listPos = daoPossede.read(idSecouriste);
+
+			dataMesComp.addAll(listPos);
+
+			tableMesCompetencesSec.setItems(dataMesComp);
+
+			colIntituleMesCompSec.setCellValueFactory(new PropertyValueFactory<>("intituleCompetence"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'affichage des compétences du secouriste : " + e.getMessage());
+		}
+	}
+
 
 	
 
@@ -1566,6 +1677,17 @@ public class Controller  {
 		if(tableDPS != null){
 			viewAllDPS();
 		}
+
+		if(tableMesCompetencesSec != null){
+			long idSecouriste = MngtSession.getIdUtilisateurConnecte();
+
+			System.out.println("bruh");
+			if (idSecouriste != -1) {
+				viewCompForSecouriste(idSecouriste);
+			} else {
+				System.out.println("Aucun secouriste connecté !");
+			}
+		}	
 	}
 
     public void addTask(LocalDate date, String taskDescription) {

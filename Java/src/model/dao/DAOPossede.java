@@ -49,4 +49,23 @@ public class DAOPossede extends DAO<Possede>{
         }
         return possedes;
     }
+
+    public List<Possede> read(long idSecouriste) throws SQLException {
+        List<Possede> possedes = new ArrayList<>();
+        String sql = "SELECT * FROM Possede WHERE leSecouriste = ?";
+        
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, idSecouriste);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Possede p = new Possede();
+                p.setIdSecouriste(rs.getLong("leSecouriste"));
+                p.setIntituleCompetence(rs.getString("laCompetence"));
+                possedes.add(p);
+            }
+        }
+        return possedes;
+    }
+
 }

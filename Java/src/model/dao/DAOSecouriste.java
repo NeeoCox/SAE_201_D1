@@ -43,7 +43,7 @@ public class DAOSecouriste extends DAO<Secouriste> {
                     s.setPrenom(rs.getString("prenom"));
                     s.setDateNaissance(rs.getString("dateNaissance"));
                     s.setEmail(rs.getString("email"));
-                    s.setTel(rs.getString("tel"));
+                    s.setTel(rs.getString("telephone"));
                     s.setAdresse(rs.getString("adresse"));
                     return s;
                 }
@@ -72,8 +72,31 @@ public class DAOSecouriste extends DAO<Secouriste> {
         return secouristes;
     }
 
+    public Secouriste readByNom(String nom) throws SQLException {
+        String sql = "SELECT * FROM Secouriste WHERE nom = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, nom);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Secouriste s = new Secouriste();
+                    s.setId(rs.getLong("id"));
+                    s.setNom(rs.getString("nom"));
+                    s.setPrenom(rs.getString("prenom"));
+                    s.setDateNaissance(rs.getString("dateNaissance"));
+                    s.setEmail(rs.getString("email"));
+                    s.setTel(rs.getString("telephone"));
+                    s.setAdresse(rs.getString("adresse"));
+                    return s;
+                }
+            }
+        }
+        return null;
+    }
+
+
+
     public void update(Secouriste secouriste) throws SQLException {
-        String sql = "UPDATE Secouriste SET nom = ?, prenom = ?, dateNaissance = ?, email = ?, tel = ?, adresse = ? WHERE id = ?";
+        String sql = "UPDATE Secouriste SET nom = ?, prenom = ?, dateNaissance = ?, email = ?, telephone = ?, adresse = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, secouriste.getNom());
             stmt.setString(2, secouriste.getPrenom());

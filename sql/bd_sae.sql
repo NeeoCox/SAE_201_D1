@@ -2,7 +2,7 @@ USE bd_sae;
 -----------------------------------------------------
 --                CREATION DES TABLES              --
 -----------------------------------------------------
-
+SET SQL_SAFE_UPDATES = 0;
 DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS affectation;
@@ -287,5 +287,36 @@ SHOW TABLES;
 SELECT * FROM Necessite;
 
 DESCRIBE Necessite;
+USE bd_sae;
+
+
+DELETE FROM users;
+
+
+
+-- Pour Jean Dupont (Secouriste id = 1)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (1, 'Dupont', '$2a$10$exampleHashedPassword1', 'secouriste');
+
+-- Pour Claire Martin (Secouriste id = 2)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (2, 'Martin', '$2a$10$exampleHashedPassword2', 'secouriste');
+
+-- Pour Linh Nguyen (Secouriste id = 3)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (3, 'Nguyen', '$2a$10$exampleHashedPassword3', 'secouriste');
+
+-- Pour Julien Moreau (Secouriste id = 4)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (4, 'Moreau', '$2a$10$exampleHashedPassword4', 'secouriste');
+
+-- Pour Sophie Lemoine (Secouriste id = 5)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (5, 'Lemoine', '$2a$10$exampleHashedPassword5', 'secouriste');
+
+INSERT INTO sessions (user_id, session_took, expires_at) VALUES
+(1, 'sessiontoken123abc', NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR)),
+(2, 'sessiontoken456def', NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR));
+
 
 

@@ -60,10 +60,10 @@
                 <GridPane alignment="CENTER" hgap="10" vgap="15">
                     <children>
                         <Label text="Identifiant" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <TextField fx:id="usernameFieldSec" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label text="Mot de passe" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <PasswordField fx:id="passwordFieldSec" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     </children>
                     <columnConstraints>
                         <ColumnConstraints />
@@ -77,7 +77,7 @@
 
                 <!-- Bouton de connexion stylé -->
                 <Button fx:id="buttonConnectionAdmin" 
-                        onAction="#connectAdmin" 
+                        onAction="#connectUser" 
                         prefWidth="150" 
                         text="Se connecter"
                         style="-fx-background-color: #125f7d; -fx-text-fill: white;" />
