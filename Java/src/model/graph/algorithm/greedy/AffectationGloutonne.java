@@ -12,6 +12,8 @@ import model.persistence.*;
  */
 public class AffectationGloutonne implements Affectation {
 
+    Map<BesoinUnitaire, Secouriste> affectationUnitaires = new HashMap<>();
+
     /**
      * Réalise l'affectation gloutonne des secouristes aux besoins.
      * @param secouristes Liste des secouristes disponibles.
@@ -79,6 +81,7 @@ public class AffectationGloutonne implements Affectation {
             }
             // On affecte le secouriste choisi à ce besoin
             affectation.computeIfAbsent(besoin.getDps(), k -> new ArrayList<>()).add(choisi);
+            affectationUnitaires.put(besoin, choisi);
             secouristesAffectes.add(choisi);
 
             // On met à jour les possibilités des autres secouristes (on retire ce besoin de leurs listes)
@@ -87,7 +90,7 @@ public class AffectationGloutonne implements Affectation {
             }
         }
 
-        return new ResultatAffectation(affectation);
+        return new ResultatAffectation(affectation, affectationUnitaires);
     }
 
     /**

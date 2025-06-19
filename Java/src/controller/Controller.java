@@ -1584,8 +1584,6 @@ public class Controller  {
 			for (Besoin b : besoinsJour) {
 				b.setLaCompetence(daoCompetence.findByIntitule(b.getIntituleCompetence()));
 			}
-			
-			besoinsJour.sort(Comparator.comparing(Besoin::getIntituleCompetence));
 
 			System.out.println("Nb besoins pour le jour " + jour + " : " + besoinsJour.size());
 			System.out.println("Besoins : " + besoinsJour);
@@ -1597,7 +1595,10 @@ public class Controller  {
 			} else {
 				algoAffect = new model.graph.algorithm.greedy.AffectationGloutonne();
 			}
-
+ 			
+			
+			resultatAffectation = algoAffect.affecter(secouristesDispos, dpsJour, besoinsJour);
+			
 			// Exécution de l'affectation
 			System.out.println("Secouristes dispos : " + secouristesDispos.size());
 			System.out.println("DPS ce jour : " + dpsJour.size());
@@ -1614,37 +1615,31 @@ public class Controller  {
 			}
 
 			resultatAffectation = algoAffect.affecter(secouristesDispos, dpsJour, besoinsJour);
+			
 			System.out.println("Nb affectations trouvées : " + resultatAffectation.getAffectations().size());
 
 			// Stockage en base via le service
 			DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
 			MngtEstAffecteA mngtAffect = new MngtEstAffecteA(daoEstAffecteA);
-
 			for (DPS dps : dpsJour) {
 				for (Secouriste s : tousSecouristes) {
 					try { mngtAffect.supprimerAffectation(s.getId(), dps.getId()); } catch (Exception ignore) {}
 				}
 			}
 
-			// On insère les nouvelles affectations
-			for (Map.Entry<DPS, List<Secouriste>> entry : resultatAffectation.getAffectations().entrySet()) {
-				DPS dps = entry.getKey();
-				for (Secouriste s : entry.getValue()) {
-					for (Besoin b : besoinsJour) {
-						if (b.getLeDPS().equals(dps)) {
-							// Vérifie que le secouriste possède la compétence requise
-							for (Possede p : s.getPossessions()) {
-								if (p.getIntituleCompetence().equals(b.getIntituleCompetence())) {
-									try {
-										mngtAffect.creerAffectation(s.getId(), b.getIntituleCompetence(), dps.getId());
-										System.out.println("Insertion : secouriste=" + s.getId() + ", comp=" + b.getIntituleCompetence() + ", dps=" + dps.getId());
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							}
-						}
-					}
+			// *** NOUVELLE BOUCLE D'INSERTION ***
+			Map<BesoinUnitaire, Secouriste> affectationsUnitaires = resultatAffectation.getAffectationsUnitaires();
+			for (Map.Entry<BesoinUnitaire, Secouriste> entry : affectationsUnitaires.entrySet()) {
+				BesoinUnitaire besoin = entry.getKey();
+				Secouriste secouriste = entry.getValue();
+				DPS dps = besoin.getDps();
+				String competence = besoin.getCompetence().getIntitule();
+
+				try {
+					mngtAffect.creerAffectation(secouriste.getId(), competence, dps.getId());
+					System.out.println("Insertion : secouriste=" + secouriste.getId() + ", comp=" + competence + ", dps=" + dps.getId());
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 

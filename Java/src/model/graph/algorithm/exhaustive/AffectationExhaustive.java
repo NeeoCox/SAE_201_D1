@@ -1,7 +1,6 @@
 package model.graph.algorithm.exhaustive;
 
 import java.util.*;
-
 import model.graph.algorithm.*;
 import model.persistence.*;
 
@@ -38,14 +37,18 @@ public class AffectationExhaustive implements Affectation {
         recherche(permutation, 0, secouristesCompletes, besoinsUnitaires, n, meilleurePermutation, meilleurScore);
 
         Map<DPS, List<Secouriste>> affectation = new HashMap<>();
+        Map<BesoinUnitaire, Secouriste> affectationUnitaires = new HashMap<>();
+
         for (int i = 0; i < n; i++) {
             Secouriste s = secouristesCompletes.get(i);
             BesoinUnitaire b = besoinsUnitaires.get(meilleurePermutation[i]);
             if (s != null && b != null && estAffectable(s, b)) {
                 affectation.computeIfAbsent(b.getDps(), k -> new ArrayList<>()).add(s);
+                affectationUnitaires.put(b, s); // Ajout de l'affectation unitaire
             }
         }
-        return new ResultatAffectation(affectation);
+
+        return new ResultatAffectation(affectation, affectationUnitaires);
     }
 
     /**
