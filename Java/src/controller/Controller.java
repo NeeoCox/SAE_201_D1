@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
@@ -1675,7 +1677,8 @@ public class Controller  {
 				}
 			}
 
-			// *** NOUVELLE BOUCLE D'INSERTION ***
+			Set<String> dejaInsere = new HashSet<>();
+
 			Map<BesoinUnitaire, Secouriste> affectationsUnitaires = resultatAffectation.getAffectationsUnitaires();
 			for (Map.Entry<BesoinUnitaire, Secouriste> entry : affectationsUnitaires.entrySet()) {
 				BesoinUnitaire besoin = entry.getKey();
@@ -1683,8 +1686,13 @@ public class Controller  {
 				DPS dps = besoin.getDps();
 				String competence = besoin.getCompetence().getIntitule();
 
+				// Clé unique pour chaque affectation
+				String cle = secouriste.getId() + "-" + dps.getId() + "-" + competence;
+				if (dejaInsere.contains(cle)) continue; // déjà inséré, on saute
+
 				try {
 					mngtAffect.creerAffectation(secouriste.getId(), competence, dps.getId());
+					dejaInsere.add(cle);
 					System.out.println("Insertion : secouriste=" + secouriste.getId() + ", comp=" + competence + ", dps=" + dps.getId());
 				} catch (Exception e) {
 					e.printStackTrace();

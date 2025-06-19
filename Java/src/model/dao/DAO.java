@@ -3,6 +3,7 @@ package model.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 /**
  * Classe abstraite DAO qui fournit des méthodes de base pour la gestion des connexions à la base de données.
  * Cette classe est générique et peut être étendue pour des types spécifiques.
@@ -16,7 +17,7 @@ public abstract class DAO<T> {
     /**
      * URL de connexion à la base de données MySQL.
      */
-    private static String URL = "jdbc:mysql://localhost:3306/bd_sae";
+    private final static String URL = "jdbc:mysql://localhost:3306/bd_sae";
     /**
      * Nom d'utilisateur pour la connexion à la base de données.
      */
@@ -24,7 +25,7 @@ public abstract class DAO<T> {
     /**
      * Mot de passe pour la connexion à la base de données.
      */
-    private static String PASSWORD = "root";
+    private static String PASSWORD = "437916";
 
     /**
      * Crée une connexion à la base de données MySQL.
