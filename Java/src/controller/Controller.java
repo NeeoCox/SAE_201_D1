@@ -473,6 +473,7 @@ public class Controller  {
 	@FXML private DatePicker datePickerAffectation;
 	@FXML private Button btnAffecterSecouristes;
 	@FXML private ToggleGroup algoGroup;
+	@FXML private DatePicker datePickerSuppression;
 
     private LocalDate currentMonday;
 
@@ -1405,6 +1406,43 @@ public class Controller  {
 		}
 	}
 
+	@FXML
+	public void onDeleteSelectedCompetence(ActionEvent event) {
+		Competence selected = tableCompetences.getSelectionModel().getSelectedItem();
+		if (selected == null) {
+			System.out.println("Veuillez sélectionner une compétence à supprimer.");
+			return;
+		}
+		String intituleASupprimer = selected.getIntitule();
+		try {
+			// Supprimer toutes les nécessités liées à cette compétence en base
+			daoNecessite.deleteByCompetence(intituleASupprimer);
+
+			// Supprimer la compétence en base
+			daoCompetence.delete(intituleASupprimer);
+
+			// Supprimer la compétence dans le graphe en mémoire si besoin
+			if (grapheCompetences != null) {
+				Competence compASupprimer = trouverCompetenceParIntitule(intituleASupprimer, grapheCompetences.getCompetences());
+				if (compASupprimer != null) {
+					grapheCompetences.getCompetences().remove(compASupprimer);
+					grapheCompetences.getNecessites().removeIf(n ->
+						(n.getIntituleCompetence() != null && n.getIntituleCompetence().equals(intituleASupprimer)) ||
+						(n.getIntituleCompetenceNecessaire() != null && n.getIntituleCompetenceNecessaire().equals(intituleASupprimer))
+					);
+				}
+			}
+
+			// Rafraîchir la table
+			viewAllComp();
+
+			System.out.println("Compétence supprimée avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression de la compétence : " + e.getMessage());
+		}
+	}
+
 
 	/*******************************************
 	 * GESTION DES DÉPENDANCES DES COMPÉTENCES *
@@ -1817,6 +1855,25 @@ public class Controller  {
 	}
 
 
+	@FXML
+	public void onSupprimerAffectationsJournee(ActionEvent event) {
+		// Utilise le DatePicker dédié à la suppression
+		LocalDate date = datePickerSuppression.getValue();
+		if (date == null) {
+			System.out.println("Veuillez choisir une date.");
+			return;
+		}
+		Journee journee = new Journee(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+		try {
+			DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
+			int nbSuppr = daoEstAffecteA.deleteByJournee(journee);
+			System.out.println(nbSuppr + " affectations supprimées pour la journée " + date);
+			afficherAffectationsTousSecouristesDansGridPane(); // Rafraîchir l'affichage
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression des affectations : " + e.getMessage());
+		}
+	}
 
 	/**
 	 ***********************************
@@ -2062,6 +2119,7 @@ public class Controller  {
 		Long id = MngtSession.getIdDPSAModifier();
 		if (id != null) {
 			DAODPS daoDPS = new DAODPS();
+			DAOBesoin daoBesoin = new DAOBesoin();
 			try {
 				DPS dps = daoDPS.read(id);
 				if (dps != null) {
@@ -2073,12 +2131,32 @@ public class Controller  {
 						dps.getEstProgramme().getMois(),
 						dps.getEstProgramme().getJour()
 					));
-					lieuRencDPSModif.setText(dps.getALieuDans().getNom());
-					sportDPSModif.setText(dps.getConcerne().getNom());
 					
+					if (dps.getALieuDans() != null)
+						lieuRencDPSModif.setText(dps.getALieuDans().getCode());
+					else
+						lieuRencDPSModif.setText("");
+					if (dps.getConcerne() != null)
+						sportDPSModif.setText(dps.getConcerne().getCode());
+					else
+						sportDPSModif.setText("");
+
+					// Préremplissage des compétences requises et nombre de secouristes
+					List<Besoin> besoins = daoBesoin.readByDpsId(dps.getId());
+					StringBuilder compReq = new StringBuilder();
+					StringBuilder nbSec = new StringBuilder();
+					for (Besoin b : besoins) {
+						if (compReq.length() > 0) compReq.append(";");
+						if (nbSec.length() > 0) nbSec.append(";");
+						compReq.append(b.getIntituleCompetence());
+						nbSec.append(b.getNombre());
+					}
+					CompReqDPSModif.setText(compReq.toString());
+					nbSecDPSModif.setText(nbSec.toString());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+				System.out.println("Erreur lors de la récupération du DPS : " + e.getMessage());
 			}
 		}
 	}

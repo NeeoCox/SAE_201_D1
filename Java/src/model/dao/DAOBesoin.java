@@ -87,5 +87,23 @@ public class DAOBesoin extends DAO<Besoin>{
         }
     }
 
+    public List<Besoin> readByDpsId(long dpsId) throws SQLException {
+        List<Besoin> besoins = new ArrayList<>();
+        String sql = "SELECT * FROM Besoin WHERE leDPS = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, dpsId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    besoins.add(new Besoin(
+                        rs.getInt("nombre"),
+                        rs.getString("laCompetence"),
+                        rs.getLong("leDPS")                    
+                    ));
+                }
+            }
+        }
+        return besoins;
+    }
+
 
 }

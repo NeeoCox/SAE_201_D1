@@ -109,6 +109,8 @@
                 <Label text="Date :" />
                 <DatePicker fx:id="datePickerAffectation"/>
                 <Button fx:id="btnAffecterSecouristes" text="Affecter les secouristes" onAction="#onAffecterSecouristes"/>
+                <DatePicker fx:id="datePickerSuppression"/>
+                <Button fx:id="btnSupprimerAffectationsJournee" text="Supprimer toutes les affectations de la journée" onAction="#onSupprimerAffectationsJournee"/>
             </HBox>
         </VBox>
     </bottom>

@@ -6,6 +6,7 @@ import java.util.List;
 import model.persistence.Competence;
 import model.persistence.DPS;
 import model.persistence.EstAffecteA;
+import model.persistence.Journee;
 
 public class DAOEstAffecteA extends DAO<EstAffecteA>{
     private final Connection connection;
@@ -114,5 +115,34 @@ public class DAOEstAffecteA extends DAO<EstAffecteA>{
             }
         }
         return affectations;
+    }
+
+    public int deleteByJournee(Journee journee) throws SQLException {
+        String sqlDps = "SELECT id FROM DPS WHERE estProgrammeJour = ? AND estProgrammeMois = ? AND estProgrammeAnnee = ?";
+        List<Long> dpsIds = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(sqlDps)) {
+            ps.setInt(1, journee.getJour());
+            ps.setInt(2, journee.getMois());
+            ps.setInt(3, journee.getAnnee());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    dpsIds.add(rs.getLong("id"));
+                }
+            }
+        }
+        if (dpsIds.isEmpty()) return 0;
+
+        StringBuilder sqlDelete = new StringBuilder("DELETE FROM EstAffecteA WHERE leDPS IN (");
+        for (int i = 0; i < dpsIds.size(); i++) {
+            sqlDelete.append("?");
+            if (i < dpsIds.size() - 1) sqlDelete.append(",");
+        }
+        sqlDelete.append(")");
+        try (PreparedStatement ps = connection.prepareStatement(sqlDelete.toString())) {
+            for (int i = 0; i < dpsIds.size(); i++) {
+                ps.setLong(i + 1, dpsIds.get(i));
+            }
+            return ps.executeUpdate();
+        }
     }
 }
