@@ -525,6 +525,10 @@ public class Controller  {
 	 * Connection BDD
 	 ***********************************
 	 */
+	/**
+	 * Methode pour gerer la connection a l'application et a la BDD
+	 * @param event l'evenement de l'action
+	 */
 	@FXML
 	public void connectUser(ActionEvent event) {
 		System.out.println("connectUser");
@@ -635,21 +639,37 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page Gestion des secouristes
+	  * @param event l'evenement de l'action
+	  */
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
     	goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page Gestion des compétences
+	  * @param event l'evenement de l'action
+	  */
 	public void goToGestionDesCompetences(ActionEvent event){
 		System.out.println("goToGestionDesCompetences");
 		goTo("/pageFxml/Administrateur/GestionDesCompetences.fxml", event);
 	}
 	
+	/**
+	  * Methode pour aller a la page Affectation des secouristes
+	  * @param event l'evenement de l'action
+	  */
 	public void goToPageAffectationSecouristes(ActionEvent event){
 		System.out.println("goToPageAffectationSecouristes");
 		goTo("/pageFxml/Administrateur/PageAffectationSecouristes.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page Dispositif de secours
+	  * @param event l'evenement de l'action
+	  */
 	public void goToDispositifsDeSecours(ActionEvent event){
 		System.out.println("goToDispositifsDeSecours");
 		goTo("/pageFxml/Administrateur/DispositifsDeSecours.fxml", event);
@@ -661,11 +681,19 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page Création de secouristes
+	  * @param event l'evenement de l'action
+	  */
 	public void goToCreationDeSouriste(ActionEvent event){
 		System.out.println("goToCreationDeSouriste");
 		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page modification des secouriste
+	  * @param event l'evenement de l'action
+	  */
 	@FXML
 	public void goToModifSecouriste(ActionEvent event) {
 		System.out.println("goToModifSecouriste");
@@ -679,6 +707,10 @@ public class Controller  {
 		goTo("/pageFxml/Administrateur/ModifSecouriste.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page delete secouriste 
+	  * @param event l'evenement de l'action
+	  */
 	public void goToDeleteSec(ActionEvent event){
 		System.out.println("goToDeleteSec");
 		goTo("/pageFxml/Administrateur/DeleteSec.fxml", event);
@@ -690,11 +722,19 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page création de DPS
+	  * @param event l'evenement de l'action
+	  */
 	public void goToCreationDPS(ActionEvent event){
 		System.out.println("goToCreationDPS");
 		goTo("/pageFxml/Administrateur/CreationDPS.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page modification de DPS
+	  * @param event l'evenement de l'action
+	  */
 	public void goToModifDPS(ActionEvent event) {
 		System.out.println("goToModifDPS");
 		DPS dps = tableDPS.getSelectionModel().getSelectedItem();
@@ -706,6 +746,10 @@ public class Controller  {
 		goTo("/pageFxml/Administrateur/ModifDPS.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page suppression de DPS
+	  * @param event l'evenement de l'action
+	  */
 	public void goToDeleteDPS(ActionEvent event){
 		System.out.println("goToDeleteDPS");
 		goTo("/pageFxml/Administrateur/DeleteDPS.fxml", event);
@@ -717,11 +761,19 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page création de compétences
+	  * @param event l'evenement de l'action
+	  */
 	public void goToCreateComp(ActionEvent event){
 		System.out.println("goToCreateComp");
 		goTo("/pageFxml/Administrateur/CreateComp.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la modification compétences
+	  * @param event l'evenement de l'action
+	  */
 	public void goToModifComp(ActionEvent event){
 		System.out.println("goToModifComp");
 		Competence comp = tableCompetences.getSelectionModel().getSelectedItem();
@@ -733,6 +785,10 @@ public class Controller  {
 		goTo("/pageFxml/Administrateur/ModifComp.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page suppréssion de compétences 
+	  * @param event l'evenement de l'action
+	  */
 	public void goToDeleteComp(ActionEvent event){
 		System.out.println("goToDeleteComp");
 		goTo("/pageFxml/Administrateur/DeleteComp.fxml", event);
@@ -744,16 +800,28 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page mes compétences
+	  * @param event l'evenement de l'action
+	  */
 	public void goToMesCompetences(ActionEvent event){
 		System.out.println("goToMesCompetences");
 		goTo("/pageFxml/Secouriste/MesCompetences.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page mes disponibilité
+	  * @param event l'evenement de l'action
+	  */
 	public void goToMesDisponibilite(ActionEvent event){
 		System.out.println("goToMesDisponibilite");
 		goTo("/pageFxml/Secouriste/MesDisponibilite.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page monplanning et affectations
+	  * @param event l'evenement de l'action
+	  */
 	public void goToMonPlanningEtAffectations(ActionEvent event){
 		System.out.println("goToMonPlanningEtAffectations");
 		goTo("/pageFxml/Secouriste/MonPlanningEtAffectations.fxml", event);
@@ -845,6 +913,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet de update un secouriste
+	 */
 	public void updateSecouriste() {
 		System.out.println("updateSecouriste");
 
@@ -912,6 +983,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * permet de supprimer un secouriste
+	 */
 	public void deleteSecouriste() {
 		System.out.println("deleteSecouriste");
 
@@ -2019,6 +2093,11 @@ public class Controller  {
 		return btnRetourPlanningSecouriste != null;
 	}
 
+	/**
+	 * Initialise les champs de modification du secouriste avec les données du secouriste à modifier.
+	 * Récupère l'identifiant stocké dans la session, puis charge les informations du secouriste correspondant depuis la base de données.
+	 * Préremplit les champs de saisie (nom, prénom, date de naissance, email, adresse, téléphone, compétences).
+	 */
 	private void initModifSecouriste() {
 		Long id = MngtSession.getIdSecouristeAModifier();
 		if (id != null) {
@@ -2050,6 +2129,11 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Initialise les champs de modification d'un DPS avec les données du DPS à modifier.
+	 * Récupère l'identifiant du DPS depuis la session, puis charge les informations correspondantes (heure, date, lieu, sport)
+	 * et les affiche dans les champs de modification.
+	 */
 	public void initModifDPS() {
 		Long id = MngtSession.getIdDPSAModifier();
 		if (id != null) {
@@ -2075,6 +2159,11 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Initialise les champs de modification d'une compétence avec les données de la compétence à modifier.
+	 * Récupère l'intitulé de la compétence depuis la session, puis lit les données correspondantes depuis la base
+	 * pour les préremplir dans le formulaire.
+	 */
 	public void initModifComp() {
 		String intitule = MngtSession.getIntituleCompetenceAModifier();
 		if (intitule != null) {
@@ -2091,10 +2180,20 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Ajoute une tâche à la date spécifiée.
+	 * Si aucune tâche n'existe encore pour cette date, une nouvelle liste est créée.
+	 * @param date La date à laquelle la tâche doit être ajoutée.
+	 * @param taskDescription La description de la tâche à ajouter.
+	 */
     public void addTask(LocalDate date, String taskDescription) {
         tasksByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(taskDescription);
     }
 
+	/**
+	 * Vide toutes les boîtes de tâches de la semaine affichée.
+	 * Supprime toutes les tâches visuellement du tableau horaire (GridPane).
+	 */
 	private void clearAllTaskBoxes() {
 		for (int day = 0; day < 7; day++) {
 			for (int hour = 0; hour < 24; hour++) {
@@ -2105,10 +2204,21 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Vérifie si une date donnée se trouve dans la semaine actuellement affichée.
+	 * @param date La date à vérifier.
+	 * @return {@code true} si la date est comprise entre le lundi courant et le dimanche suivant, {@code false} sinon.
+	 */
     private boolean isDateInCurrentWeek(LocalDate date) {
         return !date.isBefore(currentMonday) && !date.isAfter(currentMonday.plusDays(6));
     }
-
+	
+	/**
+	 * Affiche les affectations de la semaine à partir du lundi donné.
+	 * Met à jour les étiquettes des jours, puis selon la page affichée
+	 * (admin ou utilisateur), affiche les affectations correspondantes dans le GridPane.
+	 * @param monday La date correspondant au lundi de la semaine à afficher.
+	 */
     public void afficherSemaine(LocalDate monday) {
 		currentMonday = monday;
 		updateDayLabels();
@@ -2120,7 +2230,10 @@ public class Controller  {
 		}
 	}
 
-
+	/**
+	 * Met à jour les libellés des jours de la semaine affichée
+	 * en les associant à leur date respective à partir du lundi courant.
+	 */	
     private void updateDayLabels() {
         lblMon.setText(" Lundi\n " + currentMonday);
         lblTue.setText(" Mardi\n " + currentMonday.plusDays(1));
@@ -2132,9 +2245,10 @@ public class Controller  {
     }
 
     /**
-     * 
-     * @param event
-     */
+	 * Gère l'événement de clic sur le bouton "Ajouter une tâche".
+	 * Ajoute une tâche prédéfinie au mercredi de la semaine actuellement affichée.
+	 * @param event L'événement déclenché par le clic.
+	 */
     @FXML
     public void onAddTaskClicked(ActionEvent event) {
         // Exemple : on ajoute une tâche fixe au mercredi de la semaine affichée
@@ -2144,6 +2258,12 @@ public class Controller  {
         addTask(taskDate, taskDesc);
     }
 
+	/**
+	 * Génère dynamiquement les étiquettes horaires (00h à 23h)
+	 * et initialise les boîtes de tâches (VBox) pour chaque heure et chaque jour de la semaine.
+	 * Ces boîtes sont ajoutées au GridPane principal représentant la semaine.
+	 * Si le GridPane n’est pas encore initialisé, un message d’erreur est affiché.
+	 */
     private void generateHourLabelsAndTaskBoxes() {
 		if (gridWeek == null) {
 			System.err.println("gridWeek n'est pas encore initialisé");
@@ -2174,6 +2294,11 @@ public class Controller  {
 
 
 
+	/**
+	 * Gère l'action du bouton pour afficher la semaine précédente.
+	 * Décrémente l'offset de la semaine, met à jour le lundi courant,
+	 * réaffiche la semaine correspondante et met à jour le label de la semaine.
+	 */
     @FXML
 	private void onPrevWeek() {
 		currentWeekOffset--;
@@ -2182,6 +2307,11 @@ public class Controller  {
 		updateWeekLabel();
 	}
 
+	/**
+	 * Gère l'action du bouton pour afficher la semaine suivante.
+	 * Incrémente l'offset de la semaine, met à jour le lundi courant,
+	 * réaffiche la semaine correspondante et met à jour le label de la semaine.
+	 */
 	@FXML
 	private void onNextWeek() {
 		currentWeekOffset++;
@@ -2190,16 +2320,27 @@ public class Controller  {
 		updateWeekLabel();
 	}
 
+	/**
+	 * Met à jour le label indiquant le numéro de la semaine affichée,
+	 * en tenant compte de l'offset actuel appliqué à la semaine courante.
+	 */
 	private void updateWeekLabel() {
 		lblWeek.setText("Semaine " + (getCurrentWeekNumber() + currentWeekOffset));
 	}
 
+	/**
+	 * Calcule et retourne le numéro de la semaine courante selon le calendrier ISO.
+	 * @return le numéro de la semaine de l'année en cours (de 1 à 52 ou 53 selon l'année).
+	 */
     private int getCurrentWeekNumber() {
         // Retourne la semaine courante (exemple basique)
         java.time.LocalDate now = java.time.LocalDate.now();
         return now.get(java.time.temporal.WeekFields.ISO.weekOfWeekBasedYear());
     }
 
+	/**
+	 * Permet d'exporter les données de toutes la base de donnée et met les csv dans un .zip
+	 */
 	public void exportAllTables() {
         exportSecouriste();
         exportJournee();
@@ -2252,6 +2393,9 @@ public class Controller  {
 		System.out.println("Export ZIP terminé : " + zipFileName);
 	}
 
+	/**
+	 * Permet d'exporter les données de Secouriste
+	 */
     private void exportSecouriste() {
 		String file = "Secouriste.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2274,6 +2418,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de journee
+	 */
 	private void exportJournee() {
 		String file = "Journee.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2295,6 +2442,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de Competence
+	 */
     private void exportCompetence() {
 		String file = "Competence.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2316,6 +2466,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de Sport
+	 */
     private void exportSport() {
 		String file = "Sport.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2337,6 +2490,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de Site
+	 */
     private void exportSite() {
 		String file = "Site.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2358,6 +2514,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de DPS
+	 */
     private void exportDPS() {
 		String file = "DPS.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2388,6 +2547,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de Besoin
+	 */
     private void exportBesoin() {
 		String file = "Besoin.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2409,6 +2571,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de Necessite
+	 */
     private void exportNecessite() {
 		String file = "Necessite.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2430,6 +2595,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de Possede
+	 */
     private void exportPossede() {
 		String file = "Possede.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2451,6 +2619,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de EstDisponible
+	 */
     private void exportEstDisponible() {
 		String file = "EstDisponible.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
@@ -2475,6 +2646,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet d'exporter les données de EstAffecteA
+	 */
     private void exportEstAffecteA() {
 		String file = "EstAffecteA.csv";
 		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
