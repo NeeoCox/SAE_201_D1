@@ -1,6 +1,11 @@
 package controller;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 // Import des librairies Java
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.temporal.ChronoUnit;
@@ -10,6 +15,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
@@ -153,6 +160,8 @@ public class Controller  {
 	private Button buttonDPS;
 	@FXML 
 	private Button buttonGestComp;
+	@FXML 
+	private Button buttonExport;
 
 	/**
 	 ***********************************
@@ -2191,4 +2200,299 @@ public class Controller  {
         return now.get(java.time.temporal.WeekFields.ISO.weekOfWeekBasedYear());
     }
 
+	public void exportAllTables() {
+        exportSecouriste();
+        exportJournee();
+        exportCompetence();
+        exportSport();
+        exportSite();
+        exportDPS();
+        exportBesoin();
+        exportNecessite();
+        exportPossede();
+        exportEstDisponible();
+        exportEstAffecteA();
+        // Ajoute ici d'autres tables si besoin
+
+		String[] csvFiles = {
+        "Secouriste.csv", "Journee.csv", "Competence.csv", "Sport.csv", "Site.csv",
+        "DPS.csv", "Besoin.csv", "Necessite.csv", "Possede.csv", "EstDisponible.csv", "EstAffecteA.csv"
+		};
+		String zipFileName = "export_sae.zip";
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFileName))) {
+			for (String csv : csvFiles) {
+				File file = new File(csv);
+				if (file.exists()) {
+					try (FileInputStream fis = new FileInputStream(file)) {
+						ZipEntry zipEntry = new ZipEntry(csv);
+						zos.putNextEntry(zipEntry);
+						byte[] buffer = new byte[1024];
+						int len;
+						while ((len = fis.read(buffer)) > 0) {
+							zos.write(buffer, 0, len);
+						}
+						zos.closeEntry();
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la création du zip : " + e.getMessage());
+		}
+		// Suppression des fichiers CSV après création du zip
+		for (String csv : csvFiles) {
+			File file = new File(csv);
+			if (file.exists()) {
+				if (!file.delete()) {
+					System.out.println("Impossible de supprimer le fichier : " + csv);
+				}
+			}
+		}
+
+		System.out.println("Export ZIP terminé : " + zipFileName);
+	}
+
+    private void exportSecouriste() {
+		String file = "Secouriste.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("id;nom;prenom;dateNaissance;email;telephone;adresse");
+			List<Secouriste> list;
+			try {
+				list = daoSecouriste.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des secouristes : " + e.getMessage());
+				return;
+			}
+			for (Secouriste s : list) {
+				out.println(s.getId() + ";" + s.getNom() + ";" + s.getPrenom() + ";" + s.getDateNaissance() + ";" +
+						s.getEmail() + ";" + s.getTel() + ";" + s.getAdresse());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Secouriste.csv : " + e.getMessage());
+		}
+	}
+
+	private void exportJournee() {
+		String file = "Journee.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("jour;mois;annee");
+			List<Journee> list;
+			try {
+				list = daoJournee.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des journées : " + e.getMessage());
+				return;
+			}
+			for (Journee j : list) {
+				out.println(j.getJour() + ";" + j.getMois() + ";" + j.getAnnee());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Journee.csv : " + e.getMessage());
+		}
+	}
+
+    private void exportCompetence() {
+		String file = "Competence.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("intitule");
+			List<Competence> list;
+			try {
+				list = daoCompetence.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des compétences : " + e.getMessage());
+				return;
+			}
+			for (Competence c : list) {
+				out.println(c.getIntitule());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Competence.csv : " + e.getMessage());
+		}
+	}
+
+    private void exportSport() {
+		String file = "Sport.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("code;nom");
+			List<Sport> list;
+			try {
+				list = daoSport.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des sports : " + e.getMessage());
+				return;
+			}
+			for (Sport s : list) {
+				out.println(s.getCode() + ";" + s.getNom());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Sport.csv : " + e.getMessage());
+		}
+	}
+
+    private void exportSite() {
+		String file = "Site.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("code;nom;longitude;latitude");
+			List<Site> list;
+			try {
+				list = daoSite.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des sites : " + e.getMessage());
+				return;
+			}
+			for (Site s : list) {
+				out.println(s.getCode() + ";" + s.getNom() + ";" + s.getLongitude() + ";" + s.getLatitude());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Site.csv : " + e.getMessage());
+		}
+	}
+
+    private void exportDPS() {
+		String file = "DPS.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("id;horaireDepart;horaireFin;concerneSport;aLieuDansSite;estProgrammeJour;estProgrammeMois;estProgrammeAnnee");
+			List<DPS> list;
+			try {
+				list = daoDPS.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des DPS : " + e.getMessage());
+				return;
+			}
+			for (DPS d : list) {
+				out.println(
+					d.getId() + ";" +
+					d.getHoraireDepart() + ";" +
+					d.getHoraireFin() + ";" +
+					(d.getConcerne() != null ? d.getConcerne().getCode() : "") + ";" +
+					(d.getALieuDans() != null ? d.getALieuDans().getCode() : "") + ";" +
+					(d.getEstProgramme() != null ? d.getEstProgramme().getJour() : "") + ";" +
+					(d.getEstProgramme() != null ? d.getEstProgramme().getMois() : "") + ";" +
+					(d.getEstProgramme() != null ? d.getEstProgramme().getAnnee() : "")
+				);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier DPS.csv : " + e.getMessage());
+		}
+	}
+
+    private void exportBesoin() {
+		String file = "Besoin.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("laCompetence;leDPS;nombre");
+			List<Besoin> list;
+			try {
+				list = daoBesoin.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des besoins : " + e.getMessage());
+				return;
+			}
+			for (Besoin b : list) {
+				out.println(b.getIntituleCompetence() + ";" + b.getIdDPS() + ";" + b.getNombre());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Besoin.csv : " + e.getMessage());
+		}
+	}
+
+    private void exportNecessite() {
+		String file = "Necessite.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("intituleCompetence;intituleCompetenceNecessaire");
+			List<Necessite> list;
+			try {
+				list = daoNecessite.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des nécessités : " + e.getMessage());
+				return;
+			}
+			for (Necessite n : list) {
+				out.println(n.getIntituleCompetence() + ";" + n.getIntituleCompetenceNecessaire());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Necessite.csv : " + e.getMessage());
+		}
+	}
+
+    private void exportPossede() {
+		String file = "Possede.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("leSecouriste;laCompetence");
+			List<Possede> list;
+			try {
+				list = daoPossede.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des compétences possédées : " + e.getMessage());
+				return;
+			}
+			for (Possede p : list) {
+				out.println(p.getIdSecouriste() + ";" + p.getIntituleCompetence());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Possede.csv : " + e.getMessage());
+		}
+	}
+
+    private void exportEstDisponible() {
+		String file = "EstDisponible.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("leSecouriste;jourJournee;moisJournee;anneeJournee");
+			List<EstDisponible> list;
+			try {
+				list = daoEstDisponible.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des disponibilités : " + e.getMessage());
+				return;
+			}
+			for (EstDisponible ed : list) {
+				out.println(ed.getIdSecouriste() + ";" +
+							ed.getJourJournee() + ";" +
+							ed.getMoisJournee() + ";" +
+							ed.getAnneeJournee());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier EstDisponible.csv : " + e.getMessage());
+		}
+	}
+
+    private void exportEstAffecteA() {
+		String file = "EstAffecteA.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("leSecouriste;leDPS;laCompetence");
+			List<EstAffecteA> list;
+			try {
+				list = new model.dao.DAOEstAffecteA().readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des affectations : " + e.getMessage());
+				return;
+			}
+			for (EstAffecteA ea : list) {
+				out.println(ea.getIdSecouriste() + ";" + ea.getIdDPS() + ";" + ea.getIntituleCompetence());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier EstAffecteA.csv : " + e.getMessage());
+		}
+	}
 }
