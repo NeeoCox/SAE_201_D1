@@ -1,7 +1,5 @@
 USE bd_sae;
------------------------------------------------------
---                CREATION DES TABLES              --
------------------------------------------------------
+
 SET SQL_SAFE_UPDATES = 0;
 DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS users;
@@ -15,7 +13,7 @@ DROP TABLE IF EXISTS Journee;
 DROP TABLE IF EXISTS Site;
 DROP TABLE IF EXISTS Sport;
 DROP TABLE IF EXISTS Competence;
-DROP TABLE IF EXISTS Secoursite;
+DROP TABLE IF EXISTS Secouriste;
 
 
 CREATE TABLE users (
