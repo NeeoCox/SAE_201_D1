@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
@@ -95,6 +96,7 @@ public class Controller  {
 	DAOPossede daoPossede = new DAOPossede();
 	DAOJournee daoJournee = new DAOJournee();
 	DAOEstDisponible daoEstDisponible = new DAOEstDisponible();
+	DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA(); //ajout lea
 
 
 	/**
@@ -1991,6 +1993,52 @@ public class Controller  {
 		}
 	}
 
+
+// ajout lea
+	public void afficherAffectationsSecouriste() {
+		if (utilisateurConnecte == null) return;
+
+		// Nettoie la grille des anciens blocs (sauf la première ligne et colonne)
+		gridWeek.getChildren().removeIf(node -> 
+			GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0 &&
+			GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) > 0
+		);
+
+		try {
+			// Récupère toutes les affectations puis filtre celles du secouriste connecté
+			List<EstAffecteA> affectations = daoEstAffecteA.readAll()
+				.stream()
+				.filter(a -> a.getSecouriste().getId() == utilisateurConnecte.getId())
+				.collect(Collectors.toList());
+
+			for (EstAffecteA aff : affectations) {
+				DPS dps = aff.getLeDPS();
+				if (dps == null) continue;
+
+				Journee journee = dps.getEstProgramme();
+				LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
+				int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
+				if (dayIndex < 0 || dayIndex > 6) continue;
+
+				int heureDebut = dps.getHoraireDepart();
+				int heureFin = dps.getHoraireFin();
+
+				String nomDPS = dps.getId() + " - " + dps.getConcerneSport();
+				Label bloc = new Label(nomDPS + "\n" + String.format("%02dh-%02dh", heureDebut, heureFin));
+				bloc.setStyle("-fx-background-color: #90caf9; -fx-border-color: #1976d2; -fx-padding: 5; -fx-background-radius: 6; -fx-font-weight: bold;");
+
+				VBox box = new VBox(bloc);
+				box.setStyle("-fx-background-color: transparent;");
+				GridPane.setRowIndex(box, heureDebut + 1);
+				GridPane.setColumnIndex(box, dayIndex + 1);
+				GridPane.setRowSpan(box, heureFin - heureDebut);
+
+				gridWeek.getChildren().add(box);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 
 }
