@@ -1,7 +1,12 @@
 package controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 // Import des librairies Java
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.temporal.ChronoUnit;
@@ -14,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
@@ -157,6 +164,8 @@ public class Controller  {
 	private Button buttonDPS;
 	@FXML 
 	private Button buttonGestComp;
+	@FXML 
+	private Button buttonExport;
 
 	/**
 	 ***********************************
@@ -545,6 +554,10 @@ public class Controller  {
 	 * Connection BDD
 	 ***********************************
 	 */
+	/**
+	 * Methode pour gerer la connection a l'application et a la BDD
+	 * @param event l'evenement de l'action
+	 */
 	@FXML
 	public void connectUser(ActionEvent event) {
 		System.out.println("connectUser");
@@ -656,21 +669,37 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page Gestion des secouristes
+	  * @param event l'evenement de l'action
+	  */
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
 		goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page Gestion des compétences
+	  * @param event l'evenement de l'action
+	  */
 	public void goToGestionDesCompetences(ActionEvent event){
 		System.out.println("goToGestionDesCompetences");
 		goTo("/pageFxml/Administrateur/GestionDesCompetences.fxml", event);
 	}
 	
+	/**
+	  * Methode pour aller a la page Affectation des secouristes
+	  * @param event l'evenement de l'action
+	  */
 	public void goToPageAffectationSecouristes(ActionEvent event){
 		System.out.println("goToPageAffectationSecouristes");
 		goTo("/pageFxml/Administrateur/PageAffectationSecouristes.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page Dispositif de secours
+	  * @param event l'evenement de l'action
+	  */
 	public void goToDispositifsDeSecours(ActionEvent event){
 		System.out.println("goToDispositifsDeSecours");
 		goTo("/pageFxml/Administrateur/DispositifsDeSecours.fxml", event);
@@ -682,16 +711,29 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page Création de secouristes
+	  * @param event l'evenement de l'action
+	  */
 	public void goToCreationDeSouriste(ActionEvent event){
 		System.out.println("goToCreationDeSouriste");
 		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
 	}
 
-	public void goToModifSecouriste(ActionEvent event){
+	/**
+	  * Methode pour aller a la page modification des secouriste
+	  * @param event l'evenement de l'action
+	  */
+	@FXML
+	public void goToModifSecouriste(ActionEvent event) {
 		System.out.println("goToModifSecouriste");
 		goTo("/pageFxml/Administrateur/ModifSecouriste.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page delete secouriste 
+	  * @param event l'evenement de l'action
+	  */
 	public void goToDeleteSec(ActionEvent event){
 		System.out.println("goToDeleteSec");
 		goTo("/pageFxml/Administrateur/DeleteSec.fxml", event);
@@ -703,16 +745,28 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page création de DPS
+	  * @param event l'evenement de l'action
+	  */
 	public void goToCreationDPS(ActionEvent event){
 		System.out.println("goToCreationDPS");
 		goTo("/pageFxml/Administrateur/CreationDPS.fxml", event);
 	}
 
-	public void goToModifDPS(ActionEvent event){
+	/**
+	  * Methode pour aller a la page modification de DPS
+	  * @param event l'evenement de l'action
+	  */
+	public void goToModifDPS(ActionEvent event) {
 		System.out.println("goToModifDPS");
 		goTo("/pageFxml/Administrateur/ModifDPS.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page suppression de DPS
+	  * @param event l'evenement de l'action
+	  */
 	public void goToDeleteDPS(ActionEvent event){
 		System.out.println("goToDeleteDPS");
 		goTo("/pageFxml/Administrateur/DeleteDPS.fxml", event);
@@ -724,16 +778,28 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page création de compétences
+	  * @param event l'evenement de l'action
+	  */
 	public void goToCreateComp(ActionEvent event){
 		System.out.println("goToCreateComp");
 		goTo("/pageFxml/Administrateur/CreateComp.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la modification compétences
+	  * @param event l'evenement de l'action
+	  */
 	public void goToModifComp(ActionEvent event){
 		System.out.println("goToModifComp");
 		goTo("/pageFxml/Administrateur/ModifComp.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page suppréssion de compétences 
+	  * @param event l'evenement de l'action
+	  */
 	public void goToDeleteComp(ActionEvent event){
 		System.out.println("goToDeleteComp");
 		goTo("/pageFxml/Administrateur/DeleteComp.fxml", event);
@@ -745,21 +811,28 @@ public class Controller  {
 	 ***********************************
 	 */
 
+	 /**
+	  * Methode pour aller a la page mes compétences
+	  * @param event l'evenement de l'action
+	  */
 	public void goToMesCompetences(ActionEvent event){
 		System.out.println("goToMesCompetences");
 		goTo("/pageFxml/Secouriste/MesCompetences.fxml", event);
 	}
 
+	/**
+	  * Methode pour aller a la page mes disponibilité
+	  * @param event l'evenement de l'action
+	  */
 	public void goToMesDisponibilite(ActionEvent event){
 		System.out.println("goToMesDisponibilite");
 		goTo("/pageFxml/Secouriste/MesDisponibilite.fxml", event);
 	}
 
-	public void goToAjouterUneDisponibilite(ActionEvent event){
-		System.out.println("goToAjouterUneDisponibilite");
-		goTo("/pageFxml/Secouriste/AjouterUneDisponibilite.fxml", event);
-	}
-
+	/**
+	  * Methode pour aller a la page monplanning et affectations
+	  * @param event l'evenement de l'action
+	  */
 	public void goToMonPlanningEtAffectations(ActionEvent event){
 		System.out.println("goToMonPlanningEtAffectations");
 		goTo("/pageFxml/Secouriste/MonPlanningEtAffectations.fxml", event);
@@ -859,6 +932,9 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Permet de update un secouriste
+	 */
 	public void updateSecouriste() {
 		System.out.println("updateSecouriste");
 
@@ -926,8 +1002,9 @@ public class Controller  {
 		}
 	}
 
-
-
+	/**
+	 * permet de supprimer un secouriste
+	 */
 	public void deleteSecouriste() {
 		System.out.println("deleteSecouriste");
 
@@ -2012,6 +2089,11 @@ public class Controller  {
 		return btnRetourPlanningSecouriste != null;
 	}
 
+	/**
+	 * Initialise les champs de modification du secouriste avec les données du secouriste à modifier.
+	 * Récupère l'identifiant stocké dans la session, puis charge les informations du secouriste correspondant depuis la base de données.
+	 * Préremplit les champs de saisie (nom, prénom, date de naissance, email, adresse, téléphone, compétences).
+	 */
 	private void initModifSecouriste() {
 		Long id = MngtSession.getIdSecouristeAModifier();
 		if (id != null) {
@@ -2043,6 +2125,11 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Initialise les champs de modification d'un DPS avec les données du DPS à modifier.
+	 * Récupère l'identifiant du DPS depuis la session, puis charge les informations correspondantes (heure, date, lieu, sport)
+	 * et les affiche dans les champs de modification.
+	 */
 	public void initModifDPS() {
 		Long id = MngtSession.getIdDPSAModifier();
 		if (id != null) {
@@ -2089,6 +2176,11 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Initialise les champs de modification d'une compétence avec les données de la compétence à modifier.
+	 * Récupère l'intitulé de la compétence depuis la session, puis lit les données correspondantes depuis la base
+	 * pour les préremplir dans le formulaire.
+	 */
 	public void initModifComp() {
 		String intitule = MngtSession.getIntituleCompetenceAModifier();
 		if (intitule != null) {
@@ -2105,6 +2197,12 @@ public class Controller  {
 		}
 	}
 
+	/**
+	 * Ajoute une tâche à la date spécifiée.
+	 * Si aucune tâche n'existe encore pour cette date, une nouvelle liste est créée.
+	 * @param date La date à laquelle la tâche doit être ajoutée.
+	 * @param taskDescription La description de la tâche à ajouter.
+	 */
     public void addTask(LocalDate date, String taskDescription) {
         tasksByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(taskDescription);
         if (isDateInCurrentWeek(date)) {
@@ -2112,10 +2210,35 @@ public class Controller  {
         }
     }
 
+	/**
+	 * Vide toutes les boîtes de tâches de la semaine affichée.
+	 * Supprime toutes les tâches visuellement du tableau horaire (GridPane).
+	 */
+	private void clearAllTaskBoxes() {
+		for (int day = 0; day < 7; day++) {
+			for (int hour = 0; hour < 24; hour++) {
+				if (taskBoxes[day][hour] != null) {
+					taskBoxes[day][hour].getChildren().clear();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Vérifie si une date donnée se trouve dans la semaine actuellement affichée.
+	 * @param date La date à vérifier.
+	 * @return {@code true} si la date est comprise entre le lundi courant et le dimanche suivant, {@code false} sinon.
+	 */
     private boolean isDateInCurrentWeek(LocalDate date) {
         return !date.isBefore(currentMonday) && !date.isAfter(currentMonday.plusDays(6));
     }
-
+	
+	/**
+	 * Affiche les affectations de la semaine à partir du lundi donné.
+	 * Met à jour les étiquettes des jours, puis selon la page affichée
+	 * (admin ou utilisateur), affiche les affectations correspondantes dans le GridPane.
+	 * @param monday La date correspondant au lundi de la semaine à afficher.
+	 */
     public void afficherSemaine(LocalDate monday) {
 		currentMonday = monday;
 		updateDayLabels();
@@ -2158,6 +2281,10 @@ public class Controller  {
         vboxSun.getChildren().retainAll(lblSun);
     }
 
+	/**
+	 * Met à jour les libellés des jours de la semaine affichée
+	 * en les associant à leur date respective à partir du lundi courant.
+	 */	
     private void updateDayLabels() {
         lblMon.setText(" Lundi\n " + currentMonday);
         lblTue.setText(" Mardi\n " + currentMonday.plusDays(1));
@@ -2169,9 +2296,10 @@ public class Controller  {
     }
 
     /**
-     * 
-     * @param event
-     */
+	 * Gère l'événement de clic sur le bouton "Ajouter une tâche".
+	 * Ajoute une tâche prédéfinie au mercredi de la semaine actuellement affichée.
+	 * @param event L'événement déclenché par le clic.
+	 */
     @FXML
     public void onAddTaskClicked(ActionEvent event) {
         // Exemple : on ajoute une tâche fixe au mercredi de la semaine affichée
@@ -2181,6 +2309,12 @@ public class Controller  {
         addTask(taskDate, taskDesc);
     }
 
+	/**
+	 * Génère dynamiquement les étiquettes horaires (00h à 23h)
+	 * et initialise les boîtes de tâches (VBox) pour chaque heure et chaque jour de la semaine.
+	 * Ces boîtes sont ajoutées au GridPane principal représentant la semaine.
+	 * Si le GridPane n’est pas encore initialisé, un message d’erreur est affiché.
+	 */
     private void generateHourLabelsAndTaskBoxes() {
 		if (gridWeek == null) {
 			System.err.println("gridWeek n'est pas encore initialisé");
@@ -2315,6 +2449,11 @@ public class Controller  {
 	}
 
 
+	/**
+	 * Gère l'action du bouton pour afficher la semaine précédente.
+	 * Décrémente l'offset de la semaine, met à jour le lundi courant,
+	 * réaffiche la semaine correspondante et met à jour le label de la semaine.
+	 */
     @FXML
 	private void onPrevWeek() {
 		currentWeekOffset--;
@@ -2323,6 +2462,11 @@ public class Controller  {
 		updateWeekLabel();
 	}
 
+	/**
+	 * Gère l'action du bouton pour afficher la semaine suivante.
+	 * Incrémente l'offset de la semaine, met à jour le lundi courant,
+	 * réaffiche la semaine correspondante et met à jour le label de la semaine.
+	 */
 	@FXML
 	private void onNextWeek() {
 		currentWeekOffset++;
@@ -2331,13 +2475,353 @@ public class Controller  {
 		updateWeekLabel();
 	}
 
+	/**
+	 * Met à jour le label indiquant le numéro de la semaine affichée,
+	 * en tenant compte de l'offset actuel appliqué à la semaine courante.
+	 */
 	private void updateWeekLabel() {
 		lblWeek.setText("Semaine " + (getCurrentWeekNumber() + currentWeekOffset));
 	}
 
+	/**
+	 * Calcule et retourne le numéro de la semaine courante selon le calendrier ISO.
+	 * @return le numéro de la semaine de l'année en cours (de 1 à 52 ou 53 selon l'année).
+	 */
     private int getCurrentWeekNumber() {
         // Retourne la semaine courante (exemple basique)
         java.time.LocalDate now = java.time.LocalDate.now();
         return now.get(java.time.temporal.WeekFields.ISO.weekOfWeekBasedYear());
     }
+
+	/**
+	 * Permet d'exporter les données de toutes la base de donnée et met les csv dans un .zip
+	 */
+	public void exportAllTables() {
+        exportSecouriste();
+        exportJournee();
+        exportCompetence();
+        exportSport();
+        exportSite();
+        exportDPS();
+        exportBesoin();
+        exportNecessite();
+        exportPossede();
+        exportEstDisponible();
+        exportEstAffecteA();
+        // Ajoute ici d'autres tables si besoin
+
+		String[] csvFiles = {
+        "Secouriste.csv", "Journee.csv", "Competence.csv", "Sport.csv", "Site.csv",
+        "DPS.csv", "Besoin.csv", "Necessite.csv", "Possede.csv", "EstDisponible.csv", "EstAffecteA.csv"
+		};
+		String zipFileName = "export_sae.zip";
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFileName))) {
+			for (String csv : csvFiles) {
+				File file = new File(csv);
+				if (file.exists()) {
+					try (FileInputStream fis = new FileInputStream(file)) {
+						ZipEntry zipEntry = new ZipEntry(csv);
+						zos.putNextEntry(zipEntry);
+						byte[] buffer = new byte[1024];
+						int len;
+						while ((len = fis.read(buffer)) > 0) {
+							zos.write(buffer, 0, len);
+						}
+						zos.closeEntry();
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la création du zip : " + e.getMessage());
+		}
+		// Suppression des fichiers CSV après création du zip
+		for (String csv : csvFiles) {
+			File file = new File(csv);
+			if (file.exists()) {
+				if (!file.delete()) {
+					System.out.println("Impossible de supprimer le fichier : " + csv);
+				}
+			}
+		}
+
+		System.out.println("Export ZIP terminé : " + zipFileName);
+	}
+
+	/**
+	 * Permet d'exporter les données de Secouriste
+	 */
+    private void exportSecouriste() {
+		String file = "Secouriste.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("id;nom;prenom;dateNaissance;email;telephone;adresse");
+			List<Secouriste> list;
+			try {
+				list = daoSecouriste.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des secouristes : " + e.getMessage());
+				return;
+			}
+			for (Secouriste s : list) {
+				out.println(s.getId() + ";" + s.getNom() + ";" + s.getPrenom() + ";" + s.getDateNaissance() + ";" +
+						s.getEmail() + ";" + s.getTel() + ";" + s.getAdresse());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Secouriste.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de journee
+	 */
+	private void exportJournee() {
+		String file = "Journee.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("jour;mois;annee");
+			List<Journee> list;
+			try {
+				list = daoJournee.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des journées : " + e.getMessage());
+				return;
+			}
+			for (Journee j : list) {
+				out.println(j.getJour() + ";" + j.getMois() + ";" + j.getAnnee());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Journee.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de Competence
+	 */
+    private void exportCompetence() {
+		String file = "Competence.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("intitule");
+			List<Competence> list;
+			try {
+				list = daoCompetence.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des compétences : " + e.getMessage());
+				return;
+			}
+			for (Competence c : list) {
+				out.println(c.getIntitule());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Competence.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de Sport
+	 */
+    private void exportSport() {
+		String file = "Sport.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("code;nom");
+			List<Sport> list;
+			try {
+				list = daoSport.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des sports : " + e.getMessage());
+				return;
+			}
+			for (Sport s : list) {
+				out.println(s.getCode() + ";" + s.getNom());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Sport.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de Site
+	 */
+    private void exportSite() {
+		String file = "Site.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("code;nom;longitude;latitude");
+			List<Site> list;
+			try {
+				list = daoSite.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des sites : " + e.getMessage());
+				return;
+			}
+			for (Site s : list) {
+				out.println(s.getCode() + ";" + s.getNom() + ";" + s.getLongitude() + ";" + s.getLatitude());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Site.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de DPS
+	 */
+    private void exportDPS() {
+		String file = "DPS.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("id;horaireDepart;horaireFin;concerneSport;aLieuDansSite;estProgrammeJour;estProgrammeMois;estProgrammeAnnee");
+			List<DPS> list;
+			try {
+				list = daoDPS.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des DPS : " + e.getMessage());
+				return;
+			}
+			for (DPS d : list) {
+				out.println(
+					d.getId() + ";" +
+					d.getHoraireDepart() + ";" +
+					d.getHoraireFin() + ";" +
+					(d.getConcerne() != null ? d.getConcerne().getCode() : "") + ";" +
+					(d.getALieuDans() != null ? d.getALieuDans().getCode() : "") + ";" +
+					(d.getEstProgramme() != null ? d.getEstProgramme().getJour() : "") + ";" +
+					(d.getEstProgramme() != null ? d.getEstProgramme().getMois() : "") + ";" +
+					(d.getEstProgramme() != null ? d.getEstProgramme().getAnnee() : "")
+				);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier DPS.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de Besoin
+	 */
+    private void exportBesoin() {
+		String file = "Besoin.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("laCompetence;leDPS;nombre");
+			List<Besoin> list;
+			try {
+				list = daoBesoin.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des besoins : " + e.getMessage());
+				return;
+			}
+			for (Besoin b : list) {
+				out.println(b.getIntituleCompetence() + ";" + b.getIdDPS() + ";" + b.getNombre());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Besoin.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de Necessite
+	 */
+    private void exportNecessite() {
+		String file = "Necessite.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("intituleCompetence;intituleCompetenceNecessaire");
+			List<Necessite> list;
+			try {
+				list = daoNecessite.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des nécessités : " + e.getMessage());
+				return;
+			}
+			for (Necessite n : list) {
+				out.println(n.getIntituleCompetence() + ";" + n.getIntituleCompetenceNecessaire());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Necessite.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de Possede
+	 */
+    private void exportPossede() {
+		String file = "Possede.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("leSecouriste;laCompetence");
+			List<Possede> list;
+			try {
+				list = daoPossede.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des compétences possédées : " + e.getMessage());
+				return;
+			}
+			for (Possede p : list) {
+				out.println(p.getIdSecouriste() + ";" + p.getIntituleCompetence());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier Possede.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de EstDisponible
+	 */
+    private void exportEstDisponible() {
+		String file = "EstDisponible.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("leSecouriste;jourJournee;moisJournee;anneeJournee");
+			List<EstDisponible> list;
+			try {
+				list = daoEstDisponible.readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des disponibilités : " + e.getMessage());
+				return;
+			}
+			for (EstDisponible ed : list) {
+				out.println(ed.getIdSecouriste() + ";" +
+							ed.getJourJournee() + ";" +
+							ed.getMoisJournee() + ";" +
+							ed.getAnneeJournee());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier EstDisponible.csv : " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Permet d'exporter les données de EstAffecteA
+	 */
+    private void exportEstAffecteA() {
+		String file = "EstAffecteA.csv";
+		try (PrintWriter out = new PrintWriter(new FileWriter(file))) {
+			out.println("leSecouriste;leDPS;laCompetence");
+			List<EstAffecteA> list;
+			try {
+				list = new model.dao.DAOEstAffecteA().readAll();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la lecture des affectations : " + e.getMessage());
+				return;
+			}
+			for (EstAffecteA ea : list) {
+				out.println(ea.getIdSecouriste() + ";" + ea.getIdDPS() + ";" + ea.getIntituleCompetence());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'écriture du fichier EstAffecteA.csv : " + e.getMessage());
+		}
+	}
 }
