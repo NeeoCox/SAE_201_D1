@@ -16,7 +16,7 @@
         <HBox alignment="CENTER" prefHeight="60.0" style="-fx-background-color: #156082;">
             <children>
                 <Button fx:id="buttonRetourAcceuilSec" 
-                        onAction="#goToPageConnection" 
+                        onAction="#goToPageSecouristeAcceuil" 
                         text="Retour"
                         prefHeight="30" prefWidth="80"
                         style="-fx-background-color: white; -fx-text-fill: #156082;" />
