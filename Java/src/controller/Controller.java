@@ -954,149 +954,188 @@ public class Controller  {
 	 ***********************************
 	 */
 
-	public void createDispositifDeSecours(){
-		System.out.println("crateDispositifDeSecours");
-		if (idDPSCreate.getText().isEmpty() || heureDebutDPSCreate.getText().isEmpty() || 
-			heureFinDPSCreate.getText().isEmpty() 
-			|| lieuRencDPSCreate.getText().isEmpty() || sportDPSCreate.getText().isEmpty()
-			|| nbSecDPSCreate.getText().isEmpty()) {
+	public void createDispositifDeSecours() {
+		System.out.println("createDispositifDeSecours");
+
+		if (idDPSCreate.getText().isEmpty() || heureDebutDPSCreate.getText().isEmpty() ||
+			heureFinDPSCreate.getText().isEmpty() || lieuRencDPSCreate.getText().isEmpty() ||
+			sportDPSCreate.getText().isEmpty() || nbSecDPSCreate.getText().isEmpty() ||
+			CompReqDPSCreate.getText().isEmpty() || dateCreateDPS.getValue() == null) {
+			
 			System.out.println("Veuillez remplir tous les champs.");
+			return;
 		}
-		else{
-			String idDPS = idDPSCreate.getText();
-			long idDPSLong = Long.parseLong(idDPS);
 
-			String heureDebutStr = heureDebutDPSCreate.getText();
-			int heureDebut = Integer.parseInt(heureDebutStr);
+		try {
+			// Lecture et parsing des champs
+			int idDPSLong = Integer.parseInt(idDPSCreate.getText().trim());
+			int heureDebut = Integer.parseInt(heureDebutDPSCreate.getText().trim());
+			int heureFin = Integer.parseInt(heureFinDPSCreate.getText().trim());
 
-			String heureFinStr = heureFinDPSCreate.getText();
-			int heureFin = Integer.parseInt(heureFinStr);
+			if (heureDebut >= heureFin) {
+				System.out.println("L'heure de début doit être inférieure à l'heure de fin.");
+				return;
+			}
 
-			//DATE
 			LocalDate selectedDate = dateCreateDPS.getValue();
-    
-			int jour = selectedDate.getDayOfMonth(); 
-			int mois = selectedDate.getMonthValue();   
-			int annee = selectedDate.getYear();        
-			
-			Journee journee = new Journee(jour, mois, annee);
+			Journee journee = new Journee(
+				selectedDate.getDayOfMonth(),
+				selectedDate.getMonthValue(),
+				selectedDate.getYear()
+			);
 
+			// Parsing des compétences et nombres de secouristes
 			String[] compReqStr = CompReqDPSCreate.getText().split(";");
-			int nbCompReq = compReqStr.length;
+			String[] nbSecStr = nbSecDPSCreate.getText().split(";");
 
-			String nombreStr = nbSecDPSCreate.getText();
-			int nombre = Integer.parseInt(nombreStr);
-			try{
-				
-				Besoin besoin;
-				for(int i = 0; i<nbCompReq; i++){
-					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
-					daoBesoin.create(besoin);
-				}
-				 
-				
-				String lieuRenc = lieuRencDPSCreate.getText();
-				Site site = daoSite.read(lieuRenc);
-
-				// Sport
-				
-				String sport = sportDPSCreate.getText();
-				Sport sportObj = daoSport.read(sport);
-
-				
-				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
-				daoDPS.create(dps);
+			if (compReqStr.length != nbSecStr.length) {
+				System.out.println("Le nombre de compétences ne correspond pas au nombre de secouristes.");
+				return;
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la création du DPS : " + e.getMessage());
+
+			// Lecture du site
+			String lieuRenc = lieuRencDPSCreate.getText().trim();
+			Site site = daoSite.read(lieuRenc);
+			if (site == null) {
+				System.out.println("Le site '" + lieuRenc + "' n'existe pas.");
+				return;
 			}
+
+			// Lecture du sport
+			String sport = sportDPSCreate.getText().trim();
+			Sport sportObj = daoSport.read(sport);
+			if (sportObj == null) {
+				System.out.println("Le sport '" + sport + "' n'existe pas.");
+				return;
+			}
+
+			// Création du DPS
+			DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
+			daoDPS.create(dps);
+
+			// Création des Besoins
+			for (int i = 0; i < compReqStr.length; i++) {
+				String comp = compReqStr[i].trim();
+				int nb = Integer.parseInt(nbSecStr[i].trim());
+				Besoin besoin = new Besoin(nb, comp, idDPSLong);
+				daoBesoin.create(besoin);
+			}
+			System.out.println("DPS créé avec succès.");
+
+		} catch (NumberFormatException e) {
+			System.out.println("Erreur de format numérique : " + e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la création du DPS : " + e.getMessage());
 		}
-	}	
+	}
 
-	public void updateDispositifDeSecours(){
+	public void updateDispositifDeSecours() {
 		System.out.println("updateDispositifDeSecours");
-		if (idDPSModif.getText().isEmpty() || heureDebutDPSModif.getText().isEmpty() || 
-			heureFinDPSModif.getText().isEmpty() 
-			|| lieuRencDPSModif.getText().isEmpty() || sportDPSModif.getText().isEmpty()
-			|| nbSecDPSModif.getText().isEmpty()) {
+
+		if (idDPSModif.getText().isEmpty() || heureDebutDPSModif.getText().isEmpty() ||
+			heureFinDPSModif.getText().isEmpty() || lieuRencDPSModif.getText().isEmpty() ||
+			sportDPSModif.getText().isEmpty() || nbSecDPSModif.getText().isEmpty() ||
+			CompReqDPSModif.getText().isEmpty() || dateModifDPS.getValue() == null) {
+
 			System.out.println("Veuillez remplir tous les champs.");
+			return;
 		}
-		else{
-			String idDPS = idDPSModif.getText();
-			long idDPSLong = Long.parseLong(idDPS);
 
-			String heureDebutStr = heureDebutDPSModif.getText();
-			int heureDebut = Integer.parseInt(heureDebutStr);
+		try {
+			int idDPSLong = Integer.parseInt(idDPSModif.getText().trim());
+			int heureDebut = Integer.parseInt(heureDebutDPSModif.getText().trim());
+			int heureFin = Integer.parseInt(heureFinDPSModif.getText().trim());
 
-			String heureFinStr = heureFinDPSModif.getText();
-			int heureFin = Integer.parseInt(heureFinStr);
+			if (heureDebut >= heureFin) {
+				System.out.println("L'heure de début doit être inférieure à l'heure de fin.");
+				return;
+			}
 
-			//DATE
 			LocalDate selectedDate = dateModifDPS.getValue();
-    
-			int jour = selectedDate.getDayOfMonth(); 
-			int mois = selectedDate.getMonthValue();   
-			int annee = selectedDate.getYear();        
-			
-			Journee journee = new Journee(jour, mois, annee);
+			Journee journee = new Journee(
+				selectedDate.getDayOfMonth(),
+				selectedDate.getMonthValue(),
+				selectedDate.getYear()
+			);
 
-			String[] compReqStr = CompReqDPSCreate.getText().split(";");
-			int nbCompReq = compReqStr.length;
+			String[] compReqStr = CompReqDPSModif.getText().split(";");
+			String[] nbSecStr = nbSecDPSModif.getText().split(";");
 
-			String nombreStr = nbSecDPSModif.getText();
-			int nombre = Integer.parseInt(nombreStr);
-			try{
-				Besoin besoin;
-				for(int i = 0; i<nbCompReq; i++){
-					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
-					daoBesoin.update(besoin);
-				}
-
-				String lieuRenc = lieuRencDPSModif.getText();
-				Site site = daoSite.read(lieuRenc);
-
-				// Sport
-
-				String sport = sportDPSModif.getText();
-				Sport sportObj = daoSport.read(sport);
-
-				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
-				daoDPS.update(dps);
+			if (compReqStr.length != nbSecStr.length) {
+				System.out.println("Le nombre de compétences ne correspond pas au nombre de secouristes.");
+				return;
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la modification du DPS : " + e.getMessage());
+
+			String lieuRenc = lieuRencDPSModif.getText().trim();
+			Site site = daoSite.read(lieuRenc);
+			if (site == null) {
+				System.out.println("Le site '" + lieuRenc + "' n'existe pas.");
+				return;
 			}
+
+			String sport = sportDPSModif.getText().trim();
+			Sport sportObj = daoSport.read(sport);
+			if (sportObj == null) {
+				System.out.println("Le sport '" + sport + "' n'existe pas.");
+				return;
+			}
+
+			// Mise à jour du DPS
+			DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
+			daoDPS.update(dps);
+
+			// Supprimer les anciens besoins liés à ce DPS
+			daoBesoin.deleteByDpsId(idDPSLong);
+
+			// Création et insertion des nouveaux besoins
+			for (int i = 0; i < compReqStr.length; i++) {
+				String comp = compReqStr[i].trim();
+				int nb = Integer.parseInt(nbSecStr[i].trim());
+				Besoin besoin = new Besoin(nb, comp, idDPSLong);
+				daoBesoin.create(besoin);
+			}
+
+			System.out.println("DPS modifié avec succès.");
+
+		} catch (NumberFormatException e) {
+			System.out.println("Erreur de format numérique : " + e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la modification du DPS : " + e.getMessage());
 		}
 	}
+
+
+
 	
-	public void deleteDispositifDeSecours(){
+	public void deleteDispositifDeSecours() {
 		System.out.println("deleteDispositifDeSecours");
+
 		if (idDPSDelete.getText().isEmpty()) {
-			System.out.println("Veuillez remplir tous les champs.");
+			System.out.println("Veuillez remplir le champ identifiant.");
+			return;
 		}
-		else{		
-			String idDPS = idDPSDelete.getText();
-			long idDPSLong = Long.parseLong(idDPS);
 
-			try{
-				List<Besoin> besoin = daoBesoin.readAll();
+		try {
+			long idDPSLong = Long.parseLong(idDPSDelete.getText().trim());
 
-				for (Besoin b : besoin) {
-					Long idDPSFor = b.getIdDPS();
-					if(idDPSFor == idDPSLong){
-						daoBesoin.delete(idDPSLong, idDPS);
-					}
-				}
-				daoDPS.delete(idDPSLong);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la suppression du DPS : " + e.getMessage());
-			}
+			// Supprimer tous les besoins associés
+			daoBesoin.deleteByDpsId(idDPSLong);
+
+			// Supprimer le DPS
+			daoDPS.delete(idDPSLong);
+
+			System.out.println("DPS et ses besoins supprimés avec succès.");
+
+		} catch (NumberFormatException e) {
+			System.out.println("Format d'identifiant invalide : " + e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression du DPS : " + e.getMessage());
 		}
 	}
+
 
 	/**
 	 ***********************************

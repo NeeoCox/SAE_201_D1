@@ -22,7 +22,7 @@
             <!-- Bouton Retour -->
             <Button fx:id="buttonRetourAcSec"
                     text="Retour"
-                    onAction="#goToPageAdminAcceuil"
+                    onAction="#goToDispositifsDeSecours"
                     prefHeight="30" prefWidth="80"
                     style="-fx-background-color: white; -fx-text-fill: #156082;" />
             
@@ -57,6 +57,7 @@
 
                 <Button fx:id="deleteButtonDPS"
                         text="Supprimer"
+                        onAction="#deleteDispositifDeSecours"
                         prefWidth="160" prefHeight="40"
                         style="-fx-background-color: #156082; -fx-text-fill: white;" />
             </VBox>

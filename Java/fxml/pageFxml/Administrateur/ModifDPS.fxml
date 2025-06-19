@@ -16,7 +16,7 @@
             <children>
                 <Button fx:id="buttonRetourAcSec"
                         text="Retour"
-                        onAction="#goToPageAdminAcceuil"
+                        onAction="#goToDispositifsDeSecours"
                         prefHeight="30" prefWidth="80"
                         style="-fx-background-color: white; -fx-text-fill: #156082;" />
 
@@ -81,6 +81,7 @@
                 <!-- Bouton Modifier -->
                 <Button fx:id="ModifButtonDPS"
                         text="Modifier"
+                        onAction="#updateDispositifDeSecours"
                         style="-fx-background-color: #156082; -fx-text-fill: white; -fx-font-weight: bold;"
                         prefWidth="120" />
             </children>

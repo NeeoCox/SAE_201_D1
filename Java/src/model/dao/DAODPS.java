@@ -21,7 +21,7 @@ public class DAODPS extends DAO<DPS>{
     }
 
     public void create(DPS dps) throws SQLException {
-        String sql = "INSERT INTO DPS (id, horaire_depart, horaire_fin, jour, mois, annee, code_site, code_sport) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO DPS (id, horaire_depart, horaire_fin, estProgrammeJour, estProgrammeMois, estProgrammeAnnee, aLieuDansSite, concerneSport) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, dps.getId());
             stmt.setInt(2, dps.getHoraireDepart());
@@ -112,7 +112,7 @@ public class DAODPS extends DAO<DPS>{
     }
 
     public void update(DPS dps) throws SQLException {
-        String sql = "UPDATE DPS SET horaire_depart = ?, horaire_fin = ?, jour = ?, mois = ?, annee = ?, code_site = ?, code_sport = ? WHERE id = ?";
+        String sql = "UPDATE DPS SET horaire_depart = ?, horaire_fin = ?, estProgrammeJour = ?, estProgrammeMois = ?, estProgrammeAnnee = ?, aLieuDansSite = ?, concerneSport = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, dps.getHoraireDepart());
             stmt.setInt(2, dps.getHoraireFin());
