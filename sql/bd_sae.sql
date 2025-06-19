@@ -293,4 +293,4 @@ INSERT INTO EstDisponible (leSecouriste, jourJournee, moisJournee, anneeJournee)
 (4, 19, 6, 2025),
 (5, 19, 6, 2025);
 
-
+SELECT * FROM EstAffecteA;

@@ -1802,20 +1802,6 @@ public class Controller  {
 		}
 	}
 
-	@FXML
-	public void onAffecterSecouristes(ActionEvent event) {
-		System.out.println("onAffecterSecouristes");
-		String algo = radioGlouton.isSelected() ? "glouton" : "exhaustif";
-		LocalDate date = datePickerAffectation.getValue();
-		if (date == null) {
-			System.out.println("Veuillez choisir une date.");
-			return;
-		}
-		Journee journee = new Journee(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
-		affecterSecouristesPourJournee(journee, algo);
-		afficherAffectationsTousSecouristesDansGridPane();
-	}
-
 	public void afficherAffectationsTousSecouristesDansGridPane() {
 		clearAllTaskBoxes();
 		DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
@@ -1844,6 +1830,21 @@ public class Controller  {
 			System.out.println("Erreur lors de l'affichage des affectations : " + e.getMessage());
 		}
 	}
+
+	@FXML
+	public void onAffecterSecouristes(ActionEvent event) {
+		System.out.println("onAffecterSecouristes");
+		String algo = radioGlouton.isSelected() ? "glouton" : "exhaustif";
+		LocalDate date = datePickerAffectation.getValue();
+		if (date == null) {
+			System.out.println("Veuillez choisir une date.");
+			return;
+		}
+		Journee journee = new Journee(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+		affecterSecouristesPourJournee(journee, algo);
+		afficherAffectationsTousSecouristesDansGridPane();
+	}
+
 
 
 	@FXML
