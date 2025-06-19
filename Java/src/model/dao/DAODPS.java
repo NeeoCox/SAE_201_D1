@@ -3,7 +3,6 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.persistence.DPS;
 import model.persistence.Journee;
 import model.persistence.Site;
@@ -39,7 +38,7 @@ public class DAODPS extends DAO<DPS>{
         String sql = "SELECT d.*, s.nom AS nom_site, s.longitude, s.latitude, sp.nom AS nom_sport " +
                     "FROM DPS d " +
                     "JOIN Site s ON d.code_site = s.code " +
-                    "JOIN Sport sp ON d.code_sport = sp.code " +
+                    "JOIN Sport sp ON d.concerneSport = sp.code " +
                     "WHERE d.id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);

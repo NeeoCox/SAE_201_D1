@@ -264,6 +264,8 @@ public class Controller  {
 	@FXML 
 	private Button ModifButtonSec;
 
+
+
 	//Pour la suppression d'un secouriste
 	@FXML
 	private TextField idSecDelete;
@@ -316,8 +318,6 @@ public class Controller  {
 	private Button ModifButtonDPS;
 
 	//Pour la suppression d'un DPS
-	@FXML
-	private TextField idDPSDelete;
 	@FXML
 	private Button deleteButtonDPS;
 
@@ -654,7 +654,7 @@ public class Controller  {
 	
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
-		goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
+    	goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
 	}
 
 	public void goToGestionDesCompetences(ActionEvent event){
@@ -683,8 +683,16 @@ public class Controller  {
 		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
 	}
 
-	public void goToModifSecouriste(ActionEvent event){
+	@FXML
+	public void goToModifSecouriste(ActionEvent event) {
 		System.out.println("goToModifSecouriste");
+		Secouriste sec = tableSecouristes.getSelectionModel().getSelectedItem();
+		if (sec == null) {
+			// Affiche un message d'erreur ou une alerte
+			System.out.println("Veuillez sélectionner un secouriste à modifier.");
+			return;
+		}
+		MngtSession.setIdSecouristeAModifier(sec.getId());
 		goTo("/pageFxml/Administrateur/ModifSecouriste.fxml", event);
 	}
 
@@ -704,8 +712,14 @@ public class Controller  {
 		goTo("/pageFxml/Administrateur/CreationDPS.fxml", event);
 	}
 
-	public void goToModifDPS(ActionEvent event){
+	public void goToModifDPS(ActionEvent event) {
 		System.out.println("goToModifDPS");
+		DPS dps = tableDPS.getSelectionModel().getSelectedItem();
+		if (dps == null) {
+			System.out.println("Veuillez sélectionner un DPS à modifier.");
+			return;
+		}
+		MngtSession.setIdDPSAModifier(dps.getId());
 		goTo("/pageFxml/Administrateur/ModifDPS.fxml", event);
 	}
 
@@ -727,6 +741,12 @@ public class Controller  {
 
 	public void goToModifComp(ActionEvent event){
 		System.out.println("goToModifComp");
+		Competence comp = tableCompetences.getSelectionModel().getSelectedItem();
+		if (comp == null) {
+			System.out.println("Veuillez sélectionner une compétence à modifier.");
+			return;
+		}
+		MngtSession.setIntituleCompetenceAModifier(comp.getIntitule());
 		goTo("/pageFxml/Administrateur/ModifComp.fxml", event);
 	}
 
@@ -915,23 +935,27 @@ public class Controller  {
 
 
 
-	public void deleteSecouriste() {
+	@FXML
+	public void deleteSecouriste(ActionEvent event) {
 		System.out.println("deleteSecouriste");
 
-		if (idSecDelete.getText().isEmpty()) {
-			System.out.println("Veuillez remplir le champ id.");
+		// Récupère le secouriste sélectionné dans la TableView
+		Secouriste sec = tableSecouristes.getSelectionModel().getSelectedItem();
+		if (sec == null) {
+			System.out.println("Veuillez sélectionner un secouriste à supprimer.");
 			return;
 		}
 
 		try {
-			long idLong = Long.parseLong(idSecDelete.getText().trim());
-
 			// Supprimer les compétences associées d'abord
 			DAOPossede daoPossede = new DAOPossede();
-			daoPossede.deleteBySecouristeId(idLong);
+			daoPossede.deleteBySecouristeId(sec.getId());
 
 			// Puis supprimer le secouriste
-			daoSecouriste.delete(idLong);
+			daoSecouriste.delete(sec.getId());
+
+			// Rafraîchir la table
+			viewAllSecouristes();
 
 			System.out.println("Secouriste supprimé avec succès.");
 		} catch (Exception e) {
@@ -1102,22 +1126,26 @@ public class Controller  {
 
 
 	
-	public void deleteDispositifDeSecours() {
+	@FXML
+	public void deleteDispositifDeSecours(ActionEvent event) {
 		System.out.println("deleteDispositifDeSecours");
 
-		if (idDPSDelete.getText().isEmpty()) {
-			System.out.println("Veuillez remplir le champ identifiant.");
+		// On récupère le DPS sélectionné dans la TableView
+		DPS dps = tableDPS.getSelectionModel().getSelectedItem();
+		if (dps == null) {
+			System.out.println("Veuillez sélectionner un DPS à supprimer.");
 			return;
 		}
 
 		try {
-			long idDPSLong = Long.parseLong(idDPSDelete.getText().trim());
-
 			// Supprimer tous les besoins associés
-			daoBesoin.deleteByDpsId(idDPSLong);
+			daoBesoin.deleteByDpsId(dps.getId());
 
 			// Supprimer le DPS
-			daoDPS.delete(idDPSLong);
+			daoDPS.delete(dps.getId());
+
+			// Rafraîchir la table
+			viewAllDPS();
 
 			System.out.println("DPS et ses besoins supprimés avec succès.");
 
@@ -1901,6 +1929,18 @@ public class Controller  {
 			viewAllDPS();
 		}
 
+		if (nomSecModif != null) {
+			initModifSecouriste();
+		}
+
+		if (idDPSModif != null) {
+			initModifDPS();
+		}
+
+		if (intitulerUpdateComp != null) {
+			initModifComp();
+		}
+
 		if (tableMesCompetencesSec != null) {
 			// Vérifie le type d'utilisateur connecté
 			Object user = MngtSession.getUtilisateurConnecte();
@@ -1912,6 +1952,78 @@ public class Controller  {
 				viewCompForSecouriste(idSecouriste);
 			} else {
 				System.out.println("Aucun secouriste connecté !");
+			}
+		}
+	}
+
+	private void initModifSecouriste() {
+		Long id = MngtSession.getIdSecouristeAModifier();
+		if (id != null) {
+			DAOSecouriste daoSecouriste = new DAOSecouriste();
+			try {
+				Secouriste sec = daoSecouriste.read(id);
+				if (sec != null) {
+					nomSecModif.setText(sec.getNom());
+					prenomSecModif.setText(sec.getPrenom());
+					dateNaissSecModif.setText(sec.getDateNaissance());
+					mailSecModif.setText(sec.getEmail());
+					adressSecModif.setText(sec.getAdresse());
+					idSecModif.setText(String.valueOf(sec.getId()));
+					telSecModif.setText(sec.getTel());
+					// Pour les compétences, concatène les intitulés séparés par ;
+					StringBuilder sb = new StringBuilder();
+					if (sec.getPossessions() != null) {
+						for (Possede p : sec.getPossessions()) {
+							if (sb.length() > 0) sb.append(";");
+							sb.append(p.getIntituleCompetence());
+						}
+					}
+					compSecModif.setText(sb.toString());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la récupération du secouriste : " + e.getMessage());
+			}
+		}
+	}
+
+	public void initModifDPS() {
+		Long id = MngtSession.getIdDPSAModifier();
+		if (id != null) {
+			DAODPS daoDPS = new DAODPS();
+			try {
+				DPS dps = daoDPS.read(id);
+				if (dps != null) {
+					idDPSModif.setText(String.valueOf(dps.getId()));
+					heureDebutDPSModif.setText(String.valueOf(dps.getHoraireDepart()));
+					heureFinDPSModif.setText(String.valueOf(dps.getHoraireFin()));
+					dateModifDPS.setValue(LocalDate.of(
+						dps.getEstProgramme().getAnnee(),
+						dps.getEstProgramme().getMois(),
+						dps.getEstProgramme().getJour()
+					));
+					lieuRencDPSModif.setText(dps.getALieuDans().getNom());
+					sportDPSModif.setText(dps.getConcerne().getNom());
+					
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void initModifComp() {
+		String intitule = MngtSession.getIntituleCompetenceAModifier();
+		if (intitule != null) {
+			DAOCompetence daoCompetence = new DAOCompetence();
+			try {
+				Competence comp = daoCompetence.read(intitule);
+				if (comp != null) {
+					intitulerUpdateComp.setText(comp.getIntitule());
+					// Préremplis les autres champs si besoin
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

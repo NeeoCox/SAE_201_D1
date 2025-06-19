@@ -98,6 +98,7 @@ CREATE TABLE DPS (
 );
 
 CREATE TABLE Besoin (
+    nombre INT,
     laCompetence VARCHAR(50) NOT NULL,
     leDPS INT,
     
@@ -267,22 +268,18 @@ INSERT INTO DPS (id, horaire_depart, horaire_fin, concerneSport, aLieuDansSite, 
 (5, 900, 1100, 'CYCL', 'ST5', 19, 6, 2025);
 
 -- Insertion des besoins de compétences pour chaque DPS
-INSERT INTO Besoin (laCompetence, leDPS) VALUES
-('Secouriste', 1),
-('Infirmier', 1),
-('Chef de poste', 1),
-
-('Secouriste', 2),
-('Médecin', 2),
-
-('Ambulancier', 3),
-('Chef de poste', 3),
-
-('Secouriste', 4),
-('Infirmier', 4),
-
-('Médecin', 5),
-('Ambulancier', 5);
+INSERT INTO Besoin (laCompetence, leDPS, nombre) VALUES
+('Secouriste', 1, 2),
+('Infirmier', 1, 1),
+('Chef de poste', 1, 1),
+('Secouriste', 2, 2),
+('Médecin', 2, 1),
+('Ambulancier', 3, 1),
+('Chef de poste', 3, 1),
+('Secouriste', 4, 2),
+('Infirmier', 4, 1),
+('Médecin', 5, 1),
+('Ambulancier', 5, 1);
 
 SHOW TABLES;
 
@@ -315,6 +312,10 @@ VALUES (4, 'Moreau', '$2a$10$exampleHashedPassword4', 'secouriste');
 -- Pour Sophie Lemoine (Secouriste id = 5)
 INSERT INTO users (id, username, password_hash, role)
 VALUES (5, 'Lemoine', '$2a$10$exampleHashedPassword5', 'secouriste');
+
+-- Admin
+INSERT INTO users (id, username, password_hash, role)
+VALUES (110, 'admin2', '$2a$10$exampleHashedPassword110', 'admin');
 
 INSERT INTO sessions (user_id, session_took, expires_at) VALUES
 (1, 'sessiontoken123abc', NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR)),
