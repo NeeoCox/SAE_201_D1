@@ -22,6 +22,7 @@ public abstract class DAO<T> {
      * Nom d'utilisateur pour la connexion à la base de données.
      */
     private static String USERNAME = "root";
+
     /**
      * Mot de passe pour la connexion à la base de données.
      */

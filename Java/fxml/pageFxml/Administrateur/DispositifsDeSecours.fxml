@@ -76,7 +76,7 @@
                     text="Modifier"
                     style="-fx-background-color: #156082; -fx-text-fill: white;" />
             <Button fx:id="buttonSupprimerDPS"
-                    onAction="#deleteDispositifDeSecours"
+                    onAction="#goToDeleteDPS"
                     prefHeight="38.0" prefWidth="163.0"
                     text="Supprimer"
                     style="-fx-background-color: #156082; -fx-text-fill: white;" />

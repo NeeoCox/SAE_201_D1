@@ -146,6 +146,7 @@ public class Glouton {
      * @param args Arguments de la ligne de commande (non utilisés).
      */
     public static void main(String[] args) {
+        int n = 5;
         int[][] M = {
             {0, 1, 1, 0, 0},
             {0, 1, 1, 1, 0},

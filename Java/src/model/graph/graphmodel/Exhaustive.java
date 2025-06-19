@@ -55,9 +55,11 @@ public class Exhaustive {
      */
     public void executer(boolean verbose) {
         int[] permutation = new int[n];
-        for (int i = 0; i < n; i++) permutation[i] = i;
-        meilleureCouverture = -1;
-        permuter(permutation, 0, verbose);
+        for (int i = 0; i < n; i++) {
+            permutation[i] = i;
+        }
+
+        permuter(permutation, 0);
     }
 
     /**
@@ -65,35 +67,18 @@ public class Exhaustive {
      */
     private void permuter(int[] perm, int index, boolean verbose) {
         if (index == n) {
-            nbSolutionsTestees++;
-            int[] affectation = new int[n];
-            Arrays.fill(affectation, -1);
-            boolean[] secouristePris = new boolean[n];
-            int couverture = 0;
-            for (int j = 0; j < n; j++) {
-                int i = perm[j];
-                if (M[i][j] == 1 && !secouristePris[i]) {
-                    affectation[j] = i;
-                    secouristePris[i] = true;
-                    couverture++;
-                }
-            }
-            if (verbose) {
-                System.out.println("Solution testée : " + Arrays.toString(affectation) + " | Couverture : " + couverture);
-            }
-            if (couverture > meilleureCouverture) {
-                meilleureCouverture = couverture;
-                meilleureAffectation = affectation.clone();
-                if (verbose) {
-                    System.out.println("  -> Nouvelle meilleure solution !");
-                }
+            int score = evaluer(permutation);
+            if (score > meilleurScore) {
+                meilleurScore = score;
+                meilleurePermutation = permutation.clone();
             }
             return;
         }
+
         for (int i = index; i < n; i++) {
-            echanger(perm, i, index);
-            permuter(perm, index + 1, verbose);
-            echanger(perm, i, index);
+            echanger(permutation, i, index);
+            permuter(permutation, index + 1);
+            echanger(permutation, i, index); // backtrack
         }
     }
 
@@ -126,9 +111,11 @@ public class Exhaustive {
      * Affiche le résultat de la meilleure affectation trouvée.
      */
     public void afficherResultat() {
-        System.out.println("[Exhaustif] Meilleure affectation (compétence -> secouriste) : " + Arrays.toString(meilleureAffectation));
-        System.out.println("[Exhaustif] Compétences couvertes : " + meilleureCouverture + "/" + n);
-        System.out.println("[Exhaustif] Nombre de solutions testées : " + nbSolutionsTestees);
+        System.out.println("Meilleure affectation (Secouriste -> Competence) :");
+        for (int i = 0; i < n; i++) {
+            System.out.println("Secouriste " + i + " -> Competence " + meilleurePermutation[i]);
+        }
+        System.out.println("Score total : " + meilleurScore);
     }
 
     /**
@@ -141,23 +128,5 @@ public class Exhaustive {
         long t1 = System.currentTimeMillis();
         System.out.println("[Exhaustif] Temps : " + (t1 - t0) + " ms");
         ex.afficherResultat();
-    }
-
-    /**
-     * Exemple d'utilisation
-     */
-    public static void main(String[] args) {
-        int[][] M = {
-            {0, 1, 1, 0, 0},
-            {0, 1, 1, 1, 0},
-            {1, 1, 1, 0, 1},
-            {0, 0, 1, 0, 0},
-            {0, 0, 1, 1, 1}
-        };
-        System.out.println("\n\n\nTest Exhaustif sur matrice M :");
-        for (int[] ligne : M) {
-            System.out.println(Arrays.toString(ligne));
-        }
-        test(M, true);
     }
 }
