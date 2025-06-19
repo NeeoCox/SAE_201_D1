@@ -1,6 +1,11 @@
 package model.graph.graphmodel;
 import java.util.*;
 
+/**
+ * La classe VerifDAG implémente un algorithme pour vérifier si un graphe orienté est un DAG (Directed Acyclic Graph).
+ * Elle utilise un parcours en profondeur pour détecter les cycles dans le graphe.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
+ */
 public class VerifDAG {
 
     /**
@@ -15,12 +20,18 @@ public class VerifDAG {
     private final Map<String, List<String>> graphe = new HashMap<>();
     private final Map<String, Etat> etats = new HashMap<>();
 
-    // Constructeur : initialise le graphe avec les relations hiérarchiques
+    /**
+     * Constructeur de la classe VerifDAG.
+     * Initialise le graphe avec les arêtes orientées comme dans la figure 1.
+     */
     public VerifDAG() {
         initCompDep();
     }
 
-    // Ajoute les arêtes orientées comme dans la figure 1
+    /**
+     * Point d'entrée de l'application.
+     * @param args Arguments de la ligne de commande (non utilisés).
+     */
     private void initCompDep() {
         ajouterArete("CO", "CP");
         ajouterArete("CP", "CE");
@@ -31,20 +42,32 @@ public class VerifDAG {
         ajouterArete("PBF", "PBC");
     }
 
-    // Vérifie si une compétence est présente dans le graphe
+    /**
+     * Vérifie si le graphe contient une compétence donnée.
+     * @param competence La compétence à vérifier.
+     * @return true si la compétence est présente, false sinon.
+     */
     public boolean contientCompetence(String competence) {
         return graphe.containsKey(competence);
     }
 
 
-    // Ajoute une arête dirigée dans le graphe
+    /**
+     * Ajoute une arête orientée entre deux sommets du graphe.
+     * @param depuis Le sommet de départ de l'arête.
+     * @param vers Le sommet d'arrivée de l'arête.
+     */
     public void ajouterArete(String depuis, String vers) {
         graphe.putIfAbsent(depuis, new ArrayList<>());
         graphe.get(depuis).add(vers);
         graphe.putIfAbsent(vers, new ArrayList<>());
     }
 
-    // Fonction principale : vérifie si le graphe est un DAG
+    /**
+     * Vérifie si le graphe est un DAG (Directed Acyclic Graph).
+     * Utilise un parcours en profondeur pour détecter les cycles.
+     * @return true si le graphe est un DAG, false sinon.
+     */
     public boolean verifierDAG() {
         // Initialisation : tous les sommets sont blancs
         for (String noeud : graphe.keySet()) {
@@ -55,18 +78,18 @@ public class VerifDAG {
         for (String noeud : graphe.keySet()) {
             if (etats.get(noeud) == Etat.BLANC) {
                 if (aCycle(noeud)) {
-                    return false; // Cycle détecté
+                    return false;
                 }
             }
         }
 
-        return true; // Aucun cycle détecté
+        return true;
     }
 
     /**
      * Réalise un parcour en profondeur pour détécter s'il y a un cycles
-     * @param noeud 
-     * @return
+     * @param noeud Le sommet actuel à explorer.
+     * @return true si un cycle est trouvé, false sinon.
      */
     private boolean aCycle(String noeud) {
         etats.put(noeud, Etat.GRIS);

@@ -63,6 +63,11 @@ public class AffectationGloutonne implements Affectation {
         return new ResultatAffectation(affectation);
     }
 
+    /**
+     * Initialise un tableau d'entiers représentant l'ordre des lignes ou des colonnes.
+     * @param n Nombre de lignes ou de colonnes.
+     * @return Un tableau d'entiers de taille n, initialisé avec les indices de 0 à n-1.
+     */
     private static int[] initialiserOrdre(int n) {
         int[] ordre = new int[n];
         for (int i = 0; i < n; i++) {
@@ -71,6 +76,12 @@ public class AffectationGloutonne implements Affectation {
         return ordre;
     }
 
+    /**
+     * Trie les lignes de la matrice par degré (somme des éléments de chaque ligne).
+     * Met à jour l'ordre des lignes dans le tableau ordreLignes.
+     * @param M La matrice à trier.
+     * @param ordreLignes Tableau qui stocke l'ordre des lignes après tri.
+     */
     private static void trierLignesParDegre(int[][] M, int[] ordreLignes) {
         int n = M.length;
         int[] L = new int[n];
@@ -99,6 +110,11 @@ public class AffectationGloutonne implements Affectation {
         }
     }
 
+    /**
+     * Trie les colonnes de la matrice en fonction des valeurs des lignes.
+     * @param M La matrice à trier.
+     * @param ordreColonnes Tableau qui stocke l'ordre des colonnes après tri.
+     */
     private static void trierColonnes(int[][] M, int[] ordreColonnes) {
         int n = M.length;
         for (int j = 0; j < n - 1; j++) {

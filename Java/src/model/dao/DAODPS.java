@@ -9,9 +9,21 @@ import model.persistence.Journee;
 import model.persistence.Site;
 import model.persistence.Sport;
 
+/**
+ * DAO pour la gestion des Dossiers de Prise en Charge (DPS) dans la base de données.
+ * Cette classe étend la classe DAO générique et fournit des méthodes pour créer, lire, mettre à jour et supprimer des DPS.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
+ */
 public class DAODPS extends DAO<DPS>{
+    /**
+     * Connection à la base de données.
+     */
     private final Connection connection;
 
+    /**
+     * Constructeur de la classe DAODPS.
+     * Initialise la connexion à la base de données.
+     */
     public DAODPS() {
         try {
             this.connection = createConnection();
@@ -20,6 +32,11 @@ public class DAODPS extends DAO<DPS>{
         }
     }
 
+    /**
+     * Crée un nouveau DPS dans la base de données.
+     * @param dps L'objet DPS à insérer dans la base de données.
+     * @throws SQLException si une erreur se produit lors de l'insertion dans la base de données.
+     */
     public void create(DPS dps) throws SQLException {
         String sql = "INSERT INTO DPS (id, horaire_depart, horaire_fin, estProgrammeJour, estProgrammeMois, estProgrammeAnnee, aLieuDansSite, concerneSport) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -35,6 +52,12 @@ public class DAODPS extends DAO<DPS>{
         }
     }
 
+    /**
+     * Lit un DPS spécifique à partir de la base de données en fonction de son ID.
+     * @param id L'ID du DPS à lire.
+     * @return Un objet DPS représentant le DPS trouvé, ou null si aucun DPS n'est trouvé.
+     * @throws SQLException si une erreur se produit lors de la lecture dans la base de données.
+     */
     public DPS read(long id) throws SQLException {
         String sql = "SELECT d.*, s.nom AS nom_site, s.longitude, s.latitude, sp.nom AS nom_sport " +
                     "FROM DPS d " +
@@ -74,6 +97,11 @@ public class DAODPS extends DAO<DPS>{
         return null;
     }
 
+    /**
+     * Lit tous les DPS de la base de données.
+     * @return Une liste de tous les objets DPS présents dans la base de données.
+     * @throws SQLException si une erreur se produit lors de la lecture dans la base de données.
+     */
     public List<DPS> readAll() throws SQLException {
         List<DPS> dpsList = new ArrayList<>();
         String sql = "SELECT d.*, s.nom AS nom_site, s.longitude, s.latitude, sp.nom AS nom_sport " +
@@ -111,6 +139,11 @@ public class DAODPS extends DAO<DPS>{
         return dpsList;
     }
 
+    /**
+     * Met à jour un DPS existant dans la base de données.
+     * @param dps L'objet DPS contenant les nouvelles informations à mettre à jour.
+     * @throws SQLException si une erreur se produit lors de la mise à jour dans la base de données.
+     */
     public void update(DPS dps) throws SQLException {
         String sql = "UPDATE DPS SET horaire_depart = ?, horaire_fin = ?, estProgrammeJour = ?, estProgrammeMois = ?, estProgrammeAnnee = ?, aLieuDansSite = ?, concerneSport = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -126,6 +159,11 @@ public class DAODPS extends DAO<DPS>{
         }
     }
 
+    /**
+     * Supprime un DPS spécifique de la base de données en fonction de son ID.
+     * @param id L'ID du DPS à supprimer.
+     * @throws SQLException si une erreur se produit lors de la suppression dans la base de données.
+     */
     public void delete(long id) throws SQLException {
         String sql = "DELETE FROM DPS WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {

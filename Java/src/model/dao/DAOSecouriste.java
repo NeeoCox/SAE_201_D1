@@ -5,10 +5,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.persistence.Secouriste;
-
+/**
+ * DAO pour la gestion des secouristes dans la base de données.
+ * Cette classe étend la classe DAO générique et fournit des méthodes pour créer, lire,
+ * mettre à jour et supprimer des secouristes.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
+ */
 public class DAOSecouriste extends DAO<Secouriste> {
+    /**
+     * Connection à la base de données.
+     */
     private final Connection connection;
 
+    /**
+     * Constructeur de la classe DAOSecouriste.
+     * Initialise la connexion à la base de données.
+     */
     public DAOSecouriste() {
         try {
             this.connection = createConnection();
@@ -17,6 +29,11 @@ public class DAOSecouriste extends DAO<Secouriste> {
         }
     }
 
+    /**
+     * Crée un nouveau secouriste dans la base de données.
+     * @param secouriste L'objet Secouriste à insérer dans la base de données.
+     * @throws SQLException si une erreur se produit lors de l'insertion dans la base de données.
+     */
     public void create(Secouriste secouriste) throws SQLException {
         String sql = "INSERT INTO Secouriste (id, nom, prenom, dateNaissance, email, telephone, adresse) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -31,6 +48,12 @@ public class DAOSecouriste extends DAO<Secouriste> {
         }
     }
 
+    /**
+     * Lit un secouriste spécifique à partir de la base de données en fonction de son ID.
+     * @param id L'ID du secouriste à lire.
+     * @return Un objet Secouriste représentant le secouriste trouvé, ou null si aucun secouriste n'est trouvé.
+     * @throws SQLException si une erreur se produit lors de la lecture dans la base de données.
+     */
     public Secouriste read(long id) throws SQLException {
         String sql = "SELECT * FROM Secouriste WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -52,6 +75,11 @@ public class DAOSecouriste extends DAO<Secouriste> {
         return null;
     }
 
+    /**
+     * Lit tous les secouristes de la base de données.
+     * @return Une liste de tous les secouristes.
+     * @throws SQLException si une erreur se produit lors de la lecture dans la base de données.
+     */
     public List<Secouriste> readAll() throws SQLException {
         List<Secouriste> secouristes = new ArrayList<>();
         String sql = "SELECT * FROM Secouriste";
@@ -72,6 +100,12 @@ public class DAOSecouriste extends DAO<Secouriste> {
         return secouristes;
     }
 
+    /**
+     * Lit un secouriste spécifique à partir de la base de données en fonction de son nom.
+     * @param nom Le nom du secouriste à lire.
+     * @return Un objet Secouriste représentant le secouriste trouvé, ou null si aucun secouriste n'est trouvé.
+     * @throws SQLException si une erreur se produit lors de la lecture dans la base de données.
+     */
     public Secouriste readByNom(String nom) throws SQLException {
         String sql = "SELECT * FROM Secouriste WHERE nom = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -94,7 +128,11 @@ public class DAOSecouriste extends DAO<Secouriste> {
     }
 
 
-
+    /**
+     * Met à jour les informations d'un secouriste dans la base de données.
+     * @param secouriste L'objet Secouriste contenant les nouvelles informations.
+     * @throws SQLException si une erreur se produit lors de la mise à jour dans la base de données.
+     */
     public void update(Secouriste secouriste) throws SQLException {
         String sql = "UPDATE Secouriste SET nom = ?, prenom = ?, dateNaissance = ?, email = ?, telephone = ?, adresse = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -109,6 +147,11 @@ public class DAOSecouriste extends DAO<Secouriste> {
         }
     }
 
+    /**
+     * Supprime un secouriste de la base de données en fonction de son ID.
+     * @param id L'ID du secouriste à supprimer.
+     * @throws SQLException si une erreur se produit lors de la suppression dans la base de données.
+     */
     public void delete(long id) throws SQLException {
         String sql = "DELETE FROM Secouriste WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
