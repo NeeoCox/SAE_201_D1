@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAOSite;
-import model.data.Site;
+import model.persistence.Site;
 
 /**
  * Classe de gestion des sites avec persistance en base.

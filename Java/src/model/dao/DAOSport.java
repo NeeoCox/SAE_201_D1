@@ -3,7 +3,8 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.data.Sport;
+
+import model.persistence.Sport;
 
 public class DAOSport extends DAO<Sport>{
     private final Connection connection;

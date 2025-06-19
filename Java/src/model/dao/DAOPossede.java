@@ -3,7 +3,8 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.data.Possede;
+
+import model.persistence.Possede;
 
 public class DAOPossede extends DAO<Possede>{
     private final Connection connection;

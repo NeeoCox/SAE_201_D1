@@ -3,7 +3,7 @@ package model.service;
 import java.sql.SQLException;
 import java.util.List;
 import model.dao.DAONecessite;
-import model.data.Necessite;
+import model.persistence.Necessite;
 
 /**
  * Classe de gestion des relations de nécessité entre compétences.

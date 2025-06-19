@@ -1,8 +1,9 @@
 package model.graph.algorithm.exhaustive;
 
 import java.util.*;
-import model.data.*;
+
 import model.graph.algorithm.*;
+import model.persistence.*;
 
 /**
  * Implémente l'affectation exhaustive des secouristes aux besoins des DPS.

@@ -1,4 +1,4 @@
-package model.data;
+package model.persistence;
 
 /**
  * Établit la liaison entre la classe Compétence et la classe DPS.

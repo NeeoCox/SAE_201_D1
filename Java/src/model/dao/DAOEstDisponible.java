@@ -3,9 +3,10 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.data.EstDisponible;
-import model.data.Journee;
-import model.data.Secouriste;
+
+import model.persistence.EstDisponible;
+import model.persistence.Journee;
+import model.persistence.Secouriste;
 
 public class DAOEstDisponible extends DAO<EstDisponible>{
     private final Connection connection;

@@ -1,9 +1,10 @@
 package model.graph.algorithm;
 
 import java.util.*;
-import model.data.Competence;
-import model.data.Necessite;
+
 import model.graph.algorithm.dag.VerificationDAG;
+import model.persistence.Competence;
+import model.persistence.Necessite;
 
 /**
  * Gère le graphe des compétences et ses dépendances.

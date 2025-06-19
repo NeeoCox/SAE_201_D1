@@ -3,7 +3,8 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.data.Competence;
+
+import model.persistence.Competence;
 
 public class DAOCompetence extends DAO<Competence>{
     private final Connection connection;

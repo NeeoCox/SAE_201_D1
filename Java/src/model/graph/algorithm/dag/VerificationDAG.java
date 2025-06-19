@@ -1,8 +1,9 @@
 package model.graph.algorithm.dag;
 
 import java.util.*;
-import model.data.Competence;
-import model.data.Necessite;
+
+import model.persistence.Competence;
+import model.persistence.Necessite;
 
 /**
  * Permet de vérifier que le graphe des compétences est un DAG (pas de cycle).

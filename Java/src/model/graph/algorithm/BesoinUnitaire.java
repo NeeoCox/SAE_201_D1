@@ -1,7 +1,7 @@
 package model.graph.algorithm;
 
-import model.data.Competence;
-import model.data.DPS;
+import model.persistence.Competence;
+import model.persistence.DPS;
 
 public class BesoinUnitaire {
     private final DPS dps;

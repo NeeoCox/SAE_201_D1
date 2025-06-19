@@ -3,10 +3,11 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.data.DPS;
-import model.data.Journee;
-import model.data.Site;
-import model.data.Sport;
+
+import model.persistence.DPS;
+import model.persistence.Journee;
+import model.persistence.Site;
+import model.persistence.Sport;
 
 public class DAODPS extends DAO<DPS>{
     private final Connection connection;

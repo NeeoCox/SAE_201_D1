@@ -3,7 +3,8 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.data.Besoin;
+
+import model.persistence.Besoin;
 
 public class DAOBesoin extends DAO<Besoin>{
     private final Connection connection;
