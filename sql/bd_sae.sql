@@ -2,25 +2,7 @@ USE bd_sae;
 
 SET SQL_SAFE_UPDATES = 0;
 
-DROP TABLE IF EXISTS sessions;
-DROP TABLE IF EXISTS EstAffecteA;
-DROP TABLE IF EXISTS EstDisponible;
-DROP TABLE IF EXISTS Possede;
-DROP TABLE IF EXISTS Necessite;
-DROP TABLE IF EXISTS Besoin;
-DROP TABLE IF EXISTS DPS;
-DROP TABLE IF EXISTS Secouriste;
-DROP TABLE IF EXISTS Journee;
-DROP TABLE IF EXISTS Competence;
-<<<<<<< HEAD
-DROP TABLE IF EXISTS Secouriste;
-=======
-DROP TABLE IF EXISTS Sport;
-DROP TABLE IF EXISTS Site;
-DROP TABLE IF EXISTS users;
-
->>>>>>> 5435d3ae42337c14c68d7a0407e1a342fc65af8f
-
+DROP TABLE IF EXISTS EstAffecteA, EstDisponible, Possede, Necessite, Besoin, DPS, Secouriste, Journee, Competence, Sport, Site, users, sessions;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -186,7 +168,12 @@ INSERT INTO sessions (user_id, session_took, expires_at) VALUES
 INSERT INTO Journee (jour, mois, annee) VALUES
 (19, 6, 2025),
 (20, 6, 2025),
-(21, 6, 2025);
+(21, 6, 2025),
+(22, 6, 2025),
+(23, 6, 2025),
+(24, 6, 2025),
+(25, 6, 2025),
+(26, 6, 2025);
 
 -- Insertion des compétences (tu as demandé de ne pas changer, je ne touche pas)
 -- Supposons que Competence déjà inséré : PSE1, PSE2, SSA, VPSP, CE, CP, CO, PBC, PBF

@@ -70,6 +70,7 @@ import model.dao.DAOEstAffecteA;
 import model.service.MngtSession;
 import model.persistence.User;
 import model.dao.DAOUser;
+import model.utils.Session;
 
 
 /**
@@ -545,7 +546,8 @@ public class Controller  {
 						Secouriste secouriste = daoSec.readByNom(username); // Recherche par nom (username = nom)
 						if (secouriste != null) {
 							System.out.println("Secouriste trouvé : " + secouriste);
-							MngtSession.setUtilisateurConnecte(secouriste);
+							Session.utilisateurConnecte = secouriste; // Ici on stocke l'objet Secouriste
+							//MngtSession.setUtilisateurConnecte(secouriste);
 							goToPageSecouristeAcceuil(event);
 						} else {
 							System.out.println("Aucun secouriste trouvé avec ce nom.");
@@ -2057,14 +2059,14 @@ public class Controller  {
 			Journee journee = new Journee(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
 
 			// Vérifie que utilisateurConnecte n'est pas null
-			if (utilisateurConnecte == null) {
+			if (Session.utilisateurConnecte == null) {
 				javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Utilisateur non connecté.");
 				alert.showAndWait();
 				return;
 			}
 
 			EstDisponible dispo = new EstDisponible(
-				utilisateurConnecte,
+				Session.utilisateurConnecte,
 				journee,
 				date.getDayOfMonth(),
 				date.getMonthValue(),
@@ -2077,9 +2079,7 @@ public class Controller  {
 			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION, "Disponibilité ajoutée !");
 			alert.showAndWait();
 
-			// Ferme la fenêtre après validation
-			Stage stage = (Stage) datePicker.getScene().getWindow();
-			stage.close();
+			//goToMesDisponibilite(new ActionEvent());
 
 		} catch (NumberFormatException e) {
 			javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR, "Veuillez entrer des heures valides (ex : 08, 17).");

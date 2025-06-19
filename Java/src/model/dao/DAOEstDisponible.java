@@ -45,7 +45,7 @@ public class DAOEstDisponible extends DAO<EstDisponible> {
      * @throws SQLException si une erreur se produit lors de l'insertion dans la base de données.
      */
     public void create(EstDisponible dispo) throws SQLException {
-        String sql = "INSERT INTO EstDisponible (idSecouriste, jour, mois, annee) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO EstDisponible (leSecouriste, jourJournee, moisJournee, anneeJournee) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, dispo.getIdSecouriste());
             stmt.setInt(2, dispo.getJourJournee());
