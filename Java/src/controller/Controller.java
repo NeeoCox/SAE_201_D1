@@ -86,8 +86,6 @@ public class Controller  {
 	 * Connection base de donnée
 	 ***********************************
 	 */
-	
-	// Mettre les DAOSecouriste et autre la
 	DAOSecouriste daoSecouriste = new DAOSecouriste();
 	DAOBesoin daoBesoin = new DAOBesoin();
 	DAOSite daoSite = new DAOSite();
