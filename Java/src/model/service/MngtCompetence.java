@@ -8,11 +8,19 @@ import model.persistence.Competence;
 /**
  * Classe de gestion des compétences (Competence) avec persistance en base.
  * Utilise DAOCompetence pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtCompetence {
 
+    /**
+     * DAO pour les opérations sur les compétences.
+     */
     private final DAOCompetence daoCompetence;
 
+    /**
+     * Constructeur de la classe MngtCompetence.
+     * @param daoCompetence DAO pour les opérations sur les compétences
+     */
     public MngtCompetence(DAOCompetence daoCompetence) {
         this.daoCompetence = daoCompetence;
     }

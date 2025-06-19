@@ -8,11 +8,19 @@ import model.persistence.*;
 /**
  * Classe de gestion des dispositifs de secours avec persistance en base.
  * Utilise DAODPS pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtDPS {
 
+    /**
+     * DAO pour les opérations sur les DPS (Dispositifs de Secours).
+     */
     private final DAODPS daoDPS;
 
+    /**
+     * Constructeur de la classe MngtDPS.
+     * @param daoDPS DAO pour les opérations sur les DPS
+     */
     public MngtDPS(DAODPS daoDPS) {
         this.daoDPS = daoDPS;
     }

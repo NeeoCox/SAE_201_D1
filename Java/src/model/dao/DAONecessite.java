@@ -35,6 +35,16 @@ public class DAONecessite extends DAO<Necessite>{
         }
     }
 
+    public void deleteByCompetence(String intitule) throws SQLException {
+        String sql = "DELETE FROM Necessite WHERE intituleCompetence = ? OR intituleCompetenceNecessaire = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, intitule);
+            stmt.setString(2, intitule);
+            stmt.executeUpdate();
+        }
+    }
+
+
     public List<Necessite> readAll() throws SQLException {
         List<Necessite> necessites = new ArrayList<>();
         String sql = "SELECT * FROM Necessite";

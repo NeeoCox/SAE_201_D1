@@ -27,13 +27,22 @@ public class DAOPossede extends DAO<Possede>{
     }
 
     public void delete(long idSecouriste, String intituleCompetence) throws SQLException {
-        String sql = "DELETE FROM Possede WHERE idSecouriste = ? AND intituleCompetence = ?";
+        String sql = "DELETE FROM Possede WHERE leSecouriste = ? AND laCompetence = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, idSecouriste);
             stmt.setString(2, intituleCompetence);
             stmt.executeUpdate();
         }
     }
+
+    public void deleteBySecouristeId(long idSecouriste) throws SQLException {
+        String sql = "DELETE FROM Possede WHERE leSecouriste = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, idSecouriste);
+            stmt.executeUpdate();
+        }
+    }
+
 
     public List<Possede> readAll() throws SQLException {
         List<Possede> possedes = new ArrayList<>();

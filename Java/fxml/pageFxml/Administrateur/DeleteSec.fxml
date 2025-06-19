@@ -10,28 +10,19 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:controller="controller.Controller"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            prefHeight="435.0" prefWidth="641.0">
+<BorderPane prefHeight="435.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
     <!-- Bande bleue en haut -->
     <top>
-        <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;">
 
             <!-- Bouton Retour -->
-            <Button fx:id="buttonRetourAcSec"
-                    text="Retour"
-                    onAction="#goToPageAdminAcceuil"
-                    prefHeight="30" prefWidth="80"
-                    style="-fx-background-color: white; -fx-text-fill: #156082;" />
+            <Button fx:id="buttonRetourAcSec" onAction="#goToGestionDesSecouristes" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
             <Region HBox.hgrow="ALWAYS" />
 
             <!-- Titre centré -->
-            <Label text="Supprimer Secouriste"
-                   style="-fx-text-fill: white; -fx-font-size: 24px;"
-                   maxWidth="300" alignment="CENTER" />
+            <Label alignment="CENTER" maxWidth="300" style="-fx-text-fill: white; -fx-font-size: 24px;" text="Supprimer Secouriste" />
 
             <Region HBox.hgrow="ALWAYS" />
 
@@ -49,16 +40,13 @@
         <HBox alignment="CENTER" prefHeight="338.0" prefWidth="600" spacing="40">
             <Region HBox.hgrow="ALWAYS" />
 
-            <VBox alignment="CENTER" spacing="20" prefWidth="300">
+            <VBox alignment="CENTER" prefWidth="300" spacing="20">
 
                 <Label text="Identifiant" />
 
-                <TextField fx:id="idSecDelete" prefWidth="300" prefHeight="30" />
+                <TextField fx:id="idSecDelete" prefHeight="30" prefWidth="300" />
 
-                <Button fx:id="deleteButtonSec"
-                        text="Supprimer"
-                        prefWidth="160" prefHeight="40"
-                        style="-fx-background-color: #156082; -fx-text-fill: white;" />
+                <Button fx:id="deleteButtonSec" onAction="#deleteSecouriste" prefHeight="40" prefWidth="160" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Supprimer" />
             </VBox>
 
             <Region HBox.hgrow="ALWAYS" />

@@ -7,32 +7,25 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:controller="controller.Controller"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            prefHeight="435.0" prefWidth="641.0">
+<BorderPane prefHeight="435.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
     <!-- Bande bleue en haut -->
     <top>
-        <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;">
 
             <!-- Bouton Retour -->
-            <Button fx:id="buttonRetourAcSec"
-                    text="Retour"
-                    onAction="#goToPageAdminAcceuil"
-                    prefHeight="30" prefWidth="80"
-                    style="-fx-background-color: white; -fx-text-fill: #156082;" />
+            <Button fx:id="buttonRetourAcSec" onAction="#goToDispositifsDeSecours" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
             <Region HBox.hgrow="ALWAYS" />
 
             <!-- Titre centré -->
-            <Label text="Création de DPS"
-                   style="-fx-text-fill: white; -fx-font-size: 24px;"
-                   maxWidth="300" alignment="CENTER" />
+            <Label alignment="CENTER" maxWidth="300" style="-fx-text-fill: white; -fx-font-size: 24px;" text="Création de DPS" />
 
             <Region HBox.hgrow="ALWAYS" />
 
@@ -47,41 +40,49 @@
 
     <!-- Centre avec 2 colonnes alignées dans un seul GridPane -->
     <center>
-        <GridPane hgap="20" vgap="15" style="-fx-padding: 40 20 40 20;" alignment="CENTER">
+        <GridPane alignment="CENTER" hgap="20" style="-fx-padding: 40 20 40 20;" vgap="15">
 
             <!-- Colonne gauche -->
-            <Label text="Identifiant" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-            <TextField fx:id="idDPSCreate" prefWidth="250" prefHeight="30" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+            <Label text="Identifiant" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="idDPSCreate" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-            <Label text="Heure début" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-            <TextField fx:id="heureDebutDPSCreate" promptText="ex : 1050" prefWidth="250" prefHeight="30" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            <Label text="Heure début" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField fx:id="heureDebutDPSCreate" prefHeight="30" prefWidth="250" promptText="ex : 1050" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-            <Label text="Date" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-            <DatePicker fx:id="dateCreateDPS" prefWidth="250" prefHeight="30" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            <Label text="Date" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <DatePicker fx:id="dateCreateDPS" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-            <Label text="Compétences requises" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-            <TextField fx:id="CompReqDPSCreate" promptText="Comp1;Comp2;Comp3" prefWidth="250" prefHeight="30" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+            <Label text="Compétences requises" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <TextField fx:id="CompReqDPSCreate" prefHeight="30" prefWidth="250" promptText="Comp1;Comp2;Comp3" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
             <!-- Colonne droite -->
-            <Label text="Heure fin" GridPane.rowIndex="0" GridPane.columnIndex="2" />
-            <TextField fx:id="heureFinDPSCreate" promptText="ex : 1150" prefWidth="250" prefHeight="30" GridPane.rowIndex="0" GridPane.columnIndex="3" />
+            <Label text="Heure fin" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+            <TextField fx:id="heureFinDPSCreate" prefHeight="30" prefWidth="250" promptText="ex : 1150" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-            <Label text="Lieu de la rencontre" GridPane.rowIndex="1" GridPane.columnIndex="2" />
-            <TextField fx:id="lieuRencDPSCreate" prefWidth="250" prefHeight="30" GridPane.rowIndex="1" GridPane.columnIndex="3" />
+            <Label text="Lieu de la rencontre" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="lieuRencDPSCreate" prefHeight="30" prefWidth="250" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
-            <Label text="Sport" GridPane.rowIndex="2" GridPane.columnIndex="2" />
-            <TextField fx:id="sportDPSCreate" prefWidth="250" prefHeight="30" GridPane.rowIndex="2" GridPane.columnIndex="3" />
+            <Label text="Sport" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField fx:id="sportDPSCreate" prefHeight="30" prefWidth="250" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
-            <Label text="Nombre de Secouriste" GridPane.rowIndex="3" GridPane.columnIndex="2" />
-            <TextField fx:id="nbSecDPSCreate" promptText="nbSecComp1;nbSecComp2;nbSecComp3" prefWidth="250" prefHeight="30" GridPane.rowIndex="3" GridPane.columnIndex="3" />
+            <Label text="Nombre de Secouriste" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <TextField fx:id="nbSecDPSCreate" prefHeight="30" prefWidth="250" promptText="nbSecComp1;nbSecComp2;nbSecComp3" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
             <!-- Bouton créer -->
-            <Button fx:id="createButtonDPS"
-               text="Créer"
-               prefWidth="160" prefHeight="40"
-               style="-fx-background-color: #156082; -fx-text-fill: white;"
-               GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="2" 
-               GridPane.halignment="CENTER" />
+            <Button fx:id="createButtonDPS" onAction="#createDispositifDeSecours" prefHeight="40" prefWidth="160" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Créer" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
 
         </GridPane>
     </center>

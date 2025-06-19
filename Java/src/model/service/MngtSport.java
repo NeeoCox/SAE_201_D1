@@ -8,6 +8,7 @@ import model.persistence.Sport;
 /**
  * Classe de gestion des sports avec persistance en base.
  * Utilise DAOSport pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtSport {
 

@@ -61,6 +61,9 @@ public class Sport {
     }
 
 
+    /**
+     * Retourne une représentation sous forme de chaîne de caractères du sport.
+     */
     @Override
     public String toString() {
         return "Sport{" +

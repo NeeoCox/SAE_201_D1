@@ -258,7 +258,9 @@ public class Controller  {
 	@FXML
 	private TextField idSecModif;
 	@FXML
-	private TextField passWordSecModif;
+	private TextField telSecModif;
+	@FXML
+	private TextField compSecModif;
 	@FXML 
 	private Button ModifButtonSec;
 
@@ -327,7 +329,7 @@ public class Controller  {
 	
 	//Pour créer une compétence
 	@FXML
-	private TextField intituleCreateComp;
+	private TextField intitulerCreateComp;
 	@FXML
 	private TextField necessiteCreateComp;
 	@FXML
@@ -335,13 +337,21 @@ public class Controller  {
 
 	//Pour modifier une compétence
 	@FXML
-	private TextField intituleUpdateComp;
+	private TextField intitulerUpdateComp;
 	@FXML
 	private TextField necessiteUpdateComp;
 	@FXML
-	private Button updateButtonComp;
+	private TextField newIntitulerUpdateComp;
+	@FXML
+	private Button updateCompetence;
 
 	//Pour supprimer une compétence
+
+	@FXML
+	private TextField intitulerDeleteComp;
+	@FXML
+	private Button deleteButtonComp;
+
 
 	/**
 	 ***********************************
@@ -539,7 +549,9 @@ public class Controller  {
 
 	}*/
 
+	@FXML
 	public void connectUser(ActionEvent event) {
+		System.out.println("connectUser");
 		String username = usernameField.getText();
 		String password = passwordField.getText();
 
@@ -548,33 +560,35 @@ public class Controller  {
 			User user = daoUser.readByUsername(username);
 
 			if (user != null) {
-				// Vérification du mot de passe (utilisez votre propre méthode ici)
 				if (verifyPassword(password, user.getPasswordHash())) {
 					if ("secouriste".equals(user.getRole())) {
 						DAOSecouriste daoSec = new DAOSecouriste();
-						Secouriste secouriste = daoSec.readByNom(username); // <- ici on cherche par nom
-						System.out.println("Secouriste trouvé : " + secouriste);
+						Secouriste secouriste = daoSec.readByNom(username); // Recherche par nom (username = nom)
 						if (secouriste != null) {
+							System.out.println("Secouriste trouvé : " + secouriste);
 							MngtSession.setUtilisateurConnecte(secouriste);
 							goToPageSecouristeAcceuil(event);
 						} else {
 							System.out.println("Aucun secouriste trouvé avec ce nom.");
 						}
+					} else if ("admin".equals(user.getRole())) {
+						System.out.println("Connexion admin réussie");
+						MngtSession.setUtilisateurConnecte(user);  // Ici on stocke l'objet User
+						goToPageAdminAcceuil(event);
 					}
-				} else if ("admin".equals(user.getRole())) {
-					// Si besoin, chargez un objet Secouriste ou Admin ici
-					goToPageAdminAcceuil(event);        // redirection admin
-				}else {
-					System.out.print("Mot de passe incorrect");
+				} else {
+					System.out.println("Mot de passe incorrect");
 				}
 			} else {
-				System.out.print("Nom d'utilisateur non trouvé");
+				System.out.println("Nom d'utilisateur non trouvé");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.print("Erreur lors de la connexion");
+			System.out.println("Erreur lors de la connexion");
 		}
 	}
+
+
 
 
 	/**
@@ -786,7 +800,6 @@ public class Controller  {
 	 /**
 	  * Permet de créer un secouriste
 	  */
-	@FXML
 	public void createSecouriste() {
 		System.out.println("createSecouriste");
 
@@ -847,62 +860,100 @@ public class Controller  {
 	}
 
 
-	public void updateSecouriste(){
+	public void updateSecouriste() {
 		System.out.println("updateSecouriste");
+
 		if (nomSecModif.getText().isEmpty() || prenomSecModif.getText().isEmpty() ||
 			dateNaissSecModif.getText().isEmpty() || 
 			mailSecModif.getText().isEmpty() || adressSecModif.getText().isEmpty() || 
-			idSecModif.getText().isEmpty() || passWordSecModif.getText().isEmpty()) {
-			System.out.println("Veuillez remplir tous les champs.");
-		}
-		else{
-			String nom = nomSecModif.getText();
-			String prenom = prenomSecModif.getText();
-			String dateNaissance = dateNaissSecModif.getText();
-			String email = mailSecModif.getText();
-			String adresse = adressSecModif.getText();
-			String id = idSecModif.getText();
-			long idLong = Long.parseLong(id); 
-			String passWord = passWordSecModif.getText();
-			String[] compPossede = compSecCreate.getText().split(";");
-			List<Possede> listCompPos = new ArrayList<Possede>();
+			idSecModif.getText().isEmpty() || telSecModif.getText().isEmpty()) {
 
-			for(int i = 0; i<compPossede.length; i++){
+			System.out.println("Veuillez remplir tous les champs.");
+			return;
+		}
+
+		try {
+			String nom = nomSecModif.getText().trim();
+			String prenom = prenomSecModif.getText().trim();
+			String dateNaissance = dateNaissSecModif.getText().trim();
+			String email = mailSecModif.getText().trim();
+			String adresse = adressSecModif.getText().trim();
+			String telephone = telSecModif.getText().trim();
+			long idLong = Long.parseLong(idSecModif.getText().trim());
+
+			String[] compPossede = compSecModif.getText().split(";");
+			List<Possede> listCompPos = new ArrayList<>();
+
+			DAOCompetence daoCompetence = new DAOCompetence();
+			DAOPossede daoPossede = new DAOPossede();
+			DAOSecouriste daoSecouriste = new DAOSecouriste();
+
+			for (String comp : compPossede) {
+				String intitule = comp.trim();
+				
+				// Vérifie si la compétence existe
+				if (!daoCompetence.exists(intitule)) {
+					Competence newComp = new Competence();
+					newComp.setIntitule(intitule);
+					daoCompetence.create(newComp);
+				}
+
 				Possede compPos = new Possede();
 				compPos.setIdSecouriste(idLong);
-				compPos.setIntituleCompetence(compPossede[i]);
+				compPos.setIntituleCompetence(intitule);
+
+				Competence competence = new Competence();
+				competence.setIntitule(intitule);
+				compPos.setLaCompetence(competence);
+
+				listCompPos.add(compPos);
 			}
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, listCompPos);
-						
-			try{
-				daoSecouriste.update(secouriste);
+			// Mise à jour du secouriste
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, telephone, adresse, listCompPos);
+			daoSecouriste.update(secouriste);
+
+			// Suppression des anciennes compétences et réinsertion des nouvelles
+			daoPossede.deleteBySecouristeId(idLong);
+			for (Possede compPos : listCompPos) {
+				daoPossede.create(compPos);
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la modification du secouriste : " + e.getMessage());
-			}
+
+			System.out.println("Secouriste mis à jour avec succès.");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la modification du secouriste : " + e.getMessage());
 		}
 	}
 
-	public void deleteSecouriste(){
+
+
+	public void deleteSecouriste() {
 		System.out.println("deleteSecouriste");
+
 		if (idSecDelete.getText().isEmpty()) {
 			System.out.println("Veuillez remplir le champ id.");
+			return;
 		}
-		else{
-			String id = idSecDelete.getText();
-			long idLong = Long.parseLong(id); 
 
-			try{
-				daoSecouriste.delete(idLong);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la suppression du secouriste : " + e.getMessage());
-			}
+		try {
+			long idLong = Long.parseLong(idSecDelete.getText().trim());
+
+			// Supprimer les compétences associées d'abord
+			DAOPossede daoPossede = new DAOPossede();
+			daoPossede.deleteBySecouristeId(idLong);
+
+			// Puis supprimer le secouriste
+			daoSecouriste.delete(idLong);
+
+			System.out.println("Secouriste supprimé avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression du secouriste : " + e.getMessage());
 		}
 	}
+
 
 	/**
 	 ***********************************
@@ -910,149 +961,188 @@ public class Controller  {
 	 ***********************************
 	 */
 
-	public void createDispositifDeSecours(){
-		System.out.println("crateDispositifDeSecours");
-		if (idDPSCreate.getText().isEmpty() || heureDebutDPSCreate.getText().isEmpty() || 
-			heureFinDPSCreate.getText().isEmpty() 
-			|| lieuRencDPSCreate.getText().isEmpty() || sportDPSCreate.getText().isEmpty()
-			|| nbSecDPSCreate.getText().isEmpty()) {
+	public void createDispositifDeSecours() {
+		System.out.println("createDispositifDeSecours");
+
+		if (idDPSCreate.getText().isEmpty() || heureDebutDPSCreate.getText().isEmpty() ||
+			heureFinDPSCreate.getText().isEmpty() || lieuRencDPSCreate.getText().isEmpty() ||
+			sportDPSCreate.getText().isEmpty() || nbSecDPSCreate.getText().isEmpty() ||
+			CompReqDPSCreate.getText().isEmpty() || dateCreateDPS.getValue() == null) {
+			
 			System.out.println("Veuillez remplir tous les champs.");
+			return;
 		}
-		else{
-			String idDPS = idDPSCreate.getText();
-			long idDPSLong = Long.parseLong(idDPS);
 
-			String heureDebutStr = heureDebutDPSCreate.getText();
-			int heureDebut = Integer.parseInt(heureDebutStr);
+		try {
+			// Lecture et parsing des champs
+			int idDPSLong = Integer.parseInt(idDPSCreate.getText().trim());
+			int heureDebut = Integer.parseInt(heureDebutDPSCreate.getText().trim());
+			int heureFin = Integer.parseInt(heureFinDPSCreate.getText().trim());
 
-			String heureFinStr = heureFinDPSCreate.getText();
-			int heureFin = Integer.parseInt(heureFinStr);
+			if (heureDebut >= heureFin) {
+				System.out.println("L'heure de début doit être inférieure à l'heure de fin.");
+				return;
+			}
 
-			//DATE
 			LocalDate selectedDate = dateCreateDPS.getValue();
-    
-			int jour = selectedDate.getDayOfMonth(); 
-			int mois = selectedDate.getMonthValue();   
-			int annee = selectedDate.getYear();        
-			
-			Journee journee = new Journee(jour, mois, annee);
+			Journee journee = new Journee(
+				selectedDate.getDayOfMonth(),
+				selectedDate.getMonthValue(),
+				selectedDate.getYear()
+			);
 
+			// Parsing des compétences et nombres de secouristes
 			String[] compReqStr = CompReqDPSCreate.getText().split(";");
-			int nbCompReq = compReqStr.length;
+			String[] nbSecStr = nbSecDPSCreate.getText().split(";");
 
-			String nombreStr = nbSecDPSCreate.getText();
-			int nombre = Integer.parseInt(nombreStr);
-			try{
-				
-				Besoin besoin;
-				for(int i = 0; i<nbCompReq; i++){
-					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
-					daoBesoin.create(besoin);
-				}
-				 
-				
-				String lieuRenc = lieuRencDPSCreate.getText();
-				Site site = daoSite.read(lieuRenc);
-
-				// Sport
-				
-				String sport = sportDPSCreate.getText();
-				Sport sportObj = daoSport.read(sport);
-
-				
-				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
-				daoDPS.create(dps);
+			if (compReqStr.length != nbSecStr.length) {
+				System.out.println("Le nombre de compétences ne correspond pas au nombre de secouristes.");
+				return;
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la création du DPS : " + e.getMessage());
+
+			// Lecture du site
+			String lieuRenc = lieuRencDPSCreate.getText().trim();
+			Site site = daoSite.read(lieuRenc);
+			if (site == null) {
+				System.out.println("Le site '" + lieuRenc + "' n'existe pas.");
+				return;
 			}
+
+			// Lecture du sport
+			String sport = sportDPSCreate.getText().trim();
+			Sport sportObj = daoSport.read(sport);
+			if (sportObj == null) {
+				System.out.println("Le sport '" + sport + "' n'existe pas.");
+				return;
+			}
+
+			// Création du DPS
+			DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
+			daoDPS.create(dps);
+
+			// Création des Besoins
+			for (int i = 0; i < compReqStr.length; i++) {
+				String comp = compReqStr[i].trim();
+				int nb = Integer.parseInt(nbSecStr[i].trim());
+				Besoin besoin = new Besoin(nb, comp, idDPSLong);
+				daoBesoin.create(besoin);
+			}
+			System.out.println("DPS créé avec succès.");
+
+		} catch (NumberFormatException e) {
+			System.out.println("Erreur de format numérique : " + e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la création du DPS : " + e.getMessage());
 		}
-	}	
+	}
 
-	public void updateDispositifDeSecours(){
+	public void updateDispositifDeSecours() {
 		System.out.println("updateDispositifDeSecours");
-		if (idDPSModif.getText().isEmpty() || heureDebutDPSModif.getText().isEmpty() || 
-			heureFinDPSModif.getText().isEmpty() 
-			|| lieuRencDPSModif.getText().isEmpty() || sportDPSModif.getText().isEmpty()
-			|| nbSecDPSModif.getText().isEmpty()) {
+
+		if (idDPSModif.getText().isEmpty() || heureDebutDPSModif.getText().isEmpty() ||
+			heureFinDPSModif.getText().isEmpty() || lieuRencDPSModif.getText().isEmpty() ||
+			sportDPSModif.getText().isEmpty() || nbSecDPSModif.getText().isEmpty() ||
+			CompReqDPSModif.getText().isEmpty() || dateModifDPS.getValue() == null) {
+
 			System.out.println("Veuillez remplir tous les champs.");
+			return;
 		}
-		else{
-			String idDPS = idDPSModif.getText();
-			long idDPSLong = Long.parseLong(idDPS);
 
-			String heureDebutStr = heureDebutDPSModif.getText();
-			int heureDebut = Integer.parseInt(heureDebutStr);
+		try {
+			int idDPSLong = Integer.parseInt(idDPSModif.getText().trim());
+			int heureDebut = Integer.parseInt(heureDebutDPSModif.getText().trim());
+			int heureFin = Integer.parseInt(heureFinDPSModif.getText().trim());
 
-			String heureFinStr = heureFinDPSModif.getText();
-			int heureFin = Integer.parseInt(heureFinStr);
+			if (heureDebut >= heureFin) {
+				System.out.println("L'heure de début doit être inférieure à l'heure de fin.");
+				return;
+			}
 
-			//DATE
 			LocalDate selectedDate = dateModifDPS.getValue();
-    
-			int jour = selectedDate.getDayOfMonth(); 
-			int mois = selectedDate.getMonthValue();   
-			int annee = selectedDate.getYear();        
-			
-			Journee journee = new Journee(jour, mois, annee);
+			Journee journee = new Journee(
+				selectedDate.getDayOfMonth(),
+				selectedDate.getMonthValue(),
+				selectedDate.getYear()
+			);
 
-			String[] compReqStr = CompReqDPSCreate.getText().split(";");
-			int nbCompReq = compReqStr.length;
+			String[] compReqStr = CompReqDPSModif.getText().split(";");
+			String[] nbSecStr = nbSecDPSModif.getText().split(";");
 
-			String nombreStr = nbSecDPSModif.getText();
-			int nombre = Integer.parseInt(nombreStr);
-			try{
-				Besoin besoin;
-				for(int i = 0; i<nbCompReq; i++){
-					besoin = new Besoin(nombre, compReqStr[i], idDPSLong);
-					daoBesoin.update(besoin);
-				}
-
-				String lieuRenc = lieuRencDPSModif.getText();
-				Site site = daoSite.read(lieuRenc);
-
-				// Sport
-
-				String sport = sportDPSModif.getText();
-				Sport sportObj = daoSport.read(sport);
-
-				DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
-				daoDPS.update(dps);
+			if (compReqStr.length != nbSecStr.length) {
+				System.out.println("Le nombre de compétences ne correspond pas au nombre de secouristes.");
+				return;
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la modification du DPS : " + e.getMessage());
+
+			String lieuRenc = lieuRencDPSModif.getText().trim();
+			Site site = daoSite.read(lieuRenc);
+			if (site == null) {
+				System.out.println("Le site '" + lieuRenc + "' n'existe pas.");
+				return;
 			}
+
+			String sport = sportDPSModif.getText().trim();
+			Sport sportObj = daoSport.read(sport);
+			if (sportObj == null) {
+				System.out.println("Le sport '" + sport + "' n'existe pas.");
+				return;
+			}
+
+			// Mise à jour du DPS
+			DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
+			daoDPS.update(dps);
+
+			// Supprimer les anciens besoins liés à ce DPS
+			daoBesoin.deleteByDpsId(idDPSLong);
+
+			// Création et insertion des nouveaux besoins
+			for (int i = 0; i < compReqStr.length; i++) {
+				String comp = compReqStr[i].trim();
+				int nb = Integer.parseInt(nbSecStr[i].trim());
+				Besoin besoin = new Besoin(nb, comp, idDPSLong);
+				daoBesoin.create(besoin);
+			}
+
+			System.out.println("DPS modifié avec succès.");
+
+		} catch (NumberFormatException e) {
+			System.out.println("Erreur de format numérique : " + e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la modification du DPS : " + e.getMessage());
 		}
 	}
+
+
+
 	
-	public void deleteDispositifDeSecours(){
+	public void deleteDispositifDeSecours() {
 		System.out.println("deleteDispositifDeSecours");
+
 		if (idDPSDelete.getText().isEmpty()) {
-			System.out.println("Veuillez remplir tous les champs.");
+			System.out.println("Veuillez remplir le champ identifiant.");
+			return;
 		}
-		else{		
-			String idDPS = idDPSDelete.getText();
-			long idDPSLong = Long.parseLong(idDPS);
 
-			try{
-				List<Besoin> besoin = daoBesoin.readAll();
+		try {
+			long idDPSLong = Long.parseLong(idDPSDelete.getText().trim());
 
-				for (Besoin b : besoin) {
-					Long idDPSFor = b.getIdDPS();
-					if(idDPSFor == idDPSLong){
-						daoBesoin.delete(idDPSLong, idDPS);
-					}
-				}
-				daoDPS.delete(idDPSLong);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la suppression du DPS : " + e.getMessage());
-			}
+			// Supprimer tous les besoins associés
+			daoBesoin.deleteByDpsId(idDPSLong);
+
+			// Supprimer le DPS
+			daoDPS.delete(idDPSLong);
+
+			System.out.println("DPS et ses besoins supprimés avec succès.");
+
+		} catch (NumberFormatException e) {
+			System.out.println("Format d'identifiant invalide : " + e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression du DPS : " + e.getMessage());
 		}
 	}
+
 
 	/**
 	 ***********************************
@@ -1077,14 +1167,19 @@ public class Controller  {
 	}
 
 	public void createCompetences() {
-		if (intituleCreateComp.getText().isEmpty()) {
-			System.out.println("Veuillez remplir tous les champs.");
+		if (intitulerCreateComp == null || intitulerCreateComp.getText().isEmpty()) {
+			System.out.println("Champ 'Intitulé' vide ou non initialisé.");
 			return;
 		}
 
-		String intituleStr = intituleCreateComp.getText();
+		String intituleStr = intitulerCreateComp.getText();
 		String[] compNecStr = null;
-		boolean necessiteVide = necessiteCreateComp.getText().isEmpty();
+
+		// Vérifie que le champ existe avant d'appeler une méthode dessus
+		boolean necessiteVide = (necessiteCreateComp == null || 
+								necessiteCreateComp.getText() == null || 
+								necessiteCreateComp.getText().isEmpty());
+
 		if (!necessiteVide) {
 			compNecStr = necessiteCreateComp.getText().split(";");
 		}
@@ -1107,7 +1202,6 @@ public class Controller  {
 					dependances.add(compNec);
 				}
 			}
-
 			// Créer une copie temporaire du graphe et tester DAG
 			List<Competence> tempCompetences = new ArrayList<>(grapheCompetences.getCompetences());
 			tempCompetences.add(comp);
@@ -1165,37 +1259,106 @@ public class Controller  {
 		return null;
 	}
 
-	public void updateCompetence(String ancienIntitule, String nouvelIntitule) {
-		if (ancienIntitule == null || nouvelIntitule == null || ancienIntitule.isEmpty() || nouvelIntitule.isEmpty()) {
-			System.out.println("Veuillez remplir tous les champs.");
+	public void updateCompetence() {
+		// Vérification des champs requis
+		if (intitulerUpdateComp == null || newIntitulerUpdateComp == null || intitulerUpdateComp.getText().isEmpty() || newIntitulerUpdateComp.getText().isEmpty()) {
+			System.out.println("Veuillez remplir l'ancien et le nouvel intitulé.");
 			return;
 		}
 
-		try {
-			DAOCompetence daoCompetence = new DAOCompetence();
+		String ancienIntitule = intitulerUpdateComp.getText().trim();
+		String nouvelIntitule = newIntitulerUpdateComp.getText().trim();
+		String[] compNecStr = null;
 
-			Competence comp = trouverCompetenceParIntitule(ancienIntitule, grapheCompetences.getCompetences());
-			if (comp == null) {
+		boolean necessiteVide = (necessiteUpdateComp == null || necessiteUpdateComp.getText() == null || necessiteUpdateComp.getText().isEmpty());
+
+		if (!necessiteVide) {
+			compNecStr = necessiteUpdateComp.getText().split(";");
+		}
+
+		try {
+			// Récupérer la compétence existante
+			Competence ancienneComp = trouverCompetenceParIntitule(ancienIntitule, grapheCompetences.getCompetences());
+			if (ancienneComp == null) {
 				System.out.println("Compétence à modifier inexistante.");
 				return;
 			}
 
-			// Mise à jour en base
+			// Préparer la nouvelle instance
 			Competence nouvelleComp = new Competence();
 			nouvelleComp.setIntitule(nouvelIntitule);
-			daoCompetence.update(nouvelleComp, ancienIntitule);
 
-			// Mise à jour dans le graphe
-			comp.setIntitule(nouvelIntitule);
+			// Dépendances
+			List<Competence> dependances = new ArrayList<>();
+			if (!necessiteVide) {
+				for (String nec : compNecStr) {
+					String trimmedNec = nec.trim();
+					if (!trimmedNec.isEmpty()) {
+						Competence compNec = trouverCompetenceParIntitule(trimmedNec, grapheCompetences.getCompetences());
+						if (compNec == null) {
+							System.out.println("Compétence requise inexistante dans le graphe : " + trimmedNec);
+							return;
+						}
+						dependances.add(compNec);
+					}
+				}
+			}
 
-			// Mettre à jour les intitulés dans les dépendances (Necessite)
+			// Vérification de cycle (graphe temporaire)
+			List<Competence> tempCompetences = new ArrayList<>(grapheCompetences.getCompetences());
+			tempCompetences.remove(ancienneComp);
+			tempCompetences.add(nouvelleComp);
+
+			List<Necessite> tempNecessites = new ArrayList<>();
 			for (Necessite n : grapheCompetences.getNecessites()) {
-				if (n.getIntituleCompetence().equals(ancienIntitule)) {
-					n.setIntituleCompetence(nouvelIntitule);
+				if (!n.getIntituleCompetence().equals(ancienIntitule) &&
+					!n.getIntituleCompetenceNecessaire().equals(ancienIntitule)) {
+					tempNecessites.add(n);
 				}
-				if (n.getIntituleCompetenceNecessaire().equals(ancienIntitule)) {
-					n.setIntituleCompetenceNecessaire(nouvelIntitule);
-				}
+			}
+
+			for (Competence nec : dependances) {
+				Necessite n = new Necessite();
+				n.setLaCompetence(nouvelleComp);
+				n.setCompetenceNecessaire(nec);
+				n.setIntituleCompetence(nouvelIntitule);
+				n.setIntituleCompetenceNecessaire(nec.getIntitule());
+				tempNecessites.add(n);
+			}
+
+			GrapheCompetences grapheTemp = new GrapheCompetences(tempCompetences, tempNecessites);
+			if (!grapheTemp.estDAG()) {
+				System.out.println("Modification impossible : cela créerait un cycle dans le graphe.");
+				return;
+			}
+
+			// Mise à jour base
+			daoCompetence.update(nouvelleComp, ancienIntitule);
+			daoNecessite.deleteByCompetence(ancienIntitule);
+
+			for (Competence nec : dependances) {
+				Necessite besoin = new Necessite();
+				besoin.setLaCompetence(nouvelleComp);
+				besoin.setCompetenceNecessaire(nec);
+				besoin.setIntituleCompetence(nouvelIntitule);
+				besoin.setIntituleCompetenceNecessaire(nec.getIntitule());
+				daoNecessite.create(besoin);
+			}
+
+			// Mise à jour graphe
+			ancienneComp.setIntitule(nouvelIntitule);
+			grapheCompetences.getNecessites().removeIf(n ->
+				n.getIntituleCompetence().equals(ancienIntitule) ||
+				n.getIntituleCompetenceNecessaire().equals(ancienIntitule)
+			);
+
+			for (Competence nec : dependances) {
+				Necessite besoin = new Necessite();
+				besoin.setLaCompetence(ancienneComp); // même objet, nouvel intitulé
+				besoin.setCompetenceNecessaire(nec);
+				besoin.setIntituleCompetence(nouvelIntitule);
+				besoin.setIntituleCompetenceNecessaire(nec.getIntitule());
+				grapheCompetences.ajouterNecessite(besoin);
 			}
 
 			System.out.println("Compétence modifiée avec succès.");
@@ -1204,41 +1367,51 @@ public class Controller  {
 			System.out.println("Erreur lors de la modification de la compétence : " + e.getMessage());
 		}
 	}
-
-	public void deleteCompetence(String intitule) {
-		if (intitule == null || intitule.isEmpty()) {
-			System.out.println("Veuillez indiquer l'intitulé de la compétence à supprimer.");
+	
+	public void deleteCompetence() {
+		// Vérification du champ de compétence à supprimer
+		if (intitulerDeleteComp == null || intitulerDeleteComp.getText().isEmpty()) {
+			System.out.println("Veuillez remplir l'intitulé de la compétence à supprimer.");
 			return;
 		}
 
+		String intituleASupprimer = intitulerDeleteComp.getText().trim();
+
 		try {
-			DAOCompetence daoCompetence = new DAOCompetence();
-			DAONecessite daoNecessite = new DAONecessite();
-
-			// Suppression en base
-			daoCompetence.delete(intitule);
-
-			// Suppression des dépendances associées en base et dans le graphe
-			List<Necessite> necessites = new ArrayList<>(grapheCompetences.getNecessites());
-			for (Necessite n : necessites) {
-				if (n.getIntituleCompetence().equals(intitule) || n.getIntituleCompetenceNecessaire().equals(intitule)) {
-					daoNecessite.delete(n.getIntituleCompetence(), n.getIntituleCompetenceNecessaire());
-					grapheCompetences.supprimerNecessite(n);
-				}
+			// Récupérer la compétence existante dans le graphe
+			Competence compASupprimer = trouverCompetenceParIntitule(intituleASupprimer, grapheCompetences.getCompetences());
+			if (compASupprimer == null) {
+				System.out.println("Compétence à supprimer inexistante.");
+				return;
 			}
 
-			// Suppression dans le graphe
-			Competence comp = trouverCompetenceParIntitule(intitule, grapheCompetences.getCompetences());
-			if (comp != null) {
-				grapheCompetences.supprimerCompetence(comp);
-			}
+			// Étape 1 : Supprimer toutes les nécessités liées à cette compétence en base
+			daoNecessite.deleteByCompetence(intituleASupprimer);
+
+			// Étape 2 : Supprimer la compétence en base
+			daoCompetence.delete(compASupprimer.getIntitule());
+
+
+			// Étape 3 : Mettre à jour le graphe en mémoire
+			// Supprimer la compétence
+			grapheCompetences.getCompetences().remove(compASupprimer);
+
+			// Supprimer toutes les nécessités liées à cette compétence (en tant que compétence ou compétence nécessaire)
+			grapheCompetences.getNecessites().removeIf(n ->
+				(n.getIntituleCompetence() != null && n.getIntituleCompetence().equals(intituleASupprimer)) ||
+				(n.getIntituleCompetenceNecessaire() != null && n.getIntituleCompetenceNecessaire().equals(intituleASupprimer))
+			);
 
 			System.out.println("Compétence supprimée avec succès.");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Erreur lors de la suppression de la compétence : " + e.getMessage());
 		}
 	}
+
+
+
 
 
 	/*
@@ -1248,12 +1421,12 @@ public class Controller  {
 	 */
 
 	public void createNecessite() {
-		if (intituleCreateComp.getText().isEmpty() || necessiteCreateComp.getText().isEmpty()) {
+		if (intitulerCreateComp.getText().isEmpty() || necessiteCreateComp.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
 			return;
 		}
 
-		String intituleComp = intituleCreateComp.getText();
+		String intituleComp = intitulerCreateComp.getText();
 		String intituleNec = necessiteCreateComp.getText();
 
 		Competence comp = trouverCompetenceParIntitule(intituleComp, grapheCompetences.getCompetences());
@@ -1355,12 +1528,12 @@ public class Controller  {
 	}
 
 	public void deleteNecessite() {
-		if (intituleCreateComp.getText().isEmpty() || necessiteCreateComp.getText().isEmpty()) {
+		if (intitulerCreateComp.getText().isEmpty() || necessiteCreateComp.getText().isEmpty()) {
 			System.out.println("Veuillez remplir tous les champs.");
 			return;
 		}
 
-		String intituleComp = intituleCreateComp.getText();
+		String intituleComp = intitulerCreateComp.getText();
 		String intituleNec = necessiteCreateComp.getText();
 
 		try {
@@ -1647,6 +1820,7 @@ public class Controller  {
 	public void initialize() {
 		System.out.println("initialize");
 		// Si on est sur la page du planning
+		initGrapheCompetences();
 		if (gridWeek != null) {
 			LocalDate today = LocalDate.now();
 			currentMonday = today.with(DayOfWeek.MONDAY);
@@ -1678,16 +1852,19 @@ public class Controller  {
 			viewAllDPS();
 		}
 
-		if(tableMesCompetencesSec != null){
-			long idSecouriste = MngtSession.getIdUtilisateurConnecte();
+		if (tableMesCompetencesSec != null) {
+			// Vérifie le type d'utilisateur connecté
+			Object user = MngtSession.getUtilisateurConnecte();
 
-			System.out.println("bruh");
-			if (idSecouriste != -1) {
+			if (user instanceof Secouriste) {
+				Secouriste sec = (Secouriste) user;
+				long idSecouriste = sec.getId();
+
 				viewCompForSecouriste(idSecouriste);
 			} else {
 				System.out.println("Aucun secouriste connecté !");
 			}
-		}	
+		}
 	}
 
     public void addTask(LocalDate date, String taskDescription) {

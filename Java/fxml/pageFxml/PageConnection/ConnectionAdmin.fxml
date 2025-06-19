@@ -27,7 +27,7 @@
                     <left>
                         <Button fx:id="buttonRetourAcSec"
                                 text="Retour"
-                                onAction="#goToPageAdminAcceuil"
+                                onAction="#goToPageConnection"
                                 prefHeight="30" prefWidth="80"
                                 style="-fx-background-color: white; -fx-text-fill: #156082;" />
                     </left>

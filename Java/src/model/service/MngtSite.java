@@ -8,6 +8,7 @@ import model.persistence.Site;
 /**
  * Classe de gestion des sites avec persistance en base.
  * Utilise DAOSite pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtSite {
 

@@ -8,6 +8,7 @@ import model.persistence.Secouriste;
 /**
  * Classe de gestion des secouristes avec persistance en base.
  * Utilise DAOSecouriste pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtSecouriste {
 
