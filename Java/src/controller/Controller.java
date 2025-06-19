@@ -2116,19 +2116,6 @@ public class Controller  {
         lblSun.setText(" Dimanche\n " + currentMonday.plusDays(6));
     }
 
-    private VBox getDayVBox(int dayIndex) {
-        switch (dayIndex) {
-            case 0: return vboxMon;
-            case 1: return vboxTue;
-            case 2: return vboxWed;
-            case 3: return vboxThu;
-            case 4: return vboxFri;
-            case 5: return vboxSat;
-            case 6: return vboxSun;
-            default: return null;
-        }
-    }
-
     /**
      * 
      * @param event
