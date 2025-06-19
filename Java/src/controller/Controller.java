@@ -800,7 +800,6 @@ public class Controller  {
 	 /**
 	  * Permet de créer un secouriste
 	  */
-	@FXML
 	public void createSecouriste() {
 		System.out.println("createSecouriste");
 
