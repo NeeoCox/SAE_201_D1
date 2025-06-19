@@ -3,7 +3,6 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.persistence.Besoin;
 /**
  * DAO pour la gestion des besoins dans la base de données.
@@ -33,12 +32,11 @@ public class DAOBesoin extends DAO<Besoin>{
      * @throws SQLException si une erreur se produit lors de l'insertion dans la base de données.
      */
     public void create(Besoin besoin) throws SQLException {
-        String sql = "INSERT INTO Besoin (leDPS, laCompetence, nombre) VALUES (?, ?, ?)";
-        
+        String sql = "INSERT INTO Besoin (nombre, laCompetence, leDPS) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, besoin.getIdDPS());
+            stmt.setInt(1, besoin.getNombre());
             stmt.setString(2, besoin.getIntituleCompetence());
-            stmt.setInt(3, besoin.getNombre());
+            stmt.setLong(3, besoin.getIdDPS());
             stmt.executeUpdate();
         }
     }

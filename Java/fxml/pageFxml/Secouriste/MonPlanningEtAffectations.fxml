@@ -8,14 +8,15 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.2"
             xmlns:fx="http://javafx.com/fxml/1"
-            prefWidth="900.0" prefHeight="600.0">
+            prefWidth="900.0" prefHeight="600.0"
+            fx:controller="controller.Controller">
 
     <!-- Bande bleue avec titre et bouton retour -->
     <top>
         <HBox alignment="CENTER" prefHeight="60.0" style="-fx-background-color: #156082;">
             <children>
                 <Button fx:id="buttonRetourAcceuilSec" 
-                        onAction="#goToPageConnection" 
+                        onAction="#goToPageSecouristeAcceuil" 
                         text="Retour"
                         prefHeight="30" prefWidth="80"
                         style="-fx-background-color: white; -fx-text-fill: #156082;" />
@@ -45,79 +46,66 @@
                     <children>
                         <Button fx:id="btnSemainePrecedente" text="Semaine précédente"/>
                         <Button fx:id="btnSemaineSuivante" text="Semaine suivante"/>
+                        <Button fx:id="btnRetourPlanningSecouriste" text="Retour" visible="false"/>
                     </children>
                 </HBox>
 
                 <!-- Calendrier -->
-                <GridPane fx:id="gridWeek" gridLinesVisible="true" hgap="5.0" vgap="5.0">
-                    <columnConstraints>
-                        <ColumnConstraints percentWidth="12.5"/>
-                        <ColumnConstraints percentWidth="12.5"/>
-                        <ColumnConstraints percentWidth="12.5"/>
-                        <ColumnConstraints percentWidth="12.5"/>
-                        <ColumnConstraints percentWidth="12.5"/>
-                        <ColumnConstraints percentWidth="12.5"/>
-                        <ColumnConstraints percentWidth="12.5"/>
-                        <ColumnConstraints percentWidth="12.5"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="30"/>
-                        <!-- 24 heures + 1 ligne titre -->
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                        <RowConstraints minHeight="40"/>
-                    </rowConstraints>
+                <ScrollPane fitToWidth="true" fitToHeight="true" prefViewportHeight="500" prefViewportWidth="900">
+                    <content>
+                        <GridPane fx:id="gridWeek" gridLinesVisible="true" hgap="5.0" vgap="5.0">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="12.5"/>
+                                <ColumnConstraints percentWidth="12.5"/>
+                                <ColumnConstraints percentWidth="12.5"/>
+                                <ColumnConstraints percentWidth="12.5"/>
+                                <ColumnConstraints percentWidth="12.5"/>
+                                <ColumnConstraints percentWidth="12.5"/>
+                                <ColumnConstraints percentWidth="12.5"/>
+                                <ColumnConstraints percentWidth="12.5"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="30"/>
+                                <!-- 24 heures + 1 ligne titre -->
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                                <RowConstraints minHeight="40"/>
+                            </rowConstraints>
 
-                    <children>
-                        <!-- En-tête jours avec nom + date (date ajoutée dans le texte, à mettre à jour dans le controller) -->
-                        <Label fx:id="lblMon" text="Lundi\n01/01" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                        <Label fx:id="lblTue" text="Mardi\n02/01" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                        <Label fx:id="lblWed" text="Mercredi\n03/01" style="-fx-font-weight: bold;" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-                        <Label fx:id="lblThu" text="Jeudi\n04/01" style="-fx-font-weight: bold;" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-                        <Label fx:id="lblFri" text="Vendredi\n05/01" style="-fx-font-weight: bold;" GridPane.columnIndex="5" GridPane.rowIndex="0" />
-                        <Label fx:id="lblSat" text="Samedi\n06/01" style="-fx-font-weight: bold;" GridPane.columnIndex="6" GridPane.rowIndex="0" />
-                        <Label fx:id="lblSun" text="Dimanche\n07/01" style="-fx-font-weight: bold;" GridPane.columnIndex="7" GridPane.rowIndex="0" />
-
-                        <!-- Heures -->
-                        <Label text="08:00" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                        <Label text="09:00" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <Label text="10:00" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                        <Label text="11:00" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                        <Label text="12:00" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                        <Label text="13:00" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-                        <Label text="14:00" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-                        <Label text="15:00" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-                        <Label text="16:00" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
-                        <Label text="17:00" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
-                        <Label text="18:00" GridPane.columnIndex="0" GridPane.rowIndex="11"/>
-                        <Label text="19:00" GridPane.columnIndex="0" GridPane.rowIndex="12"/>
-                        <Label text="20:00" GridPane.columnIndex="0" GridPane.rowIndex="13"/>
-                        <Label text="21:00" GridPane.columnIndex="0" GridPane.rowIndex="14"/>
-                        <Label text="22:00" GridPane.columnIndex="0" GridPane.rowIndex="15"/>
-                        <Label text="23:00" GridPane.columnIndex="0" GridPane.rowIndex="16"/>
-                    </children>
-                </GridPane>
+                            <children>
+                                <!-- En-tête jours avec nom + date (date ajoutée dans le texte, à mettre à jour dans le controller) -->
+                                <Label fx:id="lblMon" text="Lundi\n01/01" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <Label fx:id="lblTue" text="Mardi\n02/01" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                <Label fx:id="lblWed" text="Mercredi\n03/01" style="-fx-font-weight: bold;" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                                <Label fx:id="lblThu" text="Jeudi\n04/01" style="-fx-font-weight: bold;" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                                <Label fx:id="lblFri" text="Vendredi\n05/01" style="-fx-font-weight: bold;" GridPane.columnIndex="5" GridPane.rowIndex="0" />
+                                <Label fx:id="lblSat" text="Samedi\n06/01" style="-fx-font-weight: bold;" GridPane.columnIndex="6" GridPane.rowIndex="0" />
+                                <Label fx:id="lblSun" text="Dimanche\n07/01" style="-fx-font-weight: bold;" GridPane.columnIndex="7" GridPane.rowIndex="0" />
+                            </children>
+                        </GridPane>
+                    </content>
+                </ScrollPane>
             </children>
         </VBox>
     </center>

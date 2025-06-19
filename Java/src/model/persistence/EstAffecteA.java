@@ -61,7 +61,7 @@ public class EstAffecteA {
      * Mutateur de l'attribut idSecouriste.
      * @param unIdSecouriste Le nouvel identifiant du secouriste affecté.
      */
-    public void setIdSecouriste(int unIdSecouriste) {
+    public void setIdSecouriste(long unIdSecouriste) {
         this.idSecouriste = unIdSecouriste;
     }
 

@@ -6,7 +6,7 @@ import model.persistence.*;
 
 /**
  * Implémente l'affectation gloutonne des secouristes aux besoins des DPS.
- * Affecte progressivement chaque besoin au premier secouriste disponible et compétent.
+ * Affecte progressivement chaque besoin au secouriste disponible et compétent le plus contraint.
  * 
  * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
@@ -24,39 +24,66 @@ public class AffectationGloutonne implements Affectation {
         // Générer la liste des besoins unitaires
         List<BesoinUnitaire> besoinsUnitaires = genererBesoinsUnitaires(besoins);
 
-        int n = secouristes.size();
-        int m = besoinsUnitaires.size();
-        int[][] matrice = new int[n][m];
-
-        // Construire la matrice binaire secouristes/besoinsUnitaires
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                matrice[i][j] = estAffectable(secouristes.get(i), besoinsUnitaires.get(j)) ? 1 : 0;
+        // Pour chaque besoin unitaire, on garde la liste des secouristes qui peuvent le satisfaire
+        Map<BesoinUnitaire, List<Secouriste>> mapBesoinSecouristes = new HashMap<>();
+        for (BesoinUnitaire b : besoinsUnitaires) {
+            List<Secouriste> possibles = new ArrayList<>();
+            for (Secouriste s : secouristes) {
+                if (estAffectable(s, b)) {
+                    possibles.add(s);
+                }
             }
+            mapBesoinSecouristes.put(b, possibles);
         }
 
-        // Appliquer le tri des lignes et colonnes comme dans Glouton
-        int[] ordreSecouristes = initialiserOrdre(n);
-        int[] ordreBesoins = initialiserOrdre(m);
-        trierLignesParDegre(matrice, ordreSecouristes);
-        trierColonnes(matrice, ordreBesoins);
+        // On trie les besoins unitaires par nombre croissant de secouristes pouvant les satisfaire
+        besoinsUnitaires.sort(Comparator.comparingInt(b -> mapBesoinSecouristes.get(b).size()));
 
-        // Affecter les secouristes aux besoins dans l'ordre trié
-        Map<DPS, List<Secouriste>> affectation = new HashMap<>();
-        boolean[] secouristePris = new boolean[n];
-
-        for (int j = 0; j < m; j++) {
-            int besoinIdx = ordreBesoins[j];
-            for (int i = 0; i < n; i++) {
-                int secIdx = ordreSecouristes[i];
-                if (!secouristePris[secIdx] && matrice[secIdx][besoinIdx] == 1) {
-                    // Affecter secouriste à ce besoin
-                    Secouriste s = secouristes.get(secIdx);
-                    BesoinUnitaire b = besoinsUnitaires.get(besoinIdx);
-                    affectation.computeIfAbsent(b.getDps(), k -> new ArrayList<>()).add(s);
-                    secouristePris[secIdx] = true;
-                    break;
+        // Pour chaque secouriste, on garde la liste des besoins unitaires qu'il peut satisfaire (et qui restent à pourvoir)
+        Map<Secouriste, Set<BesoinUnitaire>> mapSecouristeBesoins = new HashMap<>();
+        for (Secouriste s : secouristes) {
+            Set<BesoinUnitaire> possibles = new HashSet<>();
+            for (BesoinUnitaire b : besoinsUnitaires) {
+                if (estAffectable(s, b)) {
+                    possibles.add(b);
                 }
+            }
+            mapSecouristeBesoins.put(s, possibles);
+        }
+
+        // Pour chaque DPS, la liste des secouristes affectés
+        Map<DPS, List<Secouriste>> affectation = new HashMap<>();
+        Set<Secouriste> secouristesAffectes = new HashSet<>();
+
+        for (BesoinUnitaire besoin : besoinsUnitaires) {
+            // On ne considère que les secouristes non affectés qui peuvent satisfaire ce besoin
+            List<Secouriste> candidats = new ArrayList<>();
+            for (Secouriste s : mapBesoinSecouristes.get(besoin)) {
+                if (!secouristesAffectes.contains(s)) {
+                    candidats.add(s);
+                }
+            }
+            if (candidats.isEmpty()) {
+                // Aucun secouriste disponible pour ce besoin, on continue
+                continue;
+            }
+            // On choisit le secouriste qui a le moins de possibilités restantes (le plus contraint)
+            Secouriste choisi = candidats.get(0);
+            int minPossibilites = mapSecouristeBesoins.get(choisi).size();
+            for (Secouriste s : candidats) {
+                int nbPoss = mapSecouristeBesoins.get(s).size();
+                if (nbPoss < minPossibilites) {
+                    choisi = s;
+                    minPossibilites = nbPoss;
+                }
+            }
+            // On affecte le secouriste choisi à ce besoin
+            affectation.computeIfAbsent(besoin.getDps(), k -> new ArrayList<>()).add(choisi);
+            secouristesAffectes.add(choisi);
+
+            // On met à jour les possibilités des autres secouristes (on retire ce besoin de leurs listes)
+            for (Secouriste s : secouristes) {
+                mapSecouristeBesoins.get(s).remove(besoin);
             }
         }
 

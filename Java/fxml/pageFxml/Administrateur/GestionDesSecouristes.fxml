@@ -88,7 +88,7 @@
                     style="-fx-background-color: #156082; -fx-text-fill: white;" />
             <Button fx:id="buttonDeletegestSec"
                     mnemonicParsing="false"
-                    onAction="#goToDeleteSec"
+                    onAction="#deleteSecouriste"
                     prefHeight="38.0"
                     prefWidth="163.0"
                     text="Supprimer"
