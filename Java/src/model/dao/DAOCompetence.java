@@ -70,4 +70,17 @@ public class DAOCompetence extends DAO<Competence>{
             stmt.executeUpdate();
         }
     }
+
+    public boolean exists(String intitule) throws SQLException {
+        String query = "SELECT COUNT(*) FROM competence WHERE intitule = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, intitule);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
 }

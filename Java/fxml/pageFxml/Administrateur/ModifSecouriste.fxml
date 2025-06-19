@@ -10,31 +10,22 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:controller="controller.Controller"
-            xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            prefHeight="500.0" prefWidth="800.0">
+<BorderPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
     <!-- Bande bleue en haut -->
     <top>
-        <HBox spacing="10" alignment="CENTER_LEFT"
-              style="-fx-background-color: #156082; -fx-padding: 10 20;">
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20;">
             <children>
                 <!-- Bouton retour -->
-                <Button fx:id="buttonRetourAcSec"
-                        text="Retour"
-                        onAction="#goToPageAdminAcceuil"
-                        prefHeight="30" prefWidth="80"
-                        style="-fx-background-color: white; -fx-text-fill: #156082;" />
+                <Button fx:id="buttonRetourAcSec" onAction="#goToGestionDesSecouristes" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
                 <!-- Titre centré -->
-                <StackPane HBox.hgrow="ALWAYS" alignment="CENTER">
-                    <Label text="Modification de Secouriste"
-                           style="-fx-text-fill: white; -fx-font-size: 24px;" />
+                <StackPane alignment="CENTER" HBox.hgrow="ALWAYS">
+                    <Label style="-fx-text-fill: white; -fx-font-size: 24px;" text="Modification de Secouriste" />
                 </StackPane>
 
                 <!-- Logo à droite -->
-                <ImageView fitHeight="40" fitWidth="40" preserveRatio="true" pickOnBounds="true">
+                <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../../img/logo.png" />
                     </image>
@@ -75,18 +66,17 @@
                                 <Label text="Identifiant" />
                                 <TextField fx:id="idSecModif" />
 
-                                <Label text="Mot de passe" />
-                                <TextField fx:id="passWordSecModif" />
+                                <Label text="Téléphone" />
+                                <TextField fx:id="telSecModif" />
+                        <Label layoutX="10.0" layoutY="134.0" text="Comp" />
+                        <TextField fx:id="compSecModif" layoutX="10.0" layoutY="161.0" />
                             </children>
                         </VBox>
                     </children>
                 </HBox>
 
                 <!-- Bouton Modifier -->
-                <Button fx:id="ModifButtonSec"
-                        text="Modifier"
-                        style="-fx-background-color: #156082; -fx-text-fill: white; -fx-font-weight: bold;"
-                        prefWidth="120" />
+                <Button fx:id="ModifButtonSec" onAction="#updateSecouriste" prefWidth="120" style="-fx-background-color: #156082; -fx-text-fill: white; -fx-font-weight: bold;" text="Modifier" />
             </children>
         </VBox>
     </center>

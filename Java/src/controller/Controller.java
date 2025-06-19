@@ -258,7 +258,9 @@ public class Controller  {
 	@FXML
 	private TextField idSecModif;
 	@FXML
-	private TextField passWordSecModif;
+	private TextField telSecModif;
+	@FXML
+	private TextField compSecModif;
 	@FXML 
 	private Button ModifButtonSec;
 
@@ -539,7 +541,9 @@ public class Controller  {
 
 	}*/
 
+	@FXML
 	public void connectUser(ActionEvent event) {
+		System.out.println("connectUser");
 		String username = usernameField.getText();
 		String password = passwordField.getText();
 
@@ -548,33 +552,35 @@ public class Controller  {
 			User user = daoUser.readByUsername(username);
 
 			if (user != null) {
-				// Vérification du mot de passe (utilisez votre propre méthode ici)
 				if (verifyPassword(password, user.getPasswordHash())) {
 					if ("secouriste".equals(user.getRole())) {
 						DAOSecouriste daoSec = new DAOSecouriste();
-						Secouriste secouriste = daoSec.readByNom(username); // <- ici on cherche par nom
-						System.out.println("Secouriste trouvé : " + secouriste);
+						Secouriste secouriste = daoSec.readByNom(username); // Recherche par nom (username = nom)
 						if (secouriste != null) {
+							System.out.println("Secouriste trouvé : " + secouriste);
 							MngtSession.setUtilisateurConnecte(secouriste);
 							goToPageSecouristeAcceuil(event);
 						} else {
 							System.out.println("Aucun secouriste trouvé avec ce nom.");
 						}
+					} else if ("admin".equals(user.getRole())) {
+						System.out.println("Connexion admin réussie");
+						MngtSession.setUtilisateurConnecte(user);  // Ici on stocke l'objet User
+						goToPageAdminAcceuil(event);
 					}
-				} else if ("admin".equals(user.getRole())) {
-					// Si besoin, chargez un objet Secouriste ou Admin ici
-					goToPageAdminAcceuil(event);        // redirection admin
-				}else {
-					System.out.print("Mot de passe incorrect");
+				} else {
+					System.out.println("Mot de passe incorrect");
 				}
 			} else {
-				System.out.print("Nom d'utilisateur non trouvé");
+				System.out.println("Nom d'utilisateur non trouvé");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.print("Erreur lors de la connexion");
+			System.out.println("Erreur lors de la connexion");
 		}
 	}
+
+
 
 
 	/**
@@ -847,62 +853,100 @@ public class Controller  {
 	}
 
 
-	public void updateSecouriste(){
+	public void updateSecouriste() {
 		System.out.println("updateSecouriste");
+
 		if (nomSecModif.getText().isEmpty() || prenomSecModif.getText().isEmpty() ||
 			dateNaissSecModif.getText().isEmpty() || 
 			mailSecModif.getText().isEmpty() || adressSecModif.getText().isEmpty() || 
-			idSecModif.getText().isEmpty() || passWordSecModif.getText().isEmpty()) {
-			System.out.println("Veuillez remplir tous les champs.");
-		}
-		else{
-			String nom = nomSecModif.getText();
-			String prenom = prenomSecModif.getText();
-			String dateNaissance = dateNaissSecModif.getText();
-			String email = mailSecModif.getText();
-			String adresse = adressSecModif.getText();
-			String id = idSecModif.getText();
-			long idLong = Long.parseLong(id); 
-			String passWord = passWordSecModif.getText();
-			String[] compPossede = compSecCreate.getText().split(";");
-			List<Possede> listCompPos = new ArrayList<Possede>();
+			idSecModif.getText().isEmpty() || telSecModif.getText().isEmpty()) {
 
-			for(int i = 0; i<compPossede.length; i++){
+			System.out.println("Veuillez remplir tous les champs.");
+			return;
+		}
+
+		try {
+			String nom = nomSecModif.getText().trim();
+			String prenom = prenomSecModif.getText().trim();
+			String dateNaissance = dateNaissSecModif.getText().trim();
+			String email = mailSecModif.getText().trim();
+			String adresse = adressSecModif.getText().trim();
+			String telephone = telSecModif.getText().trim();
+			long idLong = Long.parseLong(idSecModif.getText().trim());
+
+			String[] compPossede = compSecModif.getText().split(";");
+			List<Possede> listCompPos = new ArrayList<>();
+
+			DAOCompetence daoCompetence = new DAOCompetence();
+			DAOPossede daoPossede = new DAOPossede();
+			DAOSecouriste daoSecouriste = new DAOSecouriste();
+
+			for (String comp : compPossede) {
+				String intitule = comp.trim();
+				
+				// Vérifie si la compétence existe
+				if (!daoCompetence.exists(intitule)) {
+					Competence newComp = new Competence();
+					newComp.setIntitule(intitule);
+					daoCompetence.create(newComp);
+				}
+
 				Possede compPos = new Possede();
 				compPos.setIdSecouriste(idLong);
-				compPos.setIntituleCompetence(compPossede[i]);
+				compPos.setIntituleCompetence(intitule);
+
+				Competence competence = new Competence();
+				competence.setIntitule(intitule);
+				compPos.setLaCompetence(competence);
+
+				listCompPos.add(compPos);
 			}
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, listCompPos);
-						
-			try{
-				daoSecouriste.update(secouriste);
+			// Mise à jour du secouriste
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, telephone, adresse, listCompPos);
+			daoSecouriste.update(secouriste);
+
+			// Suppression des anciennes compétences et réinsertion des nouvelles
+			daoPossede.deleteBySecouristeId(idLong);
+			for (Possede compPos : listCompPos) {
+				daoPossede.create(compPos);
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la modification du secouriste : " + e.getMessage());
-			}
+
+			System.out.println("Secouriste mis à jour avec succès.");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la modification du secouriste : " + e.getMessage());
 		}
 	}
 
-	public void deleteSecouriste(){
+
+
+	public void deleteSecouriste() {
 		System.out.println("deleteSecouriste");
+
 		if (idSecDelete.getText().isEmpty()) {
 			System.out.println("Veuillez remplir le champ id.");
+			return;
 		}
-		else{
-			String id = idSecDelete.getText();
-			long idLong = Long.parseLong(id); 
 
-			try{
-				daoSecouriste.delete(idLong);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la suppression du secouriste : " + e.getMessage());
-			}
+		try {
+			long idLong = Long.parseLong(idSecDelete.getText().trim());
+
+			// Supprimer les compétences associées d'abord
+			DAOPossede daoPossede = new DAOPossede();
+			daoPossede.deleteBySecouristeId(idLong);
+
+			// Puis supprimer le secouriste
+			daoSecouriste.delete(idLong);
+
+			System.out.println("Secouriste supprimé avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression du secouriste : " + e.getMessage());
 		}
 	}
+
 
 	/**
 	 ***********************************
@@ -1678,16 +1722,19 @@ public class Controller  {
 			viewAllDPS();
 		}
 
-		if(tableMesCompetencesSec != null){
-			long idSecouriste = MngtSession.getIdUtilisateurConnecte();
+		if (tableMesCompetencesSec != null) {
+			// Vérifie le type d'utilisateur connecté
+			Object user = MngtSession.getUtilisateurConnecte();
 
-			System.out.println("bruh");
-			if (idSecouriste != -1) {
+			if (user instanceof Secouriste) {
+				Secouriste sec = (Secouriste) user;
+				long idSecouriste = sec.getId();
+
 				viewCompForSecouriste(idSecouriste);
 			} else {
 				System.out.println("Aucun secouriste connecté !");
 			}
-		}	
+		}
 	}
 
     public void addTask(LocalDate date, String taskDescription) {

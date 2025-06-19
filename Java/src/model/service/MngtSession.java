@@ -1,27 +1,14 @@
 package model.service;
 
-import model.persistence.Secouriste;
 
 public class MngtSession {
-    private static Secouriste utilisateurConnecte;
+    private static Object utilisateurConnecte;
 
-    public static void setUtilisateurConnecte(Secouriste user) {
-        utilisateurConnecte = user;
+    public static void setUtilisateurConnecte(Object utilisateur) {
+        utilisateurConnecte = utilisateur;
     }
 
-    public static Secouriste getUtilisateurConnecte() {
+    public static Object getUtilisateurConnecte() {
         return utilisateurConnecte;
-    }
-
-    public static long getIdUtilisateurConnecte() {
-        long ret;
-        if (utilisateurConnecte == null){
-            ret = -1; 
-        }
-        else{
-            ret = utilisateurConnecte.getId();
-        }
-        return ret;
-
     }
 }
