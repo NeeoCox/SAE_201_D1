@@ -152,6 +152,19 @@ public class DPS {
         this.concerne = unSport;
     }
 
+    public String getEstProgrammeJournee() {
+        if (estProgramme == null) return "";
+        return String.format("%02d/%02d/%04d", estProgramme.getJour(), estProgramme.getMois(), estProgramme.getAnnee());
+    }
+
+    public String getALieuDansSite() {
+        return aLieuDans != null ? aLieuDans.getNom() : "";
+    }
+
+    public String getConcerneSport() {
+        return concerne != null ? concerne.getNom() : "";
+    }
+
 
     @Override
     public String toString() {

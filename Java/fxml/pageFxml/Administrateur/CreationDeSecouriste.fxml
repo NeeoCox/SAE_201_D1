@@ -19,7 +19,7 @@
         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;">
 
             <!-- Bouton Retour à gauche -->
-            <Button fx:id="buttonRetourAcSec" onAction="#goToPageAdminAcceuil" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
+            <Button fx:id="buttonRetourAcSec" onAction="#goToGestionDesSecouristes" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
             <Region HBox.hgrow="ALWAYS" />
 
@@ -78,11 +78,11 @@
                 <Label text="Adresse" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <TextField fx:id="adressSec" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Label text="Mot de passe" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                <TextField fx:id="passWordSec" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label text="Téléphone" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <TextField fx:id="telSec" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                 <!-- Bouton sous la dernière ligne, centré sur la colonne -->
-                <Button fx:id="createButtonSec" prefHeight="40" prefWidth="160" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Créer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Button fx:id="createButtonSec" onAction="#createSecouriste" prefHeight="40" prefWidth="160" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Créer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="Compétences" GridPane.rowIndex="3" />
             <TextField fx:id="compSecCreate" layoutX="92.0" layoutY="201.0" prefHeight="30" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <columnConstraints>

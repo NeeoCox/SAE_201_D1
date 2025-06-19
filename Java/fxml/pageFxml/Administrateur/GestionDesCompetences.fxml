@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:controller="controller.Controller"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="575.0" prefWidth="770.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
-   <!-- Bande supérieure -->
    <top>
    <BorderPane prefHeight="60.0" style="-fx-background-color: #156082;" BorderPane.alignment="CENTER">
 
       <left>
          <HBox alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 15;">
          <children>
-            <Button fx:id="buttonRetourAcGestComp"
-                     text="Retour"
-                     onAction="#goToPageAdminAcceuil"
-                     style="-fx-background-color: white; -fx-text-fill: #156082;"
-                     prefHeight="30" prefWidth="80" />
+            <Button fx:id="buttonRetourAcGestComp" onAction="#goToPageAdminAcceuil" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
          </children>
          </HBox>
       </left>
 
       <center>
-         <Label text="Gestion des Compétences"
-               textFill="WHITE"
-               alignment="CENTER">
+         <Label alignment="CENTER" text="Gestion des Compétences" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
@@ -50,50 +47,41 @@
 
    </BorderPane>
    </top>
+   <bottom>
 
-
-   <!-- Contenu principal -->
-   <center>
-      <AnchorPane>
+      <HBox alignment="CENTER" prefHeight="56.0" prefWidth="600.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <!-- TableView -->
-            <TableView fx:id="tableCompetences"
-                       AnchorPane.topAnchor="20.0"
-                       AnchorPane.leftAnchor="40.0"
-                       AnchorPane.rightAnchor="40.0"
-                       prefHeight="220.0">
+            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="buttonCreateComp" onAction="#goToCreateComp" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Créer" />
+            <Region prefHeight="56.0" prefWidth="120.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="buttonUpdateComp" onAction="#goToModifComp" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Modifier" />
+            <Region prefHeight="56.0" prefWidth="120.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="buttonDeleteComp" onAction="#goToDeleteComp" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #156082; -fx-text-fill: white;" text="Supprimer" />
+            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="tableCompetencesSec" layoutX="10.0" layoutY="10.0" prefHeight="229.0" prefWidth="770.0" VBox.vgrow="ALWAYS">
                <columns>
-                  <TableColumn fx:id="colSecouriste" prefWidth="180.0" text="Secouriste"/>
-                  <TableColumn fx:id="colSigle" prefWidth="180.0" text="Sigle"/>
-                  <TableColumn fx:id="colIntitule" prefWidth="180.0" text="Intitulé"/>
+                  <TableColumn fx:id="colSecouriste" prefWidth="382.0" text="Secouriste" />
+                  <TableColumn fx:id="colIntituleCompSec" prefWidth="387.0" text="Intitulé" />
                </columns>
             </TableView>
-
-            <!-- Boutons centrés -->
-            <HBox spacing="20.0"
-                  AnchorPane.bottomAnchor="20.0"
-                  AnchorPane.leftAnchor="0.0"
-                  AnchorPane.rightAnchor="0.0"
-                  alignment="CENTER">
-               <children>
-                  <Button fx:id="buttonCreateComp"
-                          text="Créer"
-                          onAction="#goToCreateComp"
-                          prefWidth="160.0" prefHeight="40.0"
-                          style="-fx-background-color: #156082; -fx-text-fill: white;" />
-                  <Button fx:id="buttonUpdateComp"
-                          text="Modifier"
-                          onAction="#goToModifComp"
-                          prefWidth="160.0" prefHeight="40.0"
-                          style="-fx-background-color: #156082; -fx-text-fill: white;" />
-                  <Button fx:id="buttonDeleteComp"
-                          text="Supprimer"
-                          onAction="#goToDeleteComp"
-                          prefWidth="160.0" prefHeight="40.0"
-                          style="-fx-background-color: #156082; -fx-text-fill: white;" />
-               </children>
-            </HBox>
+            <TableView fx:id="tableCompetences" prefHeight="256.0" prefWidth="770.0">
+               <columns>
+                  <TableColumn fx:id="colIntituleComp" prefWidth="769.0" text="Toutes les compétences" />
+               </columns>
+            </TableView>
+            <TableView fx:id="tableCompetencesNec" prefHeight="256.0" prefWidth="770.0">
+               <columns>
+                  <TableColumn fx:id="colIntitule" prefWidth="385.0" text="Compétences" />
+                  <TableColumn fx:id="colIntituleNec" prefWidth="383.0" text="Intitulé Compétences Nécessaires" />
+               </columns>
+            </TableView>
          </children>
-      </AnchorPane>
+      </VBox>
    </center>
 </BorderPane>

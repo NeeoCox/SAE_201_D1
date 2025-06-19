@@ -78,24 +78,24 @@ public class DAODPS extends DAO<DPS>{
         List<DPS> dpsList = new ArrayList<>();
         String sql = "SELECT d.*, s.nom AS nom_site, s.longitude, s.latitude, sp.nom AS nom_sport " +
                     "FROM DPS d " +
-                    "JOIN Site s ON d.code_site = s.code " +
-                    "JOIN Sport sp ON d.code_sport = sp.code";
+                    "JOIN Site s ON d.aLieuDansSite = s.code " +
+                    "JOIN Sport sp ON d.concerneSport = sp.code";
         try (Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Journee journee = new Journee(
-                    rs.getInt("jour"),
-                    rs.getInt("mois"),
-                    rs.getInt("annee")
+                    rs.getInt("estProgrammeJour"),
+                    rs.getInt("estProgrammeMois"),
+                    rs.getInt("estProgrammeAnnee")
                 );
                 Site site = new Site(
-                    rs.getString("code_site"),
+                    rs.getString("aLieuDansSite"),
                     rs.getString("nom_site"),
                     rs.getFloat("longitude"),
                     rs.getFloat("latitude")
                 );
                 Sport sport = new Sport(
-                    rs.getString("code_sport"),
+                    rs.getString("concerneSport"),
                     rs.getString("nom_sport")
                 );
                 dpsList.add(new DPS(

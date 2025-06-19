@@ -5,10 +5,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -16,56 +17,66 @@
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
-
     <top>
         <StackPane prefHeight="60.0" BorderPane.alignment="CENTER">
             <children>
+                <BorderPane style="-fx-background-color: #125f7d; -fx-padding: 10;">
+                    <!-- Bouton retour à gauche stylé -->
+                    <left>
+                        <Button fx:id="buttonRetourAcceuilSec" 
+                                onAction="#goToPageConnection" 
+                                text="Retour"
+                                prefHeight="30" prefWidth="80"
+                                style="-fx-background-color: white; -fx-text-fill: #156082;" />
+                    </left>
 
-                
-                <HBox alignment="CENTER_LEFT" style="-fx-background-color: #125f7d;">
-                    <children>
-                        <Button fx:id="buttonRetourAcceuilSec" onAction="#goToPageConnection" text="Retour" />
-                    </children>
-                    <padding>
-                        <Insets bottom="10" left="10" right="10" top="10" />
-                    </padding>
-                </HBox>
+                    <!-- Titre centré -->
+                    <center>
+                        <Label text="Se connecter en tant que Secouriste"
+                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"
+                               alignment="CENTER" />
+                    </center>
 
-
-                <Label alignment="CENTER" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" text="Se connecter en tant que Secouriste">
-                       
-                    <font>
-                        <Font size="24.0" />
-                    </font>
-                </Label>
-
+                    <!-- Logo à droite -->
+                    <right>
+                        <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../img/logo.png" />
+                            </image>
+                        </ImageView>
+                    </right>
+                </BorderPane>
             </children>
         </StackPane>
     </top>
 
-   
     <center>
         <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
             <children>
                 <GridPane alignment="CENTER" hgap="10" vgap="15">
                     <children>
                         <Label text="Identifiant" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <TextField fx:id="usernameFieldSec" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label text="Mot de passe" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <PasswordField fx:id="passwordFieldSec" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     </children>
-               <columnConstraints>
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints />
-                  <RowConstraints />
-               </rowConstraints>
+                    <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
                 </GridPane>
 
-                <Button fx:id="buttonConnectSec" onAction="#goToPageSecouristeAcceuil" prefWidth="150.0" style="-fx-font-size: 14px;" text="Se connecter" />
+                <!-- Bouton connexion stylé -->
+                <Button fx:id="buttonConnectSec" 
+                        onAction="#connectUser" 
+                        prefWidth="150.0" 
+                        text="Se connecter"
+                        style="-fx-background-color: #125f7d; -fx-text-fill: white; -fx-font-size: 14px;" />
             </children>
         </VBox>
     </center>

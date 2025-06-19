@@ -9,14 +9,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
-import java.net.URL;
 
 //Import des librairies JavaFX
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -36,7 +33,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-//Import de nos classes
+//Import nos class
 import model.dao.DAO;
 import model.dao.DAOBesoin;
 import model.dao.DAOCompetence;
@@ -47,11 +44,30 @@ import model.dao.DAOPossede;
 import model.dao.DAOSecouriste;
 import model.dao.DAOSite;
 import model.dao.DAOSport;
-import model.persistence.*;
-import model.graph.algorithm.*;
+import model.graph.algorithm.Affectation;
+import model.graph.algorithm.exhaustive.AffectationExhaustive;
+import model.graph.algorithm.greedy.AffectationGloutonne;
+import model.persistence.Besoin;
+import model.persistence.Competence;
+import model.persistence.DPS;
+import model.persistence.Journee;
+import model.persistence.Necessite;
+import model.persistence.Possede;
+import model.persistence.Secouriste;
+import model.persistence.Site;
+import model.persistence.Sport;
+import model.graph.algorithm.ResultatAffectation;
+import model.graph.algorithm.dag.VerificationDAG;
+import model.graph.algorithm.BesoinUnitaire;
+import model.graph.algorithm.GrapheCompetences;
+import model.persistence.EstDisponible;
+import model.dao.DAOEstDisponible;
+import model.persistence.EstAffecteA;
 import model.service.MngtEstAffecteA;
 import model.dao.DAOEstAffecteA;
-import model.dao.DAOEstDisponible;
+import model.service.MngtSession;
+import model.persistence.User;
+import model.dao.DAOUser;
 
 
 
@@ -101,9 +117,9 @@ public class Controller  {
 	@FXML 
 	private Button buttonRetourConnectAdmin;
 	@FXML 
-	private TextField usernameFieldAmin;
+	private TextField usernameField;
 	@FXML 
-	private TextField passwordFieldAdmin;
+	private TextField passwordField;
 
 
 	/**
@@ -216,7 +232,7 @@ public class Controller  {
 	@FXML
 	private TextField idSec;
 	@FXML
-	private TextField passWordSec;
+	private TextField telSec;
 	@FXML
 	private TextField dateNaissSec;
 	@FXML
@@ -242,7 +258,9 @@ public class Controller  {
 	@FXML
 	private TextField idSecModif;
 	@FXML
-	private TextField passWordSecModif;
+	private TextField telSecModif;
+	@FXML
+	private TextField compSecModif;
 	@FXML 
 	private Button ModifButtonSec;
 
@@ -362,9 +380,9 @@ public class Controller  {
     @FXML
     private TableColumn<DPS, Long> idTableDPS;
     @FXML
-    private TableColumn<DPS, String> heureDebTableDPS;
+    private TableColumn<DPS, Integer> heureDebTableDPS;
     @FXML
-    private TableColumn<DPS, String> heureFinTableDPS;
+    private TableColumn<DPS, Integer> heureFinTableDPS;
 	@FXML
     private TableColumn<DPS, String> dateTableDPS; 
 	@FXML
@@ -373,7 +391,51 @@ public class Controller  {
     private TableColumn<DPS, String> sportTableDPS;
 	private ObservableList<DPS> dataDPS = FXCollections.observableArrayList();
 
+	/**
+	 ***********************************
+	 * Variable pour affichage des Compétences
+	 ***********************************
+	 */
+	@FXML
+    private TableView<Possede> tableCompetencesSec;
+    @FXML
+    private TableColumn<Possede, Long> colSecouriste;
+    @FXML
+    private TableColumn<Possede, String> colIntituleCompSec;
 
+	private ObservableList<Possede> dataCompSec = FXCollections.observableArrayList();
+
+
+	@FXML
+    private TableView<Competence> tableCompetences;
+    @FXML
+    private TableColumn<Competence, String> colIntituleComp;
+
+	private ObservableList<Competence> dataComp = FXCollections.observableArrayList();
+
+
+	@FXML
+    private TableView<Necessite> tableCompetencesNec;
+    @FXML
+    private TableColumn<Necessite, String> colIntitule;
+	@FXML
+    private TableColumn<Necessite, String> colIntituleNec;
+	
+	private ObservableList<Necessite> dataCompNec = FXCollections.observableArrayList();
+
+	/**
+	 ***********************************
+	 * Variable pour affichage des Compétences secouriste
+	 ***********************************
+	 */
+	@FXML
+    private TableView<Possede> tableMesCompetencesSec;
+    @FXML
+    private TableColumn<Possede, String> colIntituleMesCompSec;
+	private ObservableList<Possede> dataMesComp = FXCollections.observableArrayList();
+
+
+	
 	@FXML
     private FlowPane calendar;
 
@@ -420,7 +482,24 @@ public class Controller  {
 
 
 	GrapheCompetences grapheCompetences;
+
+	
 	private ResultatAffectation resultatAffectation;
+
+	/**
+	 ***********************************
+	 * Gestion connection d'un secouriste
+	 ***********************************
+	 */
+	private Secouriste utilisateurConnecte;
+
+    public void setUtilisateurConnecte(Secouriste secouriste) {
+        this.utilisateurConnecte = secouriste;
+    }
+
+    public long getIdUtilisateurConnecte() {
+        return utilisateurConnecte != null ? utilisateurConnecte.getId() : -1;
+    }
 
 	public Controller(){
 		System.out.println("controller");
@@ -431,7 +510,7 @@ public class Controller  {
 	 * Connection BDD
 	 ***********************************
 	 */
-	public void connectAdmin(ActionEvent event){
+	/*public void connectAdmin(ActionEvent event){
 		String username = usernameFieldAmin.getText();
 		String password = passwordFieldAdmin.getText();
 
@@ -440,9 +519,79 @@ public class Controller  {
 		goToPageAdminAcceuil(event);
 	}
 
-	private void setPerm(String username, String password){
+	public void connectSecouriste(ActionEvent event){
+
+		String username = usernameFieldSec.getText();
+		String password = passwordFieldSec.getText();
+
+		DAO.setCredentials(username, password);	
+		Secouriste secouriste = null;
+		try{
+			secouriste = daoSecouriste.readByUsername(username);
+		}
+		catch(Exception e){
+			System.out.println("Erreur lors de la lecture du secouriste : " + e.getMessage());
+		}
 		
+		if (secouriste != null) {
+			MngtSession.setUtilisateurConnecte(secouriste);
+			goToPageAdminAcceuil(event);
+			// puis tu charges ta scène principale
+		}
+
+	}*/
+
+	@FXML
+	public void connectUser(ActionEvent event) {
+		System.out.println("connectUser");
+		String username = usernameField.getText();
+		String password = passwordField.getText();
+
+		try {
+			DAOUser daoUser = new DAOUser();
+			User user = daoUser.readByUsername(username);
+
+			if (user != null) {
+				if (verifyPassword(password, user.getPasswordHash())) {
+					if ("secouriste".equals(user.getRole())) {
+						DAOSecouriste daoSec = new DAOSecouriste();
+						Secouriste secouriste = daoSec.readByNom(username); // Recherche par nom (username = nom)
+						if (secouriste != null) {
+							System.out.println("Secouriste trouvé : " + secouriste);
+							MngtSession.setUtilisateurConnecte(secouriste);
+							goToPageSecouristeAcceuil(event);
+						} else {
+							System.out.println("Aucun secouriste trouvé avec ce nom.");
+						}
+					} else if ("admin".equals(user.getRole())) {
+						System.out.println("Connexion admin réussie");
+						MngtSession.setUtilisateurConnecte(user);  // Ici on stocke l'objet User
+						goToPageAdminAcceuil(event);
+					}
+				} else {
+					System.out.println("Mot de passe incorrect");
+				}
+			} else {
+				System.out.println("Nom d'utilisateur non trouvé");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la connexion");
+		}
 	}
+
+
+
+
+	/**
+	 * Méthode utilitaire locale pour vérifier le mot de passe.
+	 * À remplacer par une vraie vérification de hash si besoin.
+	 */
+	private boolean verifyPassword(String password, String passwordHash) {
+		
+		return password.equals(passwordHash);
+	}
+
 
 
 	/**
@@ -643,100 +792,161 @@ public class Controller  {
 	 /**
 	  * Permet de créer un secouriste
 	  */
-	public void createSecouriste(){
+	@FXML
+	public void createSecouriste() {
 		System.out.println("createSecouriste");
-		// Recup des valeur dans les textField
-		if (nomSec.getText().isEmpty() || prenomSec.getText().isEmpty() || dateNaissSec.getText().isEmpty() || 
-			mailSec.getText().isEmpty() || adressSec.getText().isEmpty() || idSec.getText().isEmpty() || passWordSec.getText().isEmpty()) {
+
+		// Vérification des champs requis
+		if (nomSec.getText().isEmpty() || prenomSec.getText().isEmpty() || dateNaissSec.getText().isEmpty() ||
+			mailSec.getText().isEmpty() || adressSec.getText().isEmpty() || telSec.getText().isEmpty() || idSec.getText().isEmpty()) {
+			
 			System.out.println("Veuillez remplir tous les champs.");
+			return;
 		}
-		else{
+
+		try {
 			String nom = nomSec.getText();
 			String prenom = prenomSec.getText();
 			String dateNaissance = dateNaissSec.getText();
 			String email = mailSec.getText();
 			String adresse = adressSec.getText();
-			String id = idSec.getText();
-			long idLong = Long.parseLong(id); 
-			String passWord = passWordSec.getText();
-			String[] compPossede = compSecCreate.getText().split(";");
-			List<Possede> listCompPos = new ArrayList<Possede>();
+			String telephone = telSec.getText();
+			long idLong = Long.parseLong(idSec.getText());
 
-			for(int i = 0; i<compPossede.length; i++){
+			// Liste des compétences possédées (si champ présent)
+			String[] compPossede = compSecCreate.getText().split(";");
+			List<Possede> listCompPos = new ArrayList<>();
+
+			// Création du secouriste
+			
+			for (String comp : compPossede) {
 				Possede compPos = new Possede();
 				compPos.setIdSecouriste(idLong);
-				compPos.setIntituleCompetence(compPossede[i]);
+				compPos.setIntituleCompetence(comp.trim());
+				listCompPos.add(compPos);
+			}
+			
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, telephone, adresse, listCompPos);
+
+			daoSecouriste.create(secouriste);
+			
+			for (String comp : compPossede) {
+				Possede compPos = new Possede();
+				compPos.setIdSecouriste(idLong);
+				compPos.setSecouriste(secouriste);
+				compPos.setIntituleCompetence(comp.trim());
+				Competence competence = new Competence();
+				competence.setIntitule(comp.trim());
+
+				compPos.setLaCompetence(competence);
+				daoPossede.create(compPos);
 			}
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, listCompPos);
-						
-			try{
-				daoSecouriste.create(secouriste);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la création du secouriste : " + e.getMessage());
-			}
+			
+			
+
+			System.out.println("Secouriste créé avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la création du secouriste : " + e.getMessage());
 		}
-		 
 	}
 
-	public void updateSecouriste(){
+
+	public void updateSecouriste() {
 		System.out.println("updateSecouriste");
+
 		if (nomSecModif.getText().isEmpty() || prenomSecModif.getText().isEmpty() ||
 			dateNaissSecModif.getText().isEmpty() || 
 			mailSecModif.getText().isEmpty() || adressSecModif.getText().isEmpty() || 
-			idSecModif.getText().isEmpty() || passWordSecModif.getText().isEmpty()) {
-			System.out.println("Veuillez remplir tous les champs.");
-		}
-		else{
-			String nom = nomSecModif.getText();
-			String prenom = prenomSecModif.getText();
-			String dateNaissance = dateNaissSecModif.getText();
-			String email = mailSecModif.getText();
-			String adresse = adressSecModif.getText();
-			String id = idSecModif.getText();
-			long idLong = Long.parseLong(id); 
-			String passWord = passWordSecModif.getText();
-			String[] compPossede = compSecCreate.getText().split(";");
-			List<Possede> listCompPos = new ArrayList<Possede>();
+			idSecModif.getText().isEmpty() || telSecModif.getText().isEmpty()) {
 
-			for(int i = 0; i<compPossede.length; i++){
+			System.out.println("Veuillez remplir tous les champs.");
+			return;
+		}
+
+		try {
+			String nom = nomSecModif.getText().trim();
+			String prenom = prenomSecModif.getText().trim();
+			String dateNaissance = dateNaissSecModif.getText().trim();
+			String email = mailSecModif.getText().trim();
+			String adresse = adressSecModif.getText().trim();
+			String telephone = telSecModif.getText().trim();
+			long idLong = Long.parseLong(idSecModif.getText().trim());
+
+			String[] compPossede = compSecModif.getText().split(";");
+			List<Possede> listCompPos = new ArrayList<>();
+
+			DAOCompetence daoCompetence = new DAOCompetence();
+			DAOPossede daoPossede = new DAOPossede();
+			DAOSecouriste daoSecouriste = new DAOSecouriste();
+
+			for (String comp : compPossede) {
+				String intitule = comp.trim();
+				
+				// Vérifie si la compétence existe
+				if (!daoCompetence.exists(intitule)) {
+					Competence newComp = new Competence();
+					newComp.setIntitule(intitule);
+					daoCompetence.create(newComp);
+				}
+
 				Possede compPos = new Possede();
 				compPos.setIdSecouriste(idLong);
-				compPos.setIntituleCompetence(compPossede[i]);
+				compPos.setIntituleCompetence(intitule);
+
+				Competence competence = new Competence();
+				competence.setIntitule(intitule);
+				compPos.setLaCompetence(competence);
+
+				listCompPos.add(compPos);
 			}
 
-			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, passWord, adresse, listCompPos);
-						
-			try{
-				daoSecouriste.update(secouriste);
+			// Mise à jour du secouriste
+			Secouriste secouriste = new Secouriste(idLong, nom, prenom, dateNaissance, email, telephone, adresse, listCompPos);
+			daoSecouriste.update(secouriste);
+
+			// Suppression des anciennes compétences et réinsertion des nouvelles
+			daoPossede.deleteBySecouristeId(idLong);
+			for (Possede compPos : listCompPos) {
+				daoPossede.create(compPos);
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la modification du secouriste : " + e.getMessage());
-			}
+
+			System.out.println("Secouriste mis à jour avec succès.");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la modification du secouriste : " + e.getMessage());
 		}
 	}
 
-	public void deleteSecouriste(){
+
+
+	public void deleteSecouriste() {
 		System.out.println("deleteSecouriste");
+
 		if (idSecDelete.getText().isEmpty()) {
 			System.out.println("Veuillez remplir le champ id.");
+			return;
 		}
-		else{
-			String id = idSecDelete.getText();
-			long idLong = Long.parseLong(id); 
 
-			try{
-				daoSecouriste.delete(idLong);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Erreur lors de la suppression du secouriste : " + e.getMessage());
-			}
+		try {
+			long idLong = Long.parseLong(idSecDelete.getText().trim());
+
+			// Supprimer les compétences associées d'abord
+			DAOPossede daoPossede = new DAOPossede();
+			daoPossede.deleteBySecouristeId(idLong);
+
+			// Puis supprimer le secouriste
+			daoSecouriste.delete(idLong);
+
+			System.out.println("Secouriste supprimé avec succès.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de la suppression du secouriste : " + e.getMessage());
 		}
 	}
+
 
 	/**
 	 ***********************************
@@ -1376,20 +1586,98 @@ public class Controller  {
 		}
 	}
 
+	public void viewAllComp(){
+		System.out.println("viewAllComp");
+
+		try {
+			dataCompSec.clear();
+
+			List<Possede> listPos = daoPossede.readAll();
+
+			dataCompSec.addAll(listPos);
+
+			tableCompetencesSec.setItems(dataCompSec);
+
+			colSecouriste.setCellValueFactory(new PropertyValueFactory<>("idSecouriste"));
+			colIntituleCompSec.setCellValueFactory(new PropertyValueFactory<>("intituleCompetence"));
+
+
+			dataComp.clear();
+
+			List<Competence> listComp = daoCompetence.readAll();
+
+			dataComp.addAll(listComp);
+
+			tableCompetences.setItems(dataComp);
+
+			colIntituleComp.setCellValueFactory(new PropertyValueFactory<>("intitule"));
+
+
+			dataCompNec.clear();
+
+			List<Necessite> listNec = daoNecessite.readAll();
+
+			dataCompNec.addAll(listNec);
+
+			tableCompetencesNec.setItems(dataCompNec);
+
+			colIntitule.setCellValueFactory(new PropertyValueFactory<>("intituleCompetence"));
+			colIntituleNec.setCellValueFactory(new PropertyValueFactory<>("intituleCompetenceNecessaire"));
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'affichage des secouristes : " + e.getMessage());
+		}
+	}
 
 	public void viewAllDPS(){
 		try{
+
+			dataDPS.clear();
+
 			List<DPS> listDPS = daoDPS.readAll();
 
-			for(DPS dps : listDPS){
-				dataDPS.add(dps);
-			}
+			dataDPS.addAll(listDPS);
+
+			tableDPS.setItems(dataDPS);
+
+			idTableDPS.setCellValueFactory(new PropertyValueFactory<>("id"));
+			heureDebTableDPS.setCellValueFactory(new PropertyValueFactory<>("horaireDepart"));
+			heureFinTableDPS.setCellValueFactory(new PropertyValueFactory<>("horaireFin"));
+
+			dateTableDPS.setCellValueFactory(new PropertyValueFactory<>("estProgrammeJournee"));
+			lieuTableDPS.setCellValueFactory(new PropertyValueFactory<>("ALieuDansSite"));
+			sportTableDPS.setCellValueFactory(new PropertyValueFactory<>("concerneSport"));
+
 		}
 		catch(Exception e){
 			e.printStackTrace();
 			System.out.println("Erreur lors de l'affichage des DPS : " + e.getMessage());
 		}
 	}
+
+	public void viewCompForSecouriste(long idSecouriste) {
+		System.out.println("viewCompForSecouriste - ID: " + idSecouriste);
+
+		try {
+			dataMesComp.clear();
+
+			// Récupère uniquement les compétences du secouriste
+			List<Possede> listPos = daoPossede.read(idSecouriste);
+
+			dataMesComp.addAll(listPos);
+
+			tableMesCompetencesSec.setItems(dataMesComp);
+
+			colIntituleMesCompSec.setCellValueFactory(new PropertyValueFactory<>("intituleCompetence"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'affichage des compétences du secouriste : " + e.getMessage());
+		}
+	}
+
 
 	
 
@@ -1401,7 +1689,7 @@ public class Controller  {
 
 	@FXML
 	public void initialize() {
-		System.out.println("hola");
+		System.out.println("initialize");
 		// Si on est sur la page du planning
 		if (gridWeek != null) {
 			LocalDate today = LocalDate.now();
@@ -1422,8 +1710,30 @@ public class Controller  {
 
 		// Si on est sur la page secouristes
 		if (tableSecouristes != null) {
-			System.out.println("hola deux");
+			
 			viewAllSecouristes();
+		}
+
+		if(tableCompetencesSec != null){
+			viewAllComp();
+		}
+
+		if(tableDPS != null){
+			viewAllDPS();
+		}
+
+		if (tableMesCompetencesSec != null) {
+			// Vérifie le type d'utilisateur connecté
+			Object user = MngtSession.getUtilisateurConnecte();
+
+			if (user instanceof Secouriste) {
+				Secouriste sec = (Secouriste) user;
+				long idSecouriste = sec.getId();
+
+				viewCompForSecouriste(idSecouriste);
+			} else {
+				System.out.println("Aucun secouriste connecté !");
+			}
 		}
 	}
 
@@ -1550,4 +1860,7 @@ public class Controller  {
 			}
 		}
 	}
+
+
+
 }
