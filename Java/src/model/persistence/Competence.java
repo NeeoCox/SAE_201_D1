@@ -44,4 +44,18 @@ public class Competence {
     public boolean equalsIntitule(String intitule) {
         return this.intitule != null && this.intitule.equals(intitule);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Competence that = (Competence) obj;
+        return intitule != null && intitule.equals(that.intitule);
+    }
+
+    @Override
+    public int hashCode() {
+        return intitule != null ? intitule.hashCode() : 0;
+    }
+
 }

@@ -1,3 +1,5 @@
+CREATE DATABASE bd_sae;
+
 USE bd_sae;
 -----------------------------------------------------
 --                CREATION DES TABLES              --
@@ -98,6 +100,7 @@ CREATE TABLE DPS (
 );
 
 CREATE TABLE Besoin (
+    nombre INT,
     laCompetence VARCHAR(50) NOT NULL,
     leDPS INT,
     nombre INT NOT NULL DEFAULT 0,
@@ -242,12 +245,99 @@ INSERT INTO Possede (leSecouriste, laCompetence) VALUES
 (3, 'PSE1'),
 (3, 'VPSP');
 
--- Insertion des disponibilités (EstDisponible)
-INSERT INTO EstDisponible (leSecouriste, jourJournee, moisJournee, anneeJournee) VALUES
-(1, 19, 6, 2025),
-(1, 20, 6, 2025),
-(2, 19, 6, 2025),
-(3, 21, 6, 2025);
+-- Insertion des sports
+INSERT INTO Sport (code, nom) VALUES 
+('ATHL', 'Athlétisme'),
+('NATA', 'Natation'),
+('FOOT', 'Football'),
+('BASK', 'Basketball'),
+('CYCL', 'Cyclisme');
+
+-- Insertion des sites
+INSERT INTO Site (code, nom, longitude, latitude) VALUES
+('ST1', 'Stade Olympique', 2.352222, 48.856614),
+('ST2', 'Piscine Municipale', 2.295, 48.8738),
+('ST3', 'Parc des Sports', 2.33, 48.85),
+('ST4', 'Gymnase Central', 2.35, 48.86),
+('ST5', 'Vélodrome', 2.34, 48.87);
+
+-- Insertion des journées
+INSERT INTO Journee (jour, mois, annee) VALUES
+(15, 6, 2025),
+(16, 6, 2025),
+(17, 6, 2025),
+(18, 6, 2025),
+(19, 6, 2025);
+
+-- Insertion des compétences
+INSERT INTO Competence (intitule) VALUES
+('Secouriste'),
+('Infirmier'),
+('Médecin'),
+('Chef de poste'),
+('Ambulancier');
+
+-- Insertion des DPS
+INSERT INTO DPS (id, horaire_depart, horaire_fin, concerneSport, aLieuDansSite, estProgrammeJour, estProgrammeMois, estProgrammeAnnee) VALUES
+(1, 900, 1200, 'ATHL', 'ST1', 15, 6, 2025),
+(2, 1300, 1600, 'NATA', 'ST2', 16, 6, 2025),
+(3, 1000, 1300, 'FOOT', 'ST3', 17, 6, 2025),
+(4, 1400, 1700, 'BASK', 'ST4', 18, 6, 2025),
+(5, 900, 1100, 'CYCL', 'ST5', 19, 6, 2025);
+
+-- Insertion des besoins de compétences pour chaque DPS
+INSERT INTO Besoin (laCompetence, leDPS, nombre) VALUES
+('Secouriste', 1, 2),
+('Infirmier', 1, 1),
+('Chef de poste', 1, 1),
+('Secouriste', 2, 2),
+('Médecin', 2, 1),
+('Ambulancier', 3, 1),
+('Chef de poste', 3, 1),
+('Secouriste', 4, 2),
+('Infirmier', 4, 1),
+('Médecin', 5, 1),
+('Ambulancier', 5, 1);
+
+SHOW TABLES;
+
+SELECT * FROM Necessite;
+
+DESCRIBE Necessite;
+USE bd_sae;
+
+
+DELETE FROM users;
+
+
+
+-- Pour Jean Dupont (Secouriste id = 1)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (1, 'Dupont', '$2a$10$exampleHashedPassword1', 'secouriste');
+
+-- Pour Claire Martin (Secouriste id = 2)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (2, 'Martin', '$2a$10$exampleHashedPassword2', 'secouriste');
+
+-- Pour Linh Nguyen (Secouriste id = 3)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (3, 'Nguyen', '$2a$10$exampleHashedPassword3', 'secouriste');
+
+-- Pour Julien Moreau (Secouriste id = 4)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (4, 'Moreau', '$2a$10$exampleHashedPassword4', 'secouriste');
+
+-- Pour Sophie Lemoine (Secouriste id = 5)
+INSERT INTO users (id, username, password_hash, role)
+VALUES (5, 'Lemoine', '$2a$10$exampleHashedPassword5', 'secouriste');
+
+-- Admin
+INSERT INTO users (id, username, password_hash, role)
+VALUES (110, 'admin2', '$2a$10$exampleHashedPassword110', 'admin');
+
+INSERT INTO sessions (user_id, session_took, expires_at) VALUES
+(1, 'sessiontoken123abc', NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR)),
+(2, 'sessiontoken456def', NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR));
 
 -- Insertion des affectations (EstAffecteA)
 INSERT INTO EstAffecteA (leSecouriste, leDPS, laCompetence) VALUES

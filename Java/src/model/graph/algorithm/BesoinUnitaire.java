@@ -1,5 +1,6 @@
 package model.graph.algorithm;
 
+import java.util.Objects;
 import model.persistence.Competence;
 import model.persistence.DPS;
 
@@ -14,4 +15,17 @@ public class BesoinUnitaire {
 
     public DPS getDps() { return dps; }
     public Competence getCompetence() { return competence; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BesoinUnitaire that = (BesoinUnitaire) o;
+        return Objects.equals(dps, that.dps) && Objects.equals(competence, that.competence);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dps, competence);
+    }
 }

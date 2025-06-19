@@ -3,7 +3,6 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.persistence.Competence;
 
 public class DAOCompetence extends DAO<Competence>{
@@ -83,4 +82,16 @@ public class DAOCompetence extends DAO<Competence>{
         return false;
     }
 
+    public Competence findByIntitule(String intitule) {
+        try {
+            for (Competence c : readAll()) {
+                if (c.getIntitule().equals(intitule)) {
+                    return c;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

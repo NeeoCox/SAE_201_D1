@@ -6,6 +6,7 @@ import java.time.DayOfWeek;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 
 //Import nos class
 import model.dao.DAO;
@@ -264,6 +267,8 @@ public class Controller  {
 	@FXML 
 	private Button ModifButtonSec;
 
+
+
 	//Pour la suppression d'un secouriste
 	@FXML
 	private TextField idSecDelete;
@@ -316,8 +321,6 @@ public class Controller  {
 	private Button ModifButtonDPS;
 
 	//Pour la suppression d'un DPS
-	@FXML
-	private TextField idDPSDelete;
 	@FXML
 	private Button deleteButtonDPS;
 
@@ -462,29 +465,21 @@ public class Controller  {
 	 */
 	@FXML private Label lblWeek;
     @FXML private Label lblMon, lblTue, lblWed, lblThu, lblFri, lblSat, lblSun;
-    @FXML private Button btnPrevWeek, btnNextWeek;
-
-    // VBox qui contiennent les labels des jours + les tâches
-    @FXML
-    private VBox vboxMon;
-    @FXML
-    private VBox vboxTue;
-    @FXML
-    private VBox vboxWed;
-    @FXML
-    private VBox vboxThu;
-    @FXML
-    private VBox vboxFri;
-    @FXML
-    private VBox vboxSat;
-    @FXML
-    private VBox vboxSun;
+    @FXML private Button btnSemainePrecedente, btnSemaineSuivante;
+	@FXML private Button btnAffectationAdmin;
+	@FXML private Button btnRetourPlanningSecouriste;
+	@FXML private RadioButton radioGlouton;
+	@FXML private RadioButton radioExhaustif;
+	@FXML private DatePicker datePickerAffectation;
+	@FXML private Button btnAffecterSecouristes;
+	@FXML private ToggleGroup algoGroup;
 
     private LocalDate currentMonday;
 
     private Map<LocalDate, List<String>> tasksByDate = new HashMap<>();
 
-    @FXML private GridPane gridWeek;
+    @FXML
+	private GridPane gridWeek;
 
     private VBox[][] taskBoxes = new VBox[7][24]; // 7 jours * 24h
 
@@ -513,41 +508,6 @@ public class Controller  {
 		System.out.println("controller");
 
 	}
-	/**
-	 ***********************************
-	 * Connection BDD
-	 ***********************************
-	 */
-	/*public void connectAdmin(ActionEvent event){
-		String username = usernameFieldAmin.getText();
-		String password = passwordFieldAdmin.getText();
-
-		DAO.setCredentials(username, password);	
-		
-		goToPageAdminAcceuil(event);
-	}
-
-	public void connectSecouriste(ActionEvent event){
-
-		String username = usernameFieldSec.getText();
-		String password = passwordFieldSec.getText();
-
-		DAO.setCredentials(username, password);	
-		Secouriste secouriste = null;
-		try{
-			secouriste = daoSecouriste.readByUsername(username);
-		}
-		catch(Exception e){
-			System.out.println("Erreur lors de la lecture du secouriste : " + e.getMessage());
-		}
-		
-		if (secouriste != null) {
-			MngtSession.setUtilisateurConnecte(secouriste);
-			goToPageAdminAcceuil(event);
-			// puis tu charges ta scène principale
-		}
-
-	}*/
 
 	@FXML
 	public void connectUser(ActionEvent event) {
@@ -669,7 +629,7 @@ public class Controller  {
 	
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
-		goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
+    	goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
 	}
 
 	public void goToGestionDesCompetences(ActionEvent event){
@@ -698,8 +658,16 @@ public class Controller  {
 		goTo("/pageFxml/Administrateur/CreationDeSecouriste.fxml", event);
 	}
 
-	public void goToModifSecouriste(ActionEvent event){
+	@FXML
+	public void goToModifSecouriste(ActionEvent event) {
 		System.out.println("goToModifSecouriste");
+		Secouriste sec = tableSecouristes.getSelectionModel().getSelectedItem();
+		if (sec == null) {
+			// Affiche un message d'erreur ou une alerte
+			System.out.println("Veuillez sélectionner un secouriste à modifier.");
+			return;
+		}
+		MngtSession.setIdSecouristeAModifier(sec.getId());
 		goTo("/pageFxml/Administrateur/ModifSecouriste.fxml", event);
 	}
 
@@ -719,8 +687,14 @@ public class Controller  {
 		goTo("/pageFxml/Administrateur/CreationDPS.fxml", event);
 	}
 
-	public void goToModifDPS(ActionEvent event){
+	public void goToModifDPS(ActionEvent event) {
 		System.out.println("goToModifDPS");
+		DPS dps = tableDPS.getSelectionModel().getSelectedItem();
+		if (dps == null) {
+			System.out.println("Veuillez sélectionner un DPS à modifier.");
+			return;
+		}
+		MngtSession.setIdDPSAModifier(dps.getId());
 		goTo("/pageFxml/Administrateur/ModifDPS.fxml", event);
 	}
 
@@ -742,6 +716,12 @@ public class Controller  {
 
 	public void goToModifComp(ActionEvent event){
 		System.out.println("goToModifComp");
+		Competence comp = tableCompetences.getSelectionModel().getSelectedItem();
+		if (comp == null) {
+			System.out.println("Veuillez sélectionner une compétence à modifier.");
+			return;
+		}
+		MngtSession.setIntituleCompetenceAModifier(comp.getIntitule());
 		goTo("/pageFxml/Administrateur/ModifComp.fxml", event);
 	}
 
@@ -929,23 +909,27 @@ public class Controller  {
 
 
 
-	public void deleteSecouriste() {
+	@FXML
+	public void deleteSecouriste(ActionEvent event) {
 		System.out.println("deleteSecouriste");
 
-		if (idSecDelete.getText().isEmpty()) {
-			System.out.println("Veuillez remplir le champ id.");
+		// Récupère le secouriste sélectionné dans la TableView
+		Secouriste sec = tableSecouristes.getSelectionModel().getSelectedItem();
+		if (sec == null) {
+			System.out.println("Veuillez sélectionner un secouriste à supprimer.");
 			return;
 		}
 
 		try {
-			long idLong = Long.parseLong(idSecDelete.getText().trim());
-
 			// Supprimer les compétences associées d'abord
 			DAOPossede daoPossede = new DAOPossede();
-			daoPossede.deleteBySecouristeId(idLong);
+			daoPossede.deleteBySecouristeId(sec.getId());
 
 			// Puis supprimer le secouriste
-			daoSecouriste.delete(idLong);
+			daoSecouriste.delete(sec.getId());
+
+			// Rafraîchir la table
+			viewAllSecouristes();
 
 			System.out.println("Secouriste supprimé avec succès.");
 		} catch (Exception e) {
@@ -1116,22 +1100,26 @@ public class Controller  {
 
 
 	
-	public void deleteDispositifDeSecours() {
+	@FXML
+	public void deleteDispositifDeSecours(ActionEvent event) {
 		System.out.println("deleteDispositifDeSecours");
 
-		if (idDPSDelete.getText().isEmpty()) {
-			System.out.println("Veuillez remplir le champ identifiant.");
+		// On récupère le DPS sélectionné dans la TableView
+		DPS dps = tableDPS.getSelectionModel().getSelectedItem();
+		if (dps == null) {
+			System.out.println("Veuillez sélectionner un DPS à supprimer.");
 			return;
 		}
 
 		try {
-			long idDPSLong = Long.parseLong(idDPSDelete.getText().trim());
-
 			// Supprimer tous les besoins associés
-			daoBesoin.deleteByDpsId(idDPSLong);
+			daoBesoin.deleteByDpsId(dps.getId());
 
 			// Supprimer le DPS
-			daoDPS.delete(idDPSLong);
+			daoDPS.delete(dps.getId());
+
+			// Rafraîchir la table
+			viewAllDPS();
 
 			System.out.println("DPS et ses besoins supprimés avec succès.");
 
@@ -1221,11 +1209,11 @@ public class Controller  {
 				return;
 			}
 
-			// Étape 3 : insérer la compétence
+			// insérer la compétence
 			daoCompetence.create(comp);
 			grapheCompetences.ajouterCompetence(comp);
 
-			// Étape 4 : insérer les dépendances dans la base + graphe actuel
+			// insérer les dépendances dans la base + graphe actuel
 			for (Competence nec : dependances) {
 				Necessite besoin = new Necessite();
 				besoin.setLaCompetence(comp);
@@ -1411,14 +1399,9 @@ public class Controller  {
 	}
 
 
-
-
-
-	/*
-	 * ***********************************
-	 * GESTION DES DÉPENDANCES DES COMPÉTENCES
-	 ***********************************
-	 */
+	/*******************************************
+	 * GESTION DES DÉPENDANCES DES COMPÉTENCES *
+	 *******************************************/
 
 	public void createNecessite() {
 		if (intitulerCreateComp.getText().isEmpty() || necessiteCreateComp.getText().isEmpty()) {
@@ -1607,10 +1590,23 @@ public class Controller  {
 			List<Besoin> besoins = daoBesoin.readAll();
 			List<Besoin> besoinsJour = new ArrayList<>();
 			for (Besoin b : besoins) {
-				if (contientDPS(b.getLeDPS(), dpsJour)) {
-					besoinsJour.add(b);
+				for (DPS dps : dpsJour) {
+					if (b.getIdDPS() == dps.getId()) {
+						b.setLeDPS(dps);
+						besoinsJour.add(b);
+						break;
+					}
 				}
 			}
+			DAOCompetence daoCompetence = new DAOCompetence();
+			for (Besoin b : besoinsJour) {
+				b.setLaCompetence(daoCompetence.findByIntitule(b.getIntituleCompetence()));
+			}
+			
+			besoinsJour.sort(Comparator.comparing(Besoin::getIntituleCompetence));
+
+			System.out.println("Nb besoins pour le jour " + jour + " : " + besoinsJour.size());
+			System.out.println("Besoins : " + besoinsJour);
 
 			// Choix de l'algo
 			Affectation algoAffect;
@@ -1621,7 +1617,22 @@ public class Controller  {
 			}
 
 			// Exécution de l'affectation
+			System.out.println("Secouristes dispos : " + secouristesDispos.size());
+			System.out.println("DPS ce jour : " + dpsJour.size());
+			System.out.println("Besoins ce jour : " + besoinsJour.size());
+			for (Secouriste s : secouristesDispos) {
+				System.out.println("Secouriste " + s.getId() + " possède :");
+				for (Possede p : s.getPossessions()) {
+					System.out.println("  - " + p.getIntituleCompetence());
+				}
+			}
+
+			for (Besoin b : besoinsJour) {
+				System.out.println("Besoin : " + b.getIntituleCompetence());
+			}
+
 			resultatAffectation = algoAffect.affecter(secouristesDispos, dpsJour, besoinsJour);
+			System.out.println("Nb affectations trouvées : " + resultatAffectation.getAffectations().size());
 
 			// Stockage en base via le service
 			DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
@@ -1639,7 +1650,17 @@ public class Controller  {
 				for (Secouriste s : entry.getValue()) {
 					for (Besoin b : besoinsJour) {
 						if (b.getLeDPS().equals(dps)) {
-							mngtAffect.creerAffectation(s.getId(), b.getLaCompetence().getIntitule(), dps.getId());
+							// Vérifie que le secouriste possède la compétence requise
+							for (Possede p : s.getPossessions()) {
+								if (p.getIntituleCompetence().equals(b.getIntituleCompetence())) {
+									try {
+										mngtAffect.creerAffectation(s.getId(), b.getIntituleCompetence(), dps.getId());
+										System.out.println("Insertion : secouriste=" + s.getId() + ", comp=" + b.getIntituleCompetence() + ", dps=" + dps.getId());
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							}
 						}
 					}
 				}
@@ -1673,8 +1694,125 @@ public class Controller  {
 		return false;
 	}
 
+	public List<EstAffecteA> getAffectationsPourSecouriste(long idSecouriste) {
+		DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
+		try {
+			return daoEstAffecteA.readBySecouristeId(idSecouriste);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
 
+	public void afficherAffectationsSecouriste() {
+		// Récupérer le secouriste connecté
+		Secouriste secouriste = (Secouriste) MngtSession.getUtilisateurConnecte();
+		if (secouriste == null) {
+			System.out.println("Aucun secouriste connecté !");
+			return;
+		}
 
+		// Récupérer ses affectations
+		List<EstAffecteA> affectations = getAffectationsPourSecouriste(secouriste.getId());
+
+		// Pour chaque affectation, ajouter une tâche dans le planning
+		for (EstAffecteA aff : affectations) {
+			DPS dps = aff.getLeDPS(); // ou récupère via DAO si besoin
+			Journee journee = dps.getEstProgramme();
+			LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
+
+			// Crée une description à afficher
+			String desc = "DPS " + dps.getId() + " (" + dps.getConcerneSport() + ") "
+						+ aff.getLaCompetence().getIntitule();
+
+			// Ajoute la tâche au planning
+			addTask(date, desc);
+		}
+	}
+
+	public void afficherAffectationsSecouristeDansGridPane() {
+		clearAllTaskBoxes();
+		// Récupérer le secouriste connecté
+		Secouriste secouriste = (Secouriste) MngtSession.getUtilisateurConnecte();
+		if (secouriste == null) {
+			System.out.println("Aucun secouriste connecté !");
+			return;
+		}
+
+		// Récupérer ses affectations
+		List<EstAffecteA> affectations = getAffectationsPourSecouriste(secouriste.getId());
+
+		// Pour chaque affectation, placer un label dans le GridPane
+		for (EstAffecteA aff : affectations) {
+			DPS dps = aff.getLeDPS();
+			Journee journee = dps.getEstProgramme();
+			LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
+
+			// Calcul du jour de la semaine (0 = lundi, 6 = dimanche)
+			int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
+			if (dayIndex < 0 || dayIndex > 6) continue; // hors de la semaine affichée
+
+			// Heures de début et de fin
+			int heureDebut = dps.getHoraireDepart();
+			int heureFin = dps.getHoraireFin();
+
+			// Description à afficher
+			String desc = "DPS " + dps.getId() + " (" + dps.getConcerneSport() + ") " + aff.getLaCompetence().getIntitule();
+
+			// Pour chaque heure de la plage, ajoute un label dans la bonne VBox
+			for (int h = heureDebut; h < heureFin; h++) {
+				if (h >= 0 && h < 24) {
+					VBox box = taskBoxes[dayIndex][h];
+					Label label = new Label(desc);
+					label.setStyle("-fx-background-color: #D3EAFD; -fx-padding: 2 5 2 5; -fx-border-radius: 3; -fx-background-radius: 3;");
+					box.getChildren().add(label);
+				}
+			}
+		}
+	}
+
+	@FXML
+	public void onAffecterSecouristes(ActionEvent event) {
+		System.out.println("onAffecterSecouristes");
+		String algo = radioGlouton.isSelected() ? "glouton" : "exhaustif";
+		LocalDate date = datePickerAffectation.getValue();
+		if (date == null) {
+			System.out.println("Veuillez choisir une date.");
+			return;
+		}
+		Journee journee = new Journee(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+		affecterSecouristesPourJournee(journee, algo);
+		afficherAffectationsTousSecouristesDansGridPane();
+	}
+
+	public void afficherAffectationsTousSecouristesDansGridPane() {
+		clearAllTaskBoxes();
+		DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
+		try {
+			List<EstAffecteA> affectations = daoEstAffecteA.readAll();
+			for (EstAffecteA aff : affectations) {
+				DPS dps = aff.getLeDPS();
+				Journee journee = dps.getEstProgramme();
+				LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
+				int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
+				if (dayIndex < 0 || dayIndex > 6) continue;
+				int heureDebut = dps.getHoraireDepart();
+				int heureFin = dps.getHoraireFin();
+				String desc = "S" + aff.getIdSecouriste() + " : DPS " + dps.getId() + " (" + dps.getConcerneSport() + ") " + aff.getLaCompetence().getIntitule();
+				for (int h = heureDebut; h < heureFin; h++) {
+					if (h >= 0 && h < 24) {
+						VBox box = taskBoxes[dayIndex][h];
+						Label label = new Label(desc);
+						label.setStyle("-fx-background-color: #FFD580; -fx-padding: 2 5 2 5; -fx-border-radius: 3; -fx-background-radius: 3;");
+						box.getChildren().add(label);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'affichage des affectations : " + e.getMessage());
+		}
+	}
 
 
 
@@ -1826,16 +1964,12 @@ public class Controller  {
 			currentMonday = today.with(DayOfWeek.MONDAY);
 			generateHourLabelsAndTaskBoxes();
 			afficherSemaine(currentMonday);
-			btnPrevWeek.setOnAction(e -> afficherSemaine(currentMonday.minusWeeks(1)));
-			btnNextWeek.setOnAction(e -> afficherSemaine(currentMonday.plusWeeks(1)));
 
-			vboxMon.setFillWidth(true);
-			vboxTue.setFillWidth(true);
-			vboxWed.setFillWidth(true);
-			vboxThu.setFillWidth(true);
-			vboxFri.setFillWidth(true);
-			vboxSat.setFillWidth(true);
-			vboxSun.setFillWidth(true);
+			if (isPageAffectationAdmin()) {
+				afficherAffectationsTousSecouristesDansGridPane();
+			} else {
+				afficherAffectationsSecouristeDansGridPane();
+			}
 		}
 
 		// Si on est sur la page secouristes
@@ -1850,6 +1984,18 @@ public class Controller  {
 
 		if(tableDPS != null){
 			viewAllDPS();
+		}
+
+		if (nomSecModif != null) {
+			initModifSecouriste();
+		}
+
+		if (idDPSModif != null) {
+			initModifDPS();
+		}
+
+		if (intitulerUpdateComp != null) {
+			initModifComp();
 		}
 
 		if (tableMesCompetencesSec != null) {
@@ -1867,88 +2013,130 @@ public class Controller  {
 		}
 	}
 
+	// Méthode pour détecter la page d'affectation admin
+	private boolean isPageAffectationAdmin() {
+		// Par exemple, un bouton spécifique à la page admin
+		return btnAffectationAdmin != null;
+	}
+
+	// Méthode pour détecter la page planning secouriste
+	private boolean isPagePlanningSecouriste() {
+		// Par exemple, un bouton ou label spécifique à la page secouriste
+		return btnRetourPlanningSecouriste != null;
+	}
+
+	private void initModifSecouriste() {
+		Long id = MngtSession.getIdSecouristeAModifier();
+		if (id != null) {
+			DAOSecouriste daoSecouriste = new DAOSecouriste();
+			try {
+				Secouriste sec = daoSecouriste.read(id);
+				if (sec != null) {
+					nomSecModif.setText(sec.getNom());
+					prenomSecModif.setText(sec.getPrenom());
+					dateNaissSecModif.setText(sec.getDateNaissance());
+					mailSecModif.setText(sec.getEmail());
+					adressSecModif.setText(sec.getAdresse());
+					idSecModif.setText(String.valueOf(sec.getId()));
+					telSecModif.setText(sec.getTel());
+					// Pour les compétences, concatène les intitulés séparés par ;
+					StringBuilder sb = new StringBuilder();
+					if (sec.getPossessions() != null) {
+						for (Possede p : sec.getPossessions()) {
+							if (sb.length() > 0) sb.append(";");
+							sb.append(p.getIntituleCompetence());
+						}
+					}
+					compSecModif.setText(sb.toString());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Erreur lors de la récupération du secouriste : " + e.getMessage());
+			}
+		}
+	}
+
+	public void initModifDPS() {
+		Long id = MngtSession.getIdDPSAModifier();
+		if (id != null) {
+			DAODPS daoDPS = new DAODPS();
+			try {
+				DPS dps = daoDPS.read(id);
+				if (dps != null) {
+					idDPSModif.setText(String.valueOf(dps.getId()));
+					heureDebutDPSModif.setText(String.valueOf(dps.getHoraireDepart()));
+					heureFinDPSModif.setText(String.valueOf(dps.getHoraireFin()));
+					dateModifDPS.setValue(LocalDate.of(
+						dps.getEstProgramme().getAnnee(),
+						dps.getEstProgramme().getMois(),
+						dps.getEstProgramme().getJour()
+					));
+					lieuRencDPSModif.setText(dps.getALieuDans().getNom());
+					sportDPSModif.setText(dps.getConcerne().getNom());
+					
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void initModifComp() {
+		String intitule = MngtSession.getIntituleCompetenceAModifier();
+		if (intitule != null) {
+			DAOCompetence daoCompetence = new DAOCompetence();
+			try {
+				Competence comp = daoCompetence.read(intitule);
+				if (comp != null) {
+					intitulerUpdateComp.setText(comp.getIntitule());
+					// Préremplis les autres champs si besoin
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
     public void addTask(LocalDate date, String taskDescription) {
         tasksByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(taskDescription);
-        if (isDateInCurrentWeek(date)) {
-            afficherTachesPourDate(date);
-        }
     }
+
+	private void clearAllTaskBoxes() {
+		for (int day = 0; day < 7; day++) {
+			for (int hour = 0; hour < 24; hour++) {
+				if (taskBoxes[day][hour] != null) {
+					taskBoxes[day][hour].getChildren().clear();
+				}
+			}
+		}
+	}
 
     private boolean isDateInCurrentWeek(LocalDate date) {
         return !date.isBefore(currentMonday) && !date.isAfter(currentMonday.plusDays(6));
     }
 
     public void afficherSemaine(LocalDate monday) {
-        currentMonday = monday;
+		currentMonday = monday;
+		updateDayLabels();
 
-        // Met à jour les labels des jours avec les dates
-        updateDayLabels();
+		if (isPageAffectationAdmin()) {
+			afficherAffectationsTousSecouristesDansGridPane();
+		} else {
+			afficherAffectationsSecouristeDansGridPane();
+		}
+	}
 
-        // Vide les VBoxes des jours (sauf le label titre)
-        clearAllDayBoxes();
-
-        // Ajoute les tâches existantes dans la semaine
-        for (int i = 0; i < 7; i++) {
-            LocalDate date = currentMonday.plusDays(i);
-            afficherTachesPourDate(date);
-        }
-    }
-
-    private void afficherTachesPourDate(LocalDate date) {
-        int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
-        if (dayIndex < 0 || dayIndex > 6) return;
-
-        VBox dayBox = getDayVBox(dayIndex);
-        if (dayBox == null) return;
-
-        // Le premier enfant est le label du jour, on vide le reste
-        // Donc on garde uniquement le label du jour (enfant 0)
-        while (dayBox.getChildren().size() > 1) {
-            dayBox.getChildren().remove(1);
-        }
-
-        List<String> tasks = tasksByDate.getOrDefault(date, Collections.emptyList());
-        for (String task : tasks) {
-            Label taskLabel = new Label(task);
-            taskLabel.setStyle("-fx-background-color: #D3D3D3; -fx-padding: 3; -fx-border-radius: 3; -fx-background-radius: 3;");
-            dayBox.getChildren().add(taskLabel);
-        }
-    }
-
-    private void clearAllDayBoxes() {
-        vboxMon.getChildren().retainAll(lblMon);
-        vboxTue.getChildren().retainAll(lblTue);
-        vboxWed.getChildren().retainAll(lblWed);
-        vboxThu.getChildren().retainAll(lblThu);
-        vboxFri.getChildren().retainAll(lblFri);
-        vboxSat.getChildren().retainAll(lblSat);
-        vboxSun.getChildren().retainAll(lblSun);
-    }
 
     private void updateDayLabels() {
-        lblMon.setText("Lundi\n" + currentMonday);
-        lblTue.setText("Mardi\n" + currentMonday.plusDays(1));
-        lblWed.setText("Mercredi\n" + currentMonday.plusDays(2));
-        lblThu.setText("Jeudi\n" + currentMonday.plusDays(3));
-        lblFri.setText("Vendredi\n" + currentMonday.plusDays(4));
-        lblSat.setText("Samedi\n" + currentMonday.plusDays(5));
-        lblSun.setText("Dimanche\n" + currentMonday.plusDays(6));
+        lblMon.setText(" Lundi\n " + currentMonday);
+        lblTue.setText(" Mardi\n " + currentMonday.plusDays(1));
+        lblWed.setText(" Mercredi\n " + currentMonday.plusDays(2));
+        lblThu.setText(" Jeudi\n " + currentMonday.plusDays(3));
+        lblFri.setText(" Vendredi\n " + currentMonday.plusDays(4));
+        lblSat.setText(" Samedi\n " + currentMonday.plusDays(5));
+        lblSun.setText(" Dimanche\n " + currentMonday.plusDays(6));
     }
 
-
-
-    private VBox getDayVBox(int dayIndex) {
-        switch (dayIndex) {
-            case 0: return vboxMon;
-            case 1: return vboxTue;
-            case 2: return vboxWed;
-            case 3: return vboxThu;
-            case 4: return vboxFri;
-            case 5: return vboxSat;
-            case 6: return vboxSun;
-            default: return null;
-        }
-    }
 
     /**
      * 

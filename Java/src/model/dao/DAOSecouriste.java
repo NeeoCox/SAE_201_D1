@@ -3,7 +3,7 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import model.persistence.Possede;
 import model.persistence.Secouriste;
 
 public class DAOSecouriste extends DAO<Secouriste> {
@@ -45,6 +45,11 @@ public class DAOSecouriste extends DAO<Secouriste> {
                     s.setEmail(rs.getString("email"));
                     s.setTel(rs.getString("telephone"));
                     s.setAdresse(rs.getString("adresse"));
+
+                    DAOPossede daoPossede = new DAOPossede();
+                    List<Possede> possessions = daoPossede.read(s.getId());
+                    s.setPossessions(possessions);
+
                     return s;
                 }
             }
@@ -66,6 +71,9 @@ public class DAOSecouriste extends DAO<Secouriste> {
                 s.setEmail(rs.getString("email"));
                 s.setTel(rs.getString("telephone"));
                 s.setAdresse(rs.getString("adresse"));
+                DAOPossede daoPossede = new DAOPossede();
+                List<Possede> possessions = daoPossede.read(s.getId());
+                s.setPossessions(possessions);
                 secouristes.add(s);
             }
         }

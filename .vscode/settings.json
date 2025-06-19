@@ -1,16 +1,16 @@
 {
     "java.project.sourcePaths": [
-        "java\\src",
-        "java\\lib\\calendar"
+        "java\\src"
     ],
     "java.project.referencedLibraries": [
-        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.graphics.jar",
-        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.controls.jar",
-        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.swing.jar",
-        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.web.jar",
-        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.fxml.jar",
-        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx-swt.jar",
-        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.media.jar",
-        "c:\\Users\\maelc\\Desktop\\Is_All\\BUTnfo\\Semestre_2\\SAE\\SAE2_01\\SAE_201_D1\\java\\lib\\javafx\\javafx.base.jar",
+        "java\\lib\\mysql\\mysql-connector-j-9.3.0.jar",
+        "c:\\Users\\elect\\OneDrive - Université Bretagne Sud\\Documents\\BUT Informatique\\1ère Année\\Semestre 2\\SAÉ\\S2.01\\SAE_201_D1\\java\\lib\\javafx\\javafx.controls.jar",
+        "c:\\Users\\elect\\OneDrive - Université Bretagne Sud\\Documents\\BUT Informatique\\1ère Année\\Semestre 2\\SAÉ\\S2.01\\SAE_201_D1\\java\\lib\\javafx\\javafx.base.jar",
+        "c:\\Users\\elect\\OneDrive - Université Bretagne Sud\\Documents\\BUT Informatique\\1ère Année\\Semestre 2\\SAÉ\\S2.01\\SAE_201_D1\\java\\lib\\javafx\\javafx.swing.jar",
+        "c:\\Users\\elect\\OneDrive - Université Bretagne Sud\\Documents\\BUT Informatique\\1ère Année\\Semestre 2\\SAÉ\\S2.01\\SAE_201_D1\\java\\lib\\javafx\\javafx-swt.jar",
+        "c:\\Users\\elect\\OneDrive - Université Bretagne Sud\\Documents\\BUT Informatique\\1ère Année\\Semestre 2\\SAÉ\\S2.01\\SAE_201_D1\\java\\lib\\javafx\\javafx.fxml.jar",
+        "c:\\Users\\elect\\OneDrive - Université Bretagne Sud\\Documents\\BUT Informatique\\1ère Année\\Semestre 2\\SAÉ\\S2.01\\SAE_201_D1\\java\\lib\\javafx\\javafx.web.jar",
+        "c:\\Users\\elect\\OneDrive - Université Bretagne Sud\\Documents\\BUT Informatique\\1ère Année\\Semestre 2\\SAÉ\\S2.01\\SAE_201_D1\\java\\lib\\javafx\\javafx.graphics.jar",
+        "c:\\Users\\elect\\OneDrive - Université Bretagne Sud\\Documents\\BUT Informatique\\1ère Année\\Semestre 2\\SAÉ\\S2.01\\SAE_201_D1\\java\\lib\\javafx\\javafx.media.jar"
     ]
 }

@@ -21,6 +21,9 @@ public class MngtEstAffecteA {
      * Créer une affectation et l'ajouter en base.
      */
     public void creerAffectation(long idSecouriste, String intituleCompetence, long idDPS) throws SQLException {
+        System.out.println("MngtEstAffecteA.creerAffectation() called with idSecouriste: " + idSecouriste +
+                           ", intituleCompetence: " + intituleCompetence +
+                           ", idDPS: " + idDPS);
         EstAffecteA affectation = new EstAffecteA();
         affectation.setIdSecouriste((int)idSecouriste);
         affectation.setIntituleCompetence(intituleCompetence);

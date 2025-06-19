@@ -23,7 +23,7 @@ public class DAOEstDisponible extends DAO<EstDisponible> {
     }
 
     public void create(EstDisponible dispo) throws SQLException {
-        String sql = "INSERT INTO EstDisponible (idSecouriste, jour, mois, annee) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO EstDisponible (leSecouriste, jourJournee, moisJournee, anneeJournee) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, dispo.getIdSecouriste());
             stmt.setInt(2, dispo.getJourJournee());
@@ -34,7 +34,7 @@ public class DAOEstDisponible extends DAO<EstDisponible> {
     }
 
     public EstDisponible read(long idSecouriste, int jour, int mois, int annee) throws SQLException {
-        String sql = "SELECT * FROM EstDisponible WHERE idSecouriste = ? AND jour = ? AND mois = ? AND annee = ?";
+        String sql = "SELECT * FROM EstDisponible WHERE leSecouriste = ? AND jourJournee = ? AND moisJournee = ? AND anneeJournee = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, idSecouriste);
             stmt.setInt(2, jour);
@@ -64,10 +64,10 @@ public class DAOEstDisponible extends DAO<EstDisponible> {
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                long idSecouriste = rs.getLong("idSecouriste");
-                int jour = rs.getInt("jour");
-                int mois = rs.getInt("mois");
-                int annee = rs.getInt("annee");
+                long idSecouriste = rs.getLong("leSecouriste");
+                int jour = rs.getInt("jourJournee");
+                int mois = rs.getInt("moisJournee");
+                int annee = rs.getInt("anneeJournee");
                 Secouriste secouriste = daoSecouriste.read(idSecouriste);
                 Journee journee = daoJournee.read(jour, mois, annee);
                 EstDisponible dispo = new EstDisponible();
@@ -84,7 +84,7 @@ public class DAOEstDisponible extends DAO<EstDisponible> {
     }
 
     public void delete(long idSecouriste, int jour, int mois, int annee) throws SQLException {
-        String sql = "DELETE FROM EstDisponible WHERE idSecouriste = ? AND jour = ? AND mois = ? AND annee = ?";
+        String sql = "DELETE FROM EstDisponible WHERE leSecouriste = ? AND jourJournee = ? AND moisJournee = ? AND anneeJournee = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, idSecouriste);
             stmt.setInt(2, jour);
