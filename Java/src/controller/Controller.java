@@ -961,11 +961,11 @@ public class Controller  {
 				return;
 			}
 
-			// Étape 3 : insérer la compétence
+			// insérer la compétence
 			daoCompetence.create(comp);
 			grapheCompetences.ajouterCompetence(comp);
 
-			// Étape 4 : insérer les dépendances dans la base + graphe actuel
+			// insérer les dépendances dans la base + graphe actuel
 			for (Competence nec : dependances) {
 				Necessite besoin = new Necessite();
 				besoin.setLaCompetence(comp);
