@@ -176,8 +176,6 @@ public class DPS {
     public String getConcerneSport() {
         return concerne != null ? concerne.getNom() : "";
     }
-
-
     /**
      * Méthode toString pour afficher les informations du DPS.
      */

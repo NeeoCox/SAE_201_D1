@@ -43,6 +43,11 @@ public class Secouriste {
     private List<Possede> possessions = new ArrayList<>();
 
     /**
+     * Liste des disponibilités du secouriste
+     */
+    private List<EstDisponible> disponibilites = new ArrayList<>();
+
+    /**
      * Constructeur par défaut de la classe Secouriste.
      */
     public Secouriste() {
@@ -205,6 +210,24 @@ public class Secouriste {
      */
     public void setPossessions(List<Possede> possessions) {
         this.possessions = possessions;
+    }
+
+
+
+    /**
+     * Accesseur de la liste disponibilites
+     * @return La liste des Disponibilité
+     */
+    public List<EstDisponible> getDisponibilites() {
+        return disponibilites;
+    }
+
+    /**
+     * Mutateur de la liste des disponibilité
+     * @param disponibilites la liste des disponibilité
+     */
+    public void setDisponibilites(List<EstDisponible> disponibilites) {
+        this.disponibilites = disponibilites;
     }
 
 

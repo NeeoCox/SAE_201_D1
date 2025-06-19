@@ -554,20 +554,14 @@ public class Controller  {
 			System.out.println("Erreur lors de la connexion");
 		}
 	}
-
-
-
-
+	
 	/**
 	 * Méthode utilitaire locale pour vérifier le mot de passe.
 	 * À remplacer par une vraie vérification de hash si besoin.
 	 */
-	private boolean verifyPassword(String password, String passwordHash) {
-		
+	private boolean verifyPassword(String password, String passwordHash) {	
 		return password.equals(passwordHash);
 	}
-
-
 
 	/**
 	 ***********************************
@@ -608,7 +602,6 @@ public class Controller  {
 		goTo("/pageFxml/PageConnection/ConnectionSecouriste.fxml", event);
 	}
 
-	
     /**
 	 * Methode pour aller a la page acceuil admin
 	 * @param event l'evenement de l'action
@@ -633,7 +626,6 @@ public class Controller  {
 	 ***********************************
 	 */
 
-	
 	public void goToGestionDesSecouristes(ActionEvent event){
 		System.out.println("goToGestionDesSecouristes");
 		goTo("/pageFxml/Administrateur/GestionDesSecouristes.fxml", event);
@@ -717,7 +709,6 @@ public class Controller  {
 		goTo("/pageFxml/Administrateur/DeleteComp.fxml", event);
 	}
 	
-
 	/**
 	 ***********************************
 	 * METHODE POUR LES BOUTON DE LA PAGE SECOURISTE
@@ -739,7 +730,6 @@ public class Controller  {
 		goTo("/pageFxml/Secouriste/MonPlanningEtAffectations.fxml", event);
 	}
 	
-
 	/**
 	 * Methode pour charger la page a afficher
 	 * @param fichier acces au fichier fxml
@@ -826,7 +816,6 @@ public class Controller  {
 		}
 	}
 
-
 	public void updateSecouriste() {
 		System.out.println("updateSecouriste");
 
@@ -894,8 +883,6 @@ public class Controller  {
 		}
 	}
 
-
-
 	public void deleteSecouriste() {
 		System.out.println("deleteSecouriste");
 
@@ -920,7 +907,6 @@ public class Controller  {
 			System.out.println("Erreur lors de la suppression du secouriste : " + e.getMessage());
 		}
 	}
-
 
 	/**
 	 ***********************************
@@ -1080,9 +1066,6 @@ public class Controller  {
 		}
 	}
 
-
-
-	
 	public void deleteDispositifDeSecours() {
 		System.out.println("deleteDispositifDeSecours");
 
@@ -1109,7 +1092,6 @@ public class Controller  {
 			System.out.println("Erreur lors de la suppression du DPS : " + e.getMessage());
 		}
 	}
-
 
 	/**
 	 ***********************************
@@ -1377,10 +1359,6 @@ public class Controller  {
 		}
 	}
 
-
-
-
-
 	/*
 	 * ***********************************
 	 * GESTION DES DÉPENDANCES DES COMPÉTENCES
@@ -1526,7 +1504,6 @@ public class Controller  {
 		}
 	}
 
-
 	/*
 	 ***************************************
 	 * AFFECTATION DES SECOURISTES AUX DPS *
@@ -1639,11 +1616,6 @@ public class Controller  {
 		}
 		return false;
 	}
-
-
-
-
-
 
 	/**
 	 ***********************************
@@ -1774,9 +1746,6 @@ public class Controller  {
 		}
 	}
 
-
-	
-
 	/**
 	 ***********************************
 	 * GESTION DU PLANNING
@@ -1902,8 +1871,6 @@ public class Controller  {
         lblSun.setText("Dimanche\n" + currentMonday.plusDays(6));
     }
 
-
-
     private VBox getDayVBox(int dayIndex) {
         switch (dayIndex) {
             case 0: return vboxMon;
@@ -1957,7 +1924,5 @@ public class Controller  {
 			}
 		}
 	}
-
-
 
 }
