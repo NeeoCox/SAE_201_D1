@@ -18,7 +18,8 @@ public class DAOBesoin extends DAO<Besoin>{
     }
 
     public void create(Besoin besoin) throws SQLException {
-        String sql = "INSERT INTO Besoin (idDPS, intituleCompetence, nombre) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Besoin (leDPS, laCompetence, nombre) VALUES (?, ?, ?)";
+        
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, besoin.getIdDPS());
             stmt.setString(2, besoin.getIntituleCompetence());
@@ -28,7 +29,7 @@ public class DAOBesoin extends DAO<Besoin>{
     }
 
     public Besoin read(long dpsId, String competenceIntitule) throws SQLException {
-        String sql = "SELECT * FROM Besoin WHERE idDPS = ? AND intituleCompetence = ?";
+        String sql = "SELECT * FROM Besoin WHERE leDPS = ? AND laCompetence = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, dpsId);
             stmt.setString(2, competenceIntitule);
@@ -53,8 +54,8 @@ public class DAOBesoin extends DAO<Besoin>{
             while (rs.next()) {
                 besoins.add(new Besoin(
                     rs.getInt("nombre"),
-                    rs.getString("intituleCompetence"),
-                    rs.getLong("idDPS")                    
+                    rs.getString("laCompetence"),
+                    rs.getLong("leDPS")                    
                 ));
             }
         }
@@ -62,7 +63,7 @@ public class DAOBesoin extends DAO<Besoin>{
     }
 
     public void update(Besoin besoin) throws SQLException {
-        String sql = "UPDATE Besoin SET nombre = ? WHERE idDPS = ? AND intituleCompetence = ?";
+        String sql = "UPDATE Besoin SET nombre = ? WHERE leDPS = ? AND laCompetence = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, besoin.getNombre());
             stmt.setLong(2, besoin.getIdDPS());
@@ -72,11 +73,21 @@ public class DAOBesoin extends DAO<Besoin>{
     }
 
     public void delete(long dpsId, String competenceIntitule) throws SQLException {
-        String sql = "DELETE FROM Besoin WHERE idDPS = ? AND intituleCompetence = ?";
+        String sql = "DELETE FROM Besoin WHERE leDPS = ? AND laCompetence = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, dpsId);
             stmt.setString(2, competenceIntitule);
             stmt.executeUpdate();
         }
     }
+
+    public void deleteByDpsId(long dpsId) throws SQLException {
+        String sql = "DELETE FROM Besoin WHERE leDPS = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, dpsId);
+            stmt.executeUpdate();
+        }
+    }
+
+
 }
