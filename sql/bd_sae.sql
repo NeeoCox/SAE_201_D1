@@ -1,3 +1,5 @@
+CREATE DATABASE bd_sae;
+
 USE bd_sae;
 -----------------------------------------------------
 --                CREATION DES TABLES              --
