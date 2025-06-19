@@ -11,8 +11,15 @@ import model.persistence.Besoin;
  */
 public class MngtBesoin {
 
+    /**
+     * DAO pour les opérations sur les besoins.
+     */
     private final DAOBesoin daoBesoin;
 
+    /**
+     * Constructeur de la classe MngtBesoin.
+     * @param daoBesoin DAO pour les opérations sur les besoins
+     */
     public MngtBesoin(DAOBesoin daoBesoin) {
         this.daoBesoin = daoBesoin;
     }

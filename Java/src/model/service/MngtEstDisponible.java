@@ -8,11 +8,19 @@ import model.persistence.*;
 /**
  * Classe de gestion des disponibilités (EstDisponible) avec persistance en base.
  * Utilise DAOEstDisponible pour toutes les opérations.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
  */
 public class MngtEstDisponible {
 
+    /**
+     * DAO pour les opérations sur les disponibilités.
+     */
     private final DAOEstDisponible daoEstDisponible;
 
+    /**
+     * Constructeur de la classe MngtEstDisponible.
+     * @param daoEstDisponible DAO pour les opérations sur les disponibilités
+     */
     public MngtEstDisponible(DAOEstDisponible daoEstDisponible) {
         this.daoEstDisponible = daoEstDisponible;
     }

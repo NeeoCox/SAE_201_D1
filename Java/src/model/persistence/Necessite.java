@@ -92,6 +92,9 @@ public class Necessite {
     }
 
 
+    /**
+     * Méthode toString pour afficher les informations de la nécessité.
+     */
     @Override
     public String toString() {
         return "Nécessite{" +

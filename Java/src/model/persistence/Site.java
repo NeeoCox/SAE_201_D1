@@ -106,6 +106,9 @@ public class Site {
     }
 
 
+    /**
+     * Retourne une représentation textuelle du site.
+     */
     @Override
     public String toString() {
         return "Site{" +

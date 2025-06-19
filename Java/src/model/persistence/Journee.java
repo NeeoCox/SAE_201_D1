@@ -93,6 +93,9 @@ public class Journee {
     }
 
 
+    /**
+     * Méthode toString pour afficher les informations de la journée.
+     */
     @Override
     public String toString() {
         return "Journee{" +

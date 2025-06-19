@@ -42,11 +42,24 @@ public class Secouriste {
      */
     private List<Possede> possessions = new ArrayList<>();
 
-    
+    /**
+     * Constructeur par défaut de la classe Secouriste.
+     */
     public Secouriste() {
 
     }
 
+    /**
+     * Constructeur de la classe Secouriste avec tous les attributs.
+     * @param id L'identifiant unique du secouriste.
+     * @param nom Le nom du secouriste.
+     * @param prenom Le prénom du secouriste.
+     * @param dateNaissance La date de naissance du secouriste.
+     * @param email L'adresse email du secouriste.
+     * @param tel Le numéro de téléphone du secouriste.
+     * @param adresse L'adresse postale du secouriste.
+     * @param possessions La liste des compétences possédées par le secouriste.
+     */
     public Secouriste(long id, String nom, String prenom, String dateNaissance, String email, String tel, String adresse, List<Possede> possessions) {
         this.id = id;
         this.nom = nom;
@@ -195,6 +208,9 @@ public class Secouriste {
     }
 
 
+    /**
+     * Méthode toString pour afficher les informations du secouriste.
+     */
     @Override
     public String toString() {
         return "Secouriste{" +

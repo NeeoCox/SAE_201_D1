@@ -8,7 +8,10 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
-
+/**
+ * Classe principale de l'application.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
+ */
 public class App extends Application {
     @Override
     public void start(Stage stage) {
