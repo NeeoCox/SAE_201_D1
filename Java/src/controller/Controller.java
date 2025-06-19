@@ -989,6 +989,12 @@ public class Controller  {
 
 			// Création du DPS
 			DPS dps = new DPS(idDPSLong, heureDebut, heureFin, journee, site, sportObj);
+			
+			// Vérifie si la journée existe déjà
+			DAOJournee daoJournee = new DAOJournee();
+			if (daoJournee.read(journee.getJour(), journee.getMois(), journee.getAnnee()) == null) {
+				daoJournee.create(journee);
+			}
 			daoDPS.create(dps);
 
 			// Création des Besoins
