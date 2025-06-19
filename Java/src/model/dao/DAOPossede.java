@@ -3,7 +3,6 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.persistence.Possede;
 
 public class DAOPossede extends DAO<Possede>{
@@ -47,12 +46,15 @@ public class DAOPossede extends DAO<Possede>{
     public List<Possede> readAll() throws SQLException {
         List<Possede> possedes = new ArrayList<>();
         String sql = "SELECT * FROM Possede";
+        DAOCompetence daoCompetence = new DAOCompetence(); // Ajouté
         try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+            ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Possede p = new Possede();
                 p.setIdSecouriste(rs.getLong("leSecouriste"));
                 p.setIntituleCompetence(rs.getString("laCompetence"));
+                // Ajoute cette ligne :
+                p.setLaCompetence(daoCompetence.read(p.getIntituleCompetence()));
                 possedes.add(p);
             }
         }
@@ -62,19 +64,19 @@ public class DAOPossede extends DAO<Possede>{
     public List<Possede> read(long idSecouriste) throws SQLException {
         List<Possede> possedes = new ArrayList<>();
         String sql = "SELECT * FROM Possede WHERE leSecouriste = ?";
-        
+        DAOCompetence daoCompetence = new DAOCompetence(); // Ajouté
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, idSecouriste);
             ResultSet rs = stmt.executeQuery();
-            
             while (rs.next()) {
                 Possede p = new Possede();
                 p.setIdSecouriste(rs.getLong("leSecouriste"));
                 p.setIntituleCompetence(rs.getString("laCompetence"));
+                // Ajoute cette ligne :
+                p.setLaCompetence(daoCompetence.read(p.getIntituleCompetence()));
                 possedes.add(p);
             }
         }
         return possedes;
     }
-
 }

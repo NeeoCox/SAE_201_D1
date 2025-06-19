@@ -9,6 +9,11 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.layout.StackPane?>
 
 <BorderPane prefHeight="749.0" prefWidth="1133.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
@@ -24,76 +29,88 @@
     </top>
 
     <center>
-        <GridPane fx:id="gridWeek" gridLinesVisible="true" prefHeight="594.0" prefWidth="1000.0" style="-fx-padding: 10;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-
+        <ScrollPane fitToWidth="true" fitToHeight="true" prefHeight="594.0" prefWidth="1000.0">
+            <content>
+                <GridPane fx:id="gridWeek" gridLinesVisible="true" prefHeight="594.0" prefWidth="1000.0" style="-fx-padding: 10;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
             
-            <columnConstraints>
-                <ColumnConstraints maxWidth="60" minWidth="60" />
-                <ColumnConstraints percentWidth="12.5" />
-                <ColumnConstraints percentWidth="12.5" />
-                <ColumnConstraints percentWidth="12.5" />
-                <ColumnConstraints percentWidth="12.5" />
-                <ColumnConstraints percentWidth="12.5" />
-                <ColumnConstraints percentWidth="12.5" />
-                <ColumnConstraints percentWidth="12.5" />
-            </columnConstraints>
+                    <columnConstraints>
+                        <ColumnConstraints maxWidth="60" minWidth="60" />
+                        <ColumnConstraints percentWidth="12.5" />
+                        <ColumnConstraints percentWidth="12.5" />
+                        <ColumnConstraints percentWidth="12.5" />
+                        <ColumnConstraints percentWidth="12.5" />
+                        <ColumnConstraints percentWidth="12.5" />
+                        <ColumnConstraints percentWidth="12.5" />
+                        <ColumnConstraints percentWidth="12.5" />
+                    </columnConstraints>
 
-            
-            <rowConstraints>
-                <RowConstraints minHeight="40" />
-                
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-                <RowConstraints percentHeight="4.16" />
-            </rowConstraints>
-            
-            <children>
-                
-                <Label fx:id="lblMon" text="Lun" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <Label fx:id="lblTue" text="Mar" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                <Label fx:id="lblWed" text="Mer" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-                <Label fx:id="lblThu" text="Jeu" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-                <Label fx:id="lblFri" text="Ven" GridPane.columnIndex="5" GridPane.rowIndex="0" />
-                <Label fx:id="lblSat" text="Sam" GridPane.columnIndex="6" GridPane.rowIndex="0" />
-                <Label fx:id="lblSun" text="Dim" GridPane.columnIndex="7" GridPane.rowIndex="0" />
-                <VBox fx:id="vboxMon" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <VBox fx:id="vboxTue" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                <VBox fx:id="vboxWed" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                <VBox fx:id="vboxThu" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                <VBox fx:id="vboxFri" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-                <VBox fx:id="vboxSat" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                <VBox fx:id="vboxSun" GridPane.columnIndex="7" GridPane.rowIndex="1" />
-            </children>
-        </GridPane>
-
+                    
+                    <rowConstraints>
+                        <RowConstraints minHeight="40" />
+                        
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                        <RowConstraints percentHeight="4.16" />
+                    </rowConstraints>
+                    
+                    <children>
+                        
+                        <Label fx:id="lblMon" text="Lun" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <Label fx:id="lblTue" text="Mar" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <Label fx:id="lblWed" text="Mer" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                        <Label fx:id="lblThu" text="Jeu" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                        <Label fx:id="lblFri" text="Ven" GridPane.columnIndex="5" GridPane.rowIndex="0" />
+                        <Label fx:id="lblSat" text="Sam" GridPane.columnIndex="6" GridPane.rowIndex="0" />
+                        <Label fx:id="lblSun" text="Dim" GridPane.columnIndex="7" GridPane.rowIndex="0" />
+                        <VBox fx:id="vboxMon" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <VBox fx:id="vboxTue" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <VBox fx:id="vboxWed" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <VBox fx:id="vboxThu" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                        <VBox fx:id="vboxFri" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                        <VBox fx:id="vboxSat" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                        <VBox fx:id="vboxSun" GridPane.columnIndex="7" GridPane.rowIndex="1" />
+                    </children>
+                </GridPane>
+            </content>
+        </ScrollPane>
     </center>
 
     <bottom>
         <HBox alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="1000.0" style="-fx-padding: 10;">
-            <Button fx:id="btnAddTask" onAction="#onAddTaskClicked" text="Ajouter une tâche" />
+            <Button fx:id="btnAffectationAdmin" text="Affecter" visible="false"/>
         </HBox>
+        <VBox spacing="15" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+            <HBox spacing="20" alignment="CENTER">
+                <Label text="Algorithme :" />
+                <RadioButton fx:id="radioGlouton" text="Glouton" toggleGroup="$algoGroup" selected="true"/>
+                <RadioButton fx:id="radioExhaustif" text="Exhaustif" toggleGroup="$algoGroup"/>
+                <Label text="Date :" />
+                <DatePicker fx:id="datePickerAffectation"/>
+                <Button fx:id="btnAffecterSecouristes" text="Affecter les secouristes" onAction="#onAffecterSecouristes"/>
+            </HBox>
+        </VBox>
     </bottom>
 
 </BorderPane>

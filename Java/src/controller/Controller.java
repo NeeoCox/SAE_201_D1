@@ -6,6 +6,7 @@ import java.time.DayOfWeek;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 
 //Import nos class
 import model.dao.DAO;
@@ -463,6 +466,13 @@ public class Controller  {
 	@FXML private Label lblWeek;
     @FXML private Label lblMon, lblTue, lblWed, lblThu, lblFri, lblSat, lblSun;
     @FXML private Button btnSemainePrecedente, btnSemaineSuivante;
+	@FXML private Button btnAffectationAdmin;
+	@FXML private Button btnRetourPlanningSecouriste;
+	@FXML private RadioButton radioGlouton;
+	@FXML private RadioButton radioExhaustif;
+	@FXML private DatePicker datePickerAffectation;
+	@FXML private Button btnAffecterSecouristes;
+	@FXML private ToggleGroup algoGroup;
 
     private LocalDate currentMonday;
 
@@ -498,41 +508,6 @@ public class Controller  {
 		System.out.println("controller");
 
 	}
-	/**
-	 ***********************************
-	 * Connection BDD
-	 ***********************************
-	 */
-	/*public void connectAdmin(ActionEvent event){
-		String username = usernameFieldAmin.getText();
-		String password = passwordFieldAdmin.getText();
-
-		DAO.setCredentials(username, password);	
-		
-		goToPageAdminAcceuil(event);
-	}
-
-	public void connectSecouriste(ActionEvent event){
-
-		String username = usernameFieldSec.getText();
-		String password = passwordFieldSec.getText();
-
-		DAO.setCredentials(username, password);	
-		Secouriste secouriste = null;
-		try{
-			secouriste = daoSecouriste.readByUsername(username);
-		}
-		catch(Exception e){
-			System.out.println("Erreur lors de la lecture du secouriste : " + e.getMessage());
-		}
-		
-		if (secouriste != null) {
-			MngtSession.setUtilisateurConnecte(secouriste);
-			goToPageAdminAcceuil(event);
-			// puis tu charges ta scène principale
-		}
-
-	}*/
 
 	@FXML
 	public void connectUser(ActionEvent event) {
@@ -1616,10 +1591,23 @@ public class Controller  {
 			List<Besoin> besoins = daoBesoin.readAll();
 			List<Besoin> besoinsJour = new ArrayList<>();
 			for (Besoin b : besoins) {
-				if (contientDPS(b.getLeDPS(), dpsJour)) {
-					besoinsJour.add(b);
+				for (DPS dps : dpsJour) {
+					if (b.getIdDPS() == dps.getId()) {
+						b.setLeDPS(dps);
+						besoinsJour.add(b);
+						break;
+					}
 				}
 			}
+			DAOCompetence daoCompetence = new DAOCompetence();
+			for (Besoin b : besoinsJour) {
+				b.setLaCompetence(daoCompetence.findByIntitule(b.getIntituleCompetence()));
+			}
+			
+			besoinsJour.sort(Comparator.comparing(Besoin::getIntituleCompetence));
+
+			System.out.println("Nb besoins pour le jour " + jour + " : " + besoinsJour.size());
+			System.out.println("Besoins : " + besoinsJour);
 
 			// Choix de l'algo
 			Affectation algoAffect;
@@ -1630,7 +1618,22 @@ public class Controller  {
 			}
 
 			// Exécution de l'affectation
+			System.out.println("Secouristes dispos : " + secouristesDispos.size());
+			System.out.println("DPS ce jour : " + dpsJour.size());
+			System.out.println("Besoins ce jour : " + besoinsJour.size());
+			for (Secouriste s : secouristesDispos) {
+				System.out.println("Secouriste " + s.getId() + " possède :");
+				for (Possede p : s.getPossessions()) {
+					System.out.println("  - " + p.getIntituleCompetence());
+				}
+			}
+
+			for (Besoin b : besoinsJour) {
+				System.out.println("Besoin : " + b.getIntituleCompetence());
+			}
+
 			resultatAffectation = algoAffect.affecter(secouristesDispos, dpsJour, besoinsJour);
+			System.out.println("Nb affectations trouvées : " + resultatAffectation.getAffectations().size());
 
 			// Stockage en base via le service
 			DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
@@ -1648,7 +1651,17 @@ public class Controller  {
 				for (Secouriste s : entry.getValue()) {
 					for (Besoin b : besoinsJour) {
 						if (b.getLeDPS().equals(dps)) {
-							mngtAffect.creerAffectation(s.getId(), b.getLaCompetence().getIntitule(), dps.getId());
+							// Vérifie que le secouriste possède la compétence requise
+							for (Possede p : s.getPossessions()) {
+								if (p.getIntituleCompetence().equals(b.getIntituleCompetence())) {
+									try {
+										mngtAffect.creerAffectation(s.getId(), b.getIntituleCompetence(), dps.getId());
+										System.out.println("Insertion : secouriste=" + s.getId() + ", comp=" + b.getIntituleCompetence() + ", dps=" + dps.getId());
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							}
 						}
 					}
 				}
@@ -1756,6 +1769,49 @@ public class Controller  {
 					box.getChildren().add(label);
 				}
 			}
+		}
+	}
+
+	@FXML
+	public void onAffecterSecouristes(ActionEvent event) {
+		System.out.println("onAffecterSecouristes");
+		String algo = radioGlouton.isSelected() ? "glouton" : "exhaustif";
+		LocalDate date = datePickerAffectation.getValue();
+		if (date == null) {
+			System.out.println("Veuillez choisir une date.");
+			return;
+		}
+		Journee journee = new Journee(date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+		affecterSecouristesPourJournee(journee, algo);
+		afficherAffectationsTousSecouristesDansGridPane();
+	}
+
+	public void afficherAffectationsTousSecouristesDansGridPane() {
+		clearAllTaskBoxes();
+		DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
+		try {
+			List<EstAffecteA> affectations = daoEstAffecteA.readAll();
+			for (EstAffecteA aff : affectations) {
+				DPS dps = aff.getLeDPS();
+				Journee journee = dps.getEstProgramme();
+				LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
+				int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
+				if (dayIndex < 0 || dayIndex > 6) continue;
+				int heureDebut = dps.getHoraireDepart();
+				int heureFin = dps.getHoraireFin();
+				String desc = "S" + aff.getIdSecouriste() + " : DPS " + dps.getId() + " (" + dps.getConcerneSport() + ") " + aff.getLaCompetence().getIntitule();
+				for (int h = heureDebut; h < heureFin; h++) {
+					if (h >= 0 && h < 24) {
+						VBox box = taskBoxes[dayIndex][h];
+						Label label = new Label(desc);
+						label.setStyle("-fx-background-color: #FFD580; -fx-padding: 2 5 2 5; -fx-border-radius: 3; -fx-background-radius: 3;");
+						box.getChildren().add(label);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erreur lors de l'affichage des affectations : " + e.getMessage());
 		}
 	}
 
@@ -1909,10 +1965,12 @@ public class Controller  {
 			currentMonday = today.with(DayOfWeek.MONDAY);
 			generateHourLabelsAndTaskBoxes();
 			afficherSemaine(currentMonday);
-			btnSemainePrecedente.setOnAction(e -> afficherSemaine(currentMonday.minusWeeks(1)));
-			btnSemaineSuivante.setOnAction(e -> afficherSemaine(currentMonday.plusWeeks(1)));
 
-			afficherAffectationsSecouristeDansGridPane();
+			if (isPageAffectationAdmin()) {
+				afficherAffectationsTousSecouristesDansGridPane();
+			} else {
+				afficherAffectationsSecouristeDansGridPane();
+			}
 		}
 
 		// Si on est sur la page secouristes
@@ -1954,6 +2012,18 @@ public class Controller  {
 				System.out.println("Aucun secouriste connecté !");
 			}
 		}
+	}
+
+	// Méthode pour détecter la page d'affectation admin
+	private boolean isPageAffectationAdmin() {
+		// Par exemple, un bouton spécifique à la page admin
+		return btnAffectationAdmin != null;
+	}
+
+	// Méthode pour détecter la page planning secouriste
+	private boolean isPagePlanningSecouriste() {
+		// Par exemple, un bouton ou label spécifique à la page secouriste
+		return btnRetourPlanningSecouriste != null;
 	}
 
 	private void initModifSecouriste() {
@@ -2047,23 +2117,25 @@ public class Controller  {
     }
 
     public void afficherSemaine(LocalDate monday) {
-        currentMonday = monday;
+		currentMonday = monday;
+		updateDayLabels();
 
-        // Met à jour les labels des jours avec les dates
-        updateDayLabels();
-
-        afficherAffectationsSecouristeDansGridPane();
-    }
+		if (isPageAffectationAdmin()) {
+			afficherAffectationsTousSecouristesDansGridPane();
+		} else {
+			afficherAffectationsSecouristeDansGridPane();
+		}
+	}
 
 
     private void updateDayLabels() {
-        lblMon.setText("Lundi\n" + currentMonday);
-        lblTue.setText("Mardi\n" + currentMonday.plusDays(1));
-        lblWed.setText("Mercredi\n" + currentMonday.plusDays(2));
-        lblThu.setText("Jeudi\n" + currentMonday.plusDays(3));
-        lblFri.setText("Vendredi\n" + currentMonday.plusDays(4));
-        lblSat.setText("Samedi\n" + currentMonday.plusDays(5));
-        lblSun.setText("Dimanche\n" + currentMonday.plusDays(6));
+        lblMon.setText(" Lundi\n " + currentMonday);
+        lblTue.setText(" Mardi\n " + currentMonday.plusDays(1));
+        lblWed.setText(" Mercredi\n " + currentMonday.plusDays(2));
+        lblThu.setText(" Jeudi\n " + currentMonday.plusDays(3));
+        lblFri.setText(" Vendredi\n " + currentMonday.plusDays(4));
+        lblSat.setText(" Samedi\n " + currentMonday.plusDays(5));
+        lblSun.setText(" Dimanche\n " + currentMonday.plusDays(6));
     }
 
 

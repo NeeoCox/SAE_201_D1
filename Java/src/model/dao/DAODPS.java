@@ -37,7 +37,7 @@ public class DAODPS extends DAO<DPS>{
     public DPS read(long id) throws SQLException {
         String sql = "SELECT d.*, s.nom AS nom_site, s.longitude, s.latitude, sp.nom AS nom_sport " +
                     "FROM DPS d " +
-                    "JOIN Site s ON d.code_site = s.code " +
+                    "JOIN Site s ON d.aLieuDansSite = s.code " +
                     "JOIN Sport sp ON d.concerneSport = sp.code " +
                     "WHERE d.id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -45,18 +45,18 @@ public class DAODPS extends DAO<DPS>{
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Journee journee = new Journee(
-                        rs.getInt("jour"),
-                        rs.getInt("mois"),
-                        rs.getInt("annee")
+                        rs.getInt("estProgrammeJour"),
+                        rs.getInt("estProgrammeMois"),
+                        rs.getInt("estProgrammeAnnee")
                     );
                     Site site = new Site(
-                        rs.getString("code_site"),
+                        rs.getString("aLieuDansSite"),
                         rs.getString("nom_site"),
                         rs.getFloat("longitude"),
                         rs.getFloat("latitude")
                     );
                     Sport sport = new Sport(
-                        rs.getString("code_sport"),
+                        rs.getString("concerneSport"),
                         rs.getString("nom_sport")
                     );
                     return new DPS(

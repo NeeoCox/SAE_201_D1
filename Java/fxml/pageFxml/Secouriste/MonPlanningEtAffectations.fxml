@@ -46,6 +46,7 @@
                     <children>
                         <Button fx:id="btnSemainePrecedente" text="Semaine précédente"/>
                         <Button fx:id="btnSemaineSuivante" text="Semaine suivante"/>
+                        <Button fx:id="btnRetourPlanningSecouriste" text="Retour" visible="false"/>
                     </children>
                 </HBox>
 
