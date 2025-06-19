@@ -3,7 +3,6 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.persistence.EstAffecteA;
 
 public class DAOEstAffecteA extends DAO<EstAffecteA>{
@@ -18,7 +17,7 @@ public class DAOEstAffecteA extends DAO<EstAffecteA>{
     }
 
     public void create(EstAffecteA affectation) throws SQLException {
-        String sql = "INSERT INTO EstAffecteA (idSecouriste, intituleCompetence, idDPS) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO EstAffecteA (leSecouriste, intituleCompetence, idDPS) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, affectation.getIdSecouriste());
             stmt.setString(2, affectation.getIntituleCompetence());
@@ -28,7 +27,7 @@ public class DAOEstAffecteA extends DAO<EstAffecteA>{
     }
 
     public void update(EstAffecteA affectation) throws SQLException {
-        String sql = "UPDATE EstAffecteA SET intituleCompetence = ? WHERE idSecouriste = ? AND idDPS = ?";
+        String sql = "UPDATE EstAffecteA SET intituleCompetence = ? WHERE leSecouriste = ? AND idDPS = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, affectation.getIntituleCompetence());
             stmt.setLong(2, affectation.getIdSecouriste());
@@ -38,7 +37,7 @@ public class DAOEstAffecteA extends DAO<EstAffecteA>{
     }
 
     public void delete(int idSecouriste, long idDPS) throws SQLException {
-        String sql = "DELETE FROM EstAffecteA WHERE idSecouriste = ? AND idDPS = ?";
+        String sql = "DELETE FROM EstAffecteA WHERE leSecouriste = ? AND idDPS = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, idSecouriste);
             stmt.setLong(2, idDPS);
@@ -53,10 +52,29 @@ public class DAOEstAffecteA extends DAO<EstAffecteA>{
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 EstAffecteA a = new EstAffecteA();
-                a.setIdSecouriste(rs.getInt("idSecouriste"));
+                a.setIdSecouriste(rs.getInt("leSecouriste"));
                 a.setIntituleCompetence(rs.getString("intituleCompetence"));
                 a.setIdDPS(rs.getLong("idDPS"));
                 list.add(a);
+            }
+        }
+        return list;
+    }
+
+
+    public List<EstAffecteA> readBySecouristeId(long idSecouriste) throws SQLException {
+        List<EstAffecteA> list = new ArrayList<>();
+        String sql = "SELECT * FROM EstAffecteA WHERE leSecouriste = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, idSecouriste);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    EstAffecteA a = new EstAffecteA();
+                    a.setIdSecouriste(rs.getInt("leSecouriste"));
+                    a.setIntituleCompetence(rs.getString("intituleCompetence"));
+                    a.setIdDPS(rs.getLong("idDPS"));
+                    list.add(a);
+                }
             }
         }
         return list;

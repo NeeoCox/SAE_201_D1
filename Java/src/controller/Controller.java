@@ -454,29 +454,14 @@ public class Controller  {
 	 */
 	@FXML private Label lblWeek;
     @FXML private Label lblMon, lblTue, lblWed, lblThu, lblFri, lblSat, lblSun;
-    @FXML private Button btnPrevWeek, btnNextWeek;
-
-    // VBox qui contiennent les labels des jours + les tâches
-    @FXML
-    private VBox vboxMon;
-    @FXML
-    private VBox vboxTue;
-    @FXML
-    private VBox vboxWed;
-    @FXML
-    private VBox vboxThu;
-    @FXML
-    private VBox vboxFri;
-    @FXML
-    private VBox vboxSat;
-    @FXML
-    private VBox vboxSun;
+    @FXML private Button btnSemainePrecedente, btnSemaineSuivante;
 
     private LocalDate currentMonday;
 
     private Map<LocalDate, List<String>> tasksByDate = new HashMap<>();
 
-    @FXML private GridPane gridWeek;
+    @FXML
+	private GridPane gridWeek;
 
     private VBox[][] taskBoxes = new VBox[7][24]; // 7 jours * 24h
 
@@ -1542,8 +1527,82 @@ public class Controller  {
 		return false;
 	}
 
+	public List<EstAffecteA> getAffectationsPourSecouriste(long idSecouriste) {
+		DAOEstAffecteA daoEstAffecteA = new DAOEstAffecteA();
+		try {
+			return daoEstAffecteA.readBySecouristeId(idSecouriste);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
 
+	public void afficherAffectationsSecouriste() {
+		// Récupérer le secouriste connecté
+		Secouriste secouriste = (Secouriste) MngtSession.getUtilisateurConnecte();
+		if (secouriste == null) {
+			System.out.println("Aucun secouriste connecté !");
+			return;
+		}
 
+		// Récupérer ses affectations
+		List<EstAffecteA> affectations = getAffectationsPourSecouriste(secouriste.getId());
+
+		// Pour chaque affectation, ajouter une tâche dans le planning
+		for (EstAffecteA aff : affectations) {
+			DPS dps = aff.getLeDPS(); // ou récupère via DAO si besoin
+			Journee journee = dps.getEstProgramme();
+			LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
+
+			// Crée une description à afficher
+			String desc = "DPS " + dps.getId() + " (" + dps.getConcerneSport() + ") "
+						+ aff.getLaCompetence().getIntitule();
+
+			// Ajoute la tâche au planning
+			addTask(date, desc);
+		}
+	}
+
+	public void afficherAffectationsSecouristeDansGridPane() {
+		clearAllTaskBoxes();
+		// Récupérer le secouriste connecté
+		Secouriste secouriste = (Secouriste) MngtSession.getUtilisateurConnecte();
+		if (secouriste == null) {
+			System.out.println("Aucun secouriste connecté !");
+			return;
+		}
+
+		// Récupérer ses affectations
+		List<EstAffecteA> affectations = getAffectationsPourSecouriste(secouriste.getId());
+
+		// Pour chaque affectation, placer un label dans le GridPane
+		for (EstAffecteA aff : affectations) {
+			DPS dps = aff.getLeDPS();
+			Journee journee = dps.getEstProgramme();
+			LocalDate date = LocalDate.of(journee.getAnnee(), journee.getMois(), journee.getJour());
+
+			// Calcul du jour de la semaine (0 = lundi, 6 = dimanche)
+			int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
+			if (dayIndex < 0 || dayIndex > 6) continue; // hors de la semaine affichée
+
+			// Heures de début et de fin
+			int heureDebut = dps.getHoraireDepart();
+			int heureFin = dps.getHoraireFin();
+
+			// Description à afficher
+			String desc = "DPS " + dps.getId() + " (" + dps.getConcerneSport() + ") " + aff.getLaCompetence().getIntitule();
+
+			// Pour chaque heure de la plage, ajoute un label dans la bonne VBox
+			for (int h = heureDebut; h < heureFin; h++) {
+				if (h >= 0 && h < 24) {
+					VBox box = taskBoxes[dayIndex][h];
+					Label label = new Label(desc);
+					label.setStyle("-fx-background-color: #D3EAFD; -fx-padding: 2 5 2 5; -fx-border-radius: 3; -fx-background-radius: 3;");
+					box.getChildren().add(label);
+				}
+			}
+		}
+	}
 
 
 
@@ -1694,16 +1753,10 @@ public class Controller  {
 			currentMonday = today.with(DayOfWeek.MONDAY);
 			generateHourLabelsAndTaskBoxes();
 			afficherSemaine(currentMonday);
-			btnPrevWeek.setOnAction(e -> afficherSemaine(currentMonday.minusWeeks(1)));
-			btnNextWeek.setOnAction(e -> afficherSemaine(currentMonday.plusWeeks(1)));
+			btnSemainePrecedente.setOnAction(e -> afficherSemaine(currentMonday.minusWeeks(1)));
+			btnSemaineSuivante.setOnAction(e -> afficherSemaine(currentMonday.plusWeeks(1)));
 
-			vboxMon.setFillWidth(true);
-			vboxTue.setFillWidth(true);
-			vboxWed.setFillWidth(true);
-			vboxThu.setFillWidth(true);
-			vboxFri.setFillWidth(true);
-			vboxSat.setFillWidth(true);
-			vboxSun.setFillWidth(true);
+			afficherAffectationsSecouristeDansGridPane();
 		}
 
 		// Si on est sur la page secouristes
@@ -1737,10 +1790,17 @@ public class Controller  {
 
     public void addTask(LocalDate date, String taskDescription) {
         tasksByDate.computeIfAbsent(date, k -> new ArrayList<>()).add(taskDescription);
-        if (isDateInCurrentWeek(date)) {
-            afficherTachesPourDate(date);
-        }
     }
+
+	private void clearAllTaskBoxes() {
+		for (int day = 0; day < 7; day++) {
+			for (int hour = 0; hour < 24; hour++) {
+				if (taskBoxes[day][hour] != null) {
+					taskBoxes[day][hour].getChildren().clear();
+				}
+			}
+		}
+	}
 
     private boolean isDateInCurrentWeek(LocalDate date) {
         return !date.isBefore(currentMonday) && !date.isAfter(currentMonday.plusDays(6));
@@ -1752,46 +1812,9 @@ public class Controller  {
         // Met à jour les labels des jours avec les dates
         updateDayLabels();
 
-        // Vide les VBoxes des jours (sauf le label titre)
-        clearAllDayBoxes();
-
-        // Ajoute les tâches existantes dans la semaine
-        for (int i = 0; i < 7; i++) {
-            LocalDate date = currentMonday.plusDays(i);
-            afficherTachesPourDate(date);
-        }
+        afficherAffectationsSecouristeDansGridPane();
     }
 
-    private void afficherTachesPourDate(LocalDate date) {
-        int dayIndex = (int) ChronoUnit.DAYS.between(currentMonday, date);
-        if (dayIndex < 0 || dayIndex > 6) return;
-
-        VBox dayBox = getDayVBox(dayIndex);
-        if (dayBox == null) return;
-
-        // Le premier enfant est le label du jour, on vide le reste
-        // Donc on garde uniquement le label du jour (enfant 0)
-        while (dayBox.getChildren().size() > 1) {
-            dayBox.getChildren().remove(1);
-        }
-
-        List<String> tasks = tasksByDate.getOrDefault(date, Collections.emptyList());
-        for (String task : tasks) {
-            Label taskLabel = new Label(task);
-            taskLabel.setStyle("-fx-background-color: #D3D3D3; -fx-padding: 3; -fx-border-radius: 3; -fx-background-radius: 3;");
-            dayBox.getChildren().add(taskLabel);
-        }
-    }
-
-    private void clearAllDayBoxes() {
-        vboxMon.getChildren().retainAll(lblMon);
-        vboxTue.getChildren().retainAll(lblTue);
-        vboxWed.getChildren().retainAll(lblWed);
-        vboxThu.getChildren().retainAll(lblThu);
-        vboxFri.getChildren().retainAll(lblFri);
-        vboxSat.getChildren().retainAll(lblSat);
-        vboxSun.getChildren().retainAll(lblSun);
-    }
 
     private void updateDayLabels() {
         lblMon.setText("Lundi\n" + currentMonday);
@@ -1803,20 +1826,6 @@ public class Controller  {
         lblSun.setText("Dimanche\n" + currentMonday.plusDays(6));
     }
 
-
-
-    private VBox getDayVBox(int dayIndex) {
-        switch (dayIndex) {
-            case 0: return vboxMon;
-            case 1: return vboxTue;
-            case 2: return vboxWed;
-            case 3: return vboxThu;
-            case 4: return vboxFri;
-            case 5: return vboxSat;
-            case 6: return vboxSun;
-            default: return null;
-        }
-    }
 
     /**
      * 
