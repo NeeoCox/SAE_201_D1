@@ -70,8 +70,6 @@ import model.persistence.User;
 import model.dao.DAOUser;
 
 
-
-
 /**
  * La classe Controller de l'application
  * @author M.COIGNARD, L.VIMART, A.COUDIERE
@@ -518,37 +516,6 @@ public class Controller  {
 	 * Connection BDD
 	 ***********************************
 	 */
-	/*public void connectAdmin(ActionEvent event){
-		String username = usernameFieldAmin.getText();
-		String password = passwordFieldAdmin.getText();
-
-		DAO.setCredentials(username, password);	
-		
-		goToPageAdminAcceuil(event);
-	}
-
-	public void connectSecouriste(ActionEvent event){
-
-		String username = usernameFieldSec.getText();
-		String password = passwordFieldSec.getText();
-
-		DAO.setCredentials(username, password);	
-		Secouriste secouriste = null;
-		try{
-			secouriste = daoSecouriste.readByUsername(username);
-		}
-		catch(Exception e){
-			System.out.println("Erreur lors de la lecture du secouriste : " + e.getMessage());
-		}
-		
-		if (secouriste != null) {
-			MngtSession.setUtilisateurConnecte(secouriste);
-			goToPageAdminAcceuil(event);
-			// puis tu charges ta scène principale
-		}
-
-	}*/
-
 	@FXML
 	public void connectUser(ActionEvent event) {
 		System.out.println("connectUser");
