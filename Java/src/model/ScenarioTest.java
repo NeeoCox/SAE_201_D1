@@ -3,7 +3,9 @@ import model.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ * Scenario d'affectation des secouriste avec l'algo glouton
+ */
 public class ScenarioTest {
     public static void main(String[] args) {
         // Création des compétences
@@ -20,18 +22,18 @@ public class ScenarioTest {
         // Création des secouristes
         Secouriste secouriste1 = new Secouriste();
         secouriste1.setId(1);
-        secouriste1.setNom("Alice");
-        secouriste1.setPrenom("Dupont");
+        secouriste1.setNom("Dupond");
+        secouriste1.setPrenom("Alice");
 
         Secouriste secouriste2 = new Secouriste();
         secouriste2.setId(2);
-        secouriste2.setNom("Bob");
-        secouriste2.setPrenom("Martin");
+        secouriste2.setNom("Martin");
+        secouriste2.setPrenom("Bob");
 
         Secouriste secouriste3 = new Secouriste();
         secouriste3.setId(3);
-        secouriste3.setNom("Charlie");
-        secouriste3.setPrenom("Durand");
+        secouriste3.setNom("Durand");
+        secouriste3.setPrenom("Charlie");
 
         // Ajout des compétences aux secouristes
         Possede possession1 = new Possede();
@@ -69,17 +71,28 @@ public class ScenarioTest {
         secouriste2.getDisponibilites().add(dispo2);
         secouriste3.getDisponibilites().add(dispo3);
 
-        // Création des DPS
-        DPS dps1 = new DPS(1, 8, 12, journee, null, sport1);
-        DPS dps2 = new DPS(2, 14, 18, journee, null, sport2);
+        // Création des sites
+        Site site1 = new Site("SITE1", "Stade Municipal", 48.8566f, 2.3522f);
+        Site site2 = new Site("SITE2", "Parc des Expositions", 48.8584f, 2.2945f);
+
+        // Création des DPS avec sites
+        DPS dps1 = new DPS(1, 8, 12, journee, site1, sport1);
+        DPS dps2 = new DPS(2, 14, 18, journee, site2, sport2);
 
         // Affectation gloutonne
         System.out.println("Affectation gloutonne :");
+
         for (DPS dps : List.of(dps1, dps2)) {
+            System.out.println("Traitement du DPS : " + dps.getId() + ", site : " + dps.getALieuDans().getNom());
+
             for (Secouriste secouriste : List.of(secouriste1, secouriste2, secouriste3)) {
+                System.out.println("  Vérification du secouriste : " + secouriste.getNom());
+
                 boolean disponible = false;
                 for (EstDisponible dispo : secouriste.getDisponibilites()) {
+                    System.out.println("    Vérifie disponibilité pour la journée : " + dispo.getLaJournee().toString());
                     if (dispo.getLaJournee().estEgale(journee)) {
+                        System.out.println("    --> Disponible ce jour-là !");
                         disponible = true;
                         break;
                     }
@@ -87,48 +100,20 @@ public class ScenarioTest {
 
                 boolean possedeCompetence = false;
                 for (Possede possession : secouriste.getPossessions()) {
+                    System.out.println("    Vérifie compétence : " + possession.getLaCompetence().getIntitule());
                     if (possession.getLaCompetence().equalsIntitule(dps.getConcerne().getNom())) {
+                        System.out.println("    --> Possède la compétence : " + dps.getConcerne().getNom());
                         possedeCompetence = true;
                         break;
                     }
                 }
 
                 if (disponible && possedeCompetence) {
-                    System.out.println("Secouriste " + secouriste.getNom() + " affecté à DPS " + dps.getId());
+                    System.out.println("  >>> Secouriste " + secouriste.getNom() + " affecté à DPS " + dps.getId() + " au site " + dps.getALieuDans().getNom());
                     break; // Glouton : on prend le premier secouriste valide
+                } else {
+                    System.out.println("  --> Ce secouriste ne peut pas être affecté (disponibilité ou compétence manquante).");
                 }
-            }
-        }
-
-        // Affectation exhaustive
-        System.out.println("\nAffectation exhaustive :");
-        for (DPS dps : List.of(dps1, dps2)) {
-            List<Secouriste> candidats = new ArrayList<>();
-            for (Secouriste secouriste : List.of(secouriste1, secouriste2, secouriste3)) {
-                boolean disponible = false;
-                for (EstDisponible dispo : secouriste.getDisponibilites()) {
-                    if (dispo.getLaJournee().estEgale(journee)) {
-                        disponible = true;
-                        break;
-                    }
-                }
-
-                boolean possedeCompetence = false;
-                for (Possede possession : secouriste.getPossessions()) {
-                    if (possession.getLaCompetence().equalsIntitule(dps.getConcerne().getNom())) {
-                        possedeCompetence = true;
-                        break;
-                    }
-                }
-
-                if (disponible && possedeCompetence) {
-                    candidats.add(secouriste);
-                }
-            }
-
-            if (!candidats.isEmpty()) {
-                Secouriste meilleurCandidat = candidats.get(0);
-                System.out.println("Secouriste " + meilleurCandidat.getNom() + " affecté à DPS " + dps.getId());
             }
         }
     }
