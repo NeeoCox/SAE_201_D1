@@ -16,11 +16,11 @@
             xmlns:fx="http://javafx.com/fxml/1"
             prefHeight="435.0" prefWidth="641.0">
 
-    <!-- Bande bleue en haut -->
+    
     <top>
         <HBox style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;" alignment="CENTER_LEFT" spacing="10">
             
-            <!-- Bouton Retour -->
+            
             <Button fx:id="buttonRetourAcSec"
                     text="Retour"
                     onAction="#goToGestionDesCompetences"
@@ -29,14 +29,14 @@
             
             <Region HBox.hgrow="ALWAYS" />
             
-            <!-- Titre centré -->
+            
             <Label text="Supprimer Compétence"
                    style="-fx-text-fill: white; -fx-font-size: 24px;"
                    maxWidth="300" alignment="CENTER" />
             
             <Region HBox.hgrow="ALWAYS" />
             
-            <!-- Logo -->
+            
             <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../../img/logo.png" />
@@ -45,7 +45,7 @@
         </HBox>
     </top>
 
-    <!-- Centre avec formulaire centré -->
+   
     <center>
         <HBox alignment="CENTER" prefHeight="338.0" prefWidth="600" spacing="40">
             <Region HBox.hgrow="ALWAYS" />

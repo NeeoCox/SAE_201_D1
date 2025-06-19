@@ -12,19 +12,19 @@
 
 <BorderPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
-    <!-- Bande bleue en haut -->
+    
     <top>
         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20;">
             <children>
-                <!-- Bouton retour -->
+                
                 <Button fx:id="buttonRetourAcSec" onAction="#goToGestionDesSecouristes" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
-                <!-- Titre centré -->
+                
                 <StackPane alignment="CENTER" HBox.hgrow="ALWAYS">
                     <Label style="-fx-text-fill: white; -fx-font-size: 24px;" text="Modification de Secouriste" />
                 </StackPane>
 
-                <!-- Logo à droite -->
+                
                 <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../../img/logo.png" />
@@ -34,13 +34,13 @@
         </HBox>
     </top>
 
-    <!-- Contenu principal -->
+    
     <center>
         <VBox alignment="TOP_CENTER" spacing="20" style="-fx-padding: 20;">
             <children>
                 <HBox alignment="CENTER" spacing="40">
                     <children>
-                        <!-- Colonne gauche -->
+                        
                         <VBox spacing="10">
                             <children>
                                 <Label text="Nom" />
@@ -57,7 +57,7 @@
                             </children>
                         </VBox>
 
-                        <!-- Colonne droite -->
+                        
                         <VBox spacing="10">
                             <children>
                                 <Label text="Adresse" />
@@ -75,7 +75,7 @@
                     </children>
                 </HBox>
 
-                <!-- Bouton Modifier -->
+                
                 <Button fx:id="ModifButtonSec" onAction="#updateSecouriste" prefWidth="120" style="-fx-background-color: #156082; -fx-text-fill: white; -fx-font-weight: bold;" text="Modifier" />
             </children>
         </VBox>

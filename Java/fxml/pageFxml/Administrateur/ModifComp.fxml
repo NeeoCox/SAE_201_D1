@@ -13,23 +13,23 @@
 
 <BorderPane prefHeight="435.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
-    <!-- Bande bleue en haut -->
+    
     <top>
         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;">
 
-            <!-- Bouton Retour -->
+            
             <Button fx:id="buttonRetourAcSec" onAction="#goToGestionDesCompetences" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
-            <!-- Espace flexible -->
+            
             <Region HBox.hgrow="ALWAYS" />
 
-            <!-- Titre centré -->
+            
             <Label alignment="CENTER" maxWidth="320" style="-fx-text-fill: white; -fx-font-size: 24px;" text="Modification de compétence" />
 
-            <!-- Espace flexible -->
+            
             <Region HBox.hgrow="ALWAYS" />
 
-            <!-- Logo à droite -->
+            
             <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../../img/logo.png" />
@@ -39,7 +39,7 @@
         </HBox>
     </top>
 
-    <!-- Centre avec formulaire -->
+    
     <center>
         <HBox alignment="CENTER" prefHeight="402.0" prefWidth="669.0" spacing="20">
 

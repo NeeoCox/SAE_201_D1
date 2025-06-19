@@ -18,17 +18,17 @@
 
    <top>
       <BorderPane style="-fx-background-color: #156082; -fx-padding: 10;" prefHeight="60">
-         <!-- Bouton Retour à gauche -->
+         
          <left>
             <Button fx:id="buttonRetourAcceuilSec" onAction="#goToPageConnection" text="Retour" />
          </left>
 
-         <!-- Titre centré -->
+        
          <center>
             <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="Secouriste" />
          </center>
 
-         <!-- Logo à droite -->
+         
          <right>
             <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                <image>

@@ -203,7 +203,12 @@ public class Controller  {
 	 */
 	@FXML
 	private Button buttonRetAcAffectSec;
-	
+	@FXML
+	private Button btnPrevWeek;
+	@FXML
+	private Button btnNextWeek;
+
+	private int currentWeekOffset = 0;
 
 
 
@@ -2157,5 +2162,33 @@ public class Controller  {
 			}
 		}
 	}
+
+
+
+    @FXML
+	private void onPrevWeek() {
+		currentWeekOffset--;
+		currentMonday = currentMonday.minusWeeks(1);
+		afficherSemaine(currentMonday);
+		updateWeekLabel();
+	}
+
+	@FXML
+	private void onNextWeek() {
+		currentWeekOffset++;
+		currentMonday = currentMonday.plusWeeks(1);
+		afficherSemaine(currentMonday);
+		updateWeekLabel();
+	}
+
+	private void updateWeekLabel() {
+		lblWeek.setText("Semaine " + (getCurrentWeekNumber() + currentWeekOffset));
+	}
+
+    private int getCurrentWeekNumber() {
+        // Retourne la semaine courante (exemple basique)
+        java.time.LocalDate now = java.time.LocalDate.now();
+        return now.get(java.time.temporal.WeekFields.ISO.weekOfWeekBasedYear());
+    }
 
 }

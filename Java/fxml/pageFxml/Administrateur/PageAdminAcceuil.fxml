@@ -17,7 +17,7 @@
             fx:controller="controller.Controller"
             prefHeight="400.0" prefWidth="600.0">
 
-    <!-- Bande bleue en haut -->
+    
     <top>
         <HBox spacing="10" alignment="CENTER_LEFT"
               style="-fx-background-color: #156082; -fx-padding: 10 20;" BorderPane.alignment="CENTER">
@@ -41,7 +41,7 @@
         </HBox>
     </top>
 
-    <!-- Centre avec boutons -->
+    
     <center>
         <GridPane hgap="20" vgap="20" alignment="CENTER" BorderPane.alignment="CENTER">
             <padding>

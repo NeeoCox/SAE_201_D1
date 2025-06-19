@@ -12,23 +12,21 @@
 
 <BorderPane prefHeight="435.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
 
-    <!-- Bande supérieure -->
-    <top>
+        <top>
         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #156082; -fx-padding: 10 20 10 20;">
 
-            <!-- Bouton Retour à gauche -->
             <Button fx:id="buttonRetourAcSec" onAction="#goToGestionDesCompetences" prefHeight="30" prefWidth="80" style="-fx-background-color: white; -fx-text-fill: #156082;" text="Retour" />
 
-            <!-- Espace flexible -->
+            
             <Region HBox.hgrow="ALWAYS" />
 
-            <!-- Titre centré -->
+            
             <Label alignment="CENTER" maxWidth="300" style="-fx-text-fill: white; -fx-font-size: 20px;" text="Création de compétence" />
             
-            <!-- Espace flexible -->
+            
             <Region HBox.hgrow="ALWAYS" />
 
-            <!-- Logo à droite -->
+            
             <ImageView fitHeight="40" fitWidth="40" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="@../../img/logo.png" />
@@ -38,7 +36,7 @@
         </HBox>
     </top>
 
-    <!-- Centre -->
+  
     <center>
         <VBox alignment="CENTER" fillWidth="false" spacing="15" style="-fx-padding: 40 20 40 20;">
             <Label text="Intitulé" />
