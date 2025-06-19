@@ -1,7 +1,15 @@
 package model.graph.graphmodel;
-
+/**
+ * La classe Glouton implémente un algorithme glouton pour sélectionner des sommets
+ * dans un graphe représenté par une matrice d'adjacence.
+ * @author Maël COIGNARD, Adrien COUDIERE, Léa VIMART - Groupe D1
+ */
 public class Glouton {
 
+    /**
+     * Point d'entrée de l'application.
+     * @param args Arguments de la ligne de commande (non utilisés).
+     */
     public static void main(String[] args) {
         int n = 5;
         int[][] M = {
@@ -27,6 +35,11 @@ public class Glouton {
         System.out.println("Sommets S sélectionnés : " + toString(S, n));
     }
 
+    /**
+     * Initialise un tableau d'entiers de taille n avec les indices de 0 à n-1.
+     * @param n La taille du tableau.
+     * @return Un tableau d'entiers initialisé.
+     */
     private static int[] initialiserOrdre(int n) {
         int[] ordre = new int[n];
         for (int i = 0; i < n; i++) {
@@ -35,6 +48,11 @@ public class Glouton {
         return ordre;
     }
 
+    /**
+     * Trie les lignes de la matrice M par degré croissant et met à jour l'ordre des lignes.
+     * @param M La matrice d'adjacence.
+     * @param ordreLignes Le tableau qui stocke l'ordre des lignes après le tri.
+     */
     private static void trierLignesParDegre(int[][] M, int[] ordreLignes) {
         int n = M.length;
         int[] L = new int[n];
@@ -63,6 +81,11 @@ public class Glouton {
         }
     }
 
+    /**
+     * Trie les colonnes de la matrice M par ordre croissant en utilisant le premier élément non nul de chaque colonne.
+     * @param M La matrice d'adjacence.
+     * @param ordreColonnes Le tableau qui stocke l'ordre des colonnes après le tri.
+     */
     private static void trierColonnes(int[][] M, int[] ordreColonnes) {
         int n = M.length;
         for (int j = 0; j < n - 1; j++) {
@@ -89,6 +112,11 @@ public class Glouton {
         }
     }
 
+    /**
+     * Affiche l'ordre des lignes ou des colonnes.
+     * @param nom Le nom de l'ordre (lignes ou colonnes).
+     * @param ordre Le tableau contenant l'ordre des indices.
+     */
     private static void afficherOrdre(String nom, int[] ordre) {
         System.out.print("Ordre des " + nom + " : ");
         for (int i = 0; i < ordre.length; i++) {
@@ -97,6 +125,10 @@ public class Glouton {
         System.out.println();
     }
 
+    /**
+     * Affiche la matrice d'adjacence M avec les colonnes triées dans l'ordre croissant.
+     * @param M La matrice d'adjacence.
+     */
     private static void afficherMatrice(int[][] M) {
         System.out.println("Matrice d'adjacence M avec colonnes triées dans l'ordre croissant :");
         for (int[] row : M) {
@@ -107,6 +139,11 @@ public class Glouton {
         }
     }
 
+    /**
+     * Sélectionne les sommets S dans la matrice d'adjacence M en suivant l'algorithme glouton.
+     * @param M La matrice d'adjacence.
+     * @return Un tableau contenant les indices des sommets sélectionnés.
+     */
     private static int[] selectionnerSommets(int[][] M) {
         int n = M.length;
         int[] S = new int[n];
@@ -137,6 +174,12 @@ public class Glouton {
         return S;
     }
 
+    /**
+     * Convertit un tableau d'entiers en une chaîne de caractères.
+     * @param tab Le tableau d'entiers à convertir.
+     * @param length La longueur du tableau à considérer.
+     * @return Une chaîne de caractères représentant le tableau.
+     */
     public static String toString(int[] tab, int length) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
